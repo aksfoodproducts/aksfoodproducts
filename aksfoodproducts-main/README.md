@@ -1,2 +1,0 @@
-# aksfoodproducts
-snacks buying website
