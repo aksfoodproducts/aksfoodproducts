@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Discover the family story behind AKS Food Products, homemade traditional snacks from Matha Kovil, Enapatti.">
+  <meta name="theme-color" content="#263b2a">
+  <title>Our Story | AKS Food Products</title>
+  <style>
+    :root {
+      --forest: #263b2a;
+      --forest-deep: #17271c;
+      --leaf: #5d7445;
+      --cream: #fff9ed;
+      --paper: #f4eddd;
+      --gold: #d7ad61;
+      --ink: #283128;
+      --muted: #687064;
+      --white: #fffefa;
+      --shadow: 0 18px 50px rgba(31, 45, 31, .12);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--cream);
+      color: var(--ink);
+      font-family: Georgia, "Times New Roman", serif;
+      line-height: 1.7;
+    }
+    a { color: inherit; }
+    .topline { height: 5px; background: linear-gradient(90deg, var(--gold), #f0d9a2, var(--leaf)); }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(255, 249, 237, .94);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(38, 59, 42, .12);
+    }
+    .nav {
+      width: min(1120px, calc(100% - 40px));
+      min-height: 82px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      text-decoration: none;
+      min-width: 0;
+    }
+    .brand img {
+      width: 58px;
+      height: 58px;
+      object-fit: contain;
+      border-radius: 50%;
+      background: #fff;
+      border: 1px solid rgba(38, 59, 42, .12);
+    }
+    .brand-name { display: block; color: var(--forest); font-size: 1.05rem; font-weight: bold; line-height: 1.2; letter-spacing: .04em; }
+    .brand-tag { display: block; color: var(--muted); font: 0.7rem/1.5 Arial, sans-serif; letter-spacing: .12em; text-transform: uppercase; }
+    .nav-links { display: flex; align-items: center; gap: 10px; font-family: Arial, sans-serif; }
+    .nav-links a {
+      text-decoration: none;
+      font-size: .9rem;
+      font-weight: 700;
+      padding: 10px 15px;
+      border-radius: 999px;
+      transition: background .2s, color .2s, transform .2s;
+    }
+    .nav-links a:hover { background: #e9e2d0; transform: translateY(-1px); }
+    .nav-links .active { background: var(--forest); color: white; }
+    .hero {
+      position: relative;
+      overflow: hidden;
+      color: white;
+      background:
+        radial-gradient(circle at 82% 18%, rgba(215,173,97,.22), transparent 25%),
+        radial-gradient(circle at 12% 100%, rgba(116,145,87,.28), transparent 35%),
+        linear-gradient(135deg, var(--forest-deep), var(--forest) 65%, #3f5738);
+    }
+    .hero::before, .hero::after {
+      content: "";
+      position: absolute;
+      width: 280px;
+      height: 280px;
+      border: 1px solid rgba(240, 217, 162, .16);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .hero::before { top: -150px; right: -65px; }
+    .hero::after { bottom: -210px; left: -90px; width: 390px; height: 390px; }
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      width: min(960px, calc(100% - 40px));
+      margin: auto;
+      padding: 92px 0 100px;
+      text-align: center;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: #f0d9a2;
+      font: 700 .76rem/1.4 Arial, sans-serif;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before, .eyebrow::after { content: ""; width: 28px; height: 1px; background: currentColor; }
+    h1 {
+      margin: 20px 0 14px;
+      font-size: clamp(3rem, 8vw, 6.2rem);
+      font-weight: 500;
+      line-height: .98;
+      letter-spacing: -.045em;
+    }
+    .hero-subtitle {
+      max-width: 680px;
+      margin: 0 auto;
+      color: #f6eddb;
+      font-size: clamp(1.1rem, 2.4vw, 1.55rem);
+    }
+    .hero-note {
+      margin-top: 30px;
+      color: #d7e0d0;
+      font: .8rem Arial, sans-serif;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+    main { overflow: hidden; }
+    .intro {
+      width: min(820px, calc(100% - 40px));
+      margin: -28px auto 0;
+      position: relative;
+      z-index: 2;
+      padding: 34px clamp(24px, 5vw, 54px);
+      background: var(--white);
+      border: 1px solid rgba(38,59,42,.08);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+    .intro p { margin: 0; font-size: 1.13rem; }
+    .dropcap { color: var(--leaf); font-size: 1.3em; font-weight: bold; }
+    .story-grid {
+      width: min(1040px, calc(100% - 40px));
+      margin: 82px auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
+    }
+    .story-card {
+      padding: clamp(25px, 4vw, 40px);
+      background: var(--white);
+      border: 1px solid rgba(38,59,42,.08);
+      border-radius: 16px;
+      box-shadow: 0 8px 30px rgba(31,45,31,.05);
+    }
+    .story-card:nth-child(2), .story-card:nth-child(3) { background: var(--paper); }
+    .icon {
+      width: 54px;
+      height: 54px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: #e5eadc;
+      font-size: 1.55rem;
+      margin-bottom: 20px;
+    }
+    h2 { color: var(--forest); font-size: clamp(1.55rem, 3vw, 2.05rem); line-height: 1.2; margin: 0 0 16px; font-weight: 600; }
+    .story-card p { margin: 0; color: #535b50; }
+    .values {
+      background: #e9e7d8;
+      padding: 66px 20px 70px;
+      text-align: center;
+    }
+    .values-inner { width: min(960px, 100%); margin: auto; }
+    .values h2 { margin-bottom: 12px; }
+    .values-intro { color: var(--muted); margin: 0 auto 32px; max-width: 620px; }
+    .value-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .value-item { padding: 23px 16px; background: rgba(255,254,250,.78); border-radius: 12px; }
+    .value-item strong { display: block; color: var(--forest); font-size: 1.1rem; margin-bottom: 5px; }
+    .value-item span { color: var(--muted); font: .9rem/1.6 Arial, sans-serif; }
+    .closing {
+      padding: 82px 20px 88px;
+      text-align: center;
+      background: var(--cream);
+    }
+    .closing .heart { font-size: 2rem; }
+    .closing h2 { margin: 12px 0; font-size: clamp(2rem, 5vw, 3.4rem); }
+    .closing p { max-width: 630px; margin: 0 auto 27px; color: var(--muted); }
+    .button {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 9px;
+      padding: 13px 23px;
+      min-height: 48px;
+      border-radius: 999px;
+      background: var(--forest);
+      color: white;
+      text-decoration: none;
+      font: 700 .93rem Arial, sans-serif;
+      box-shadow: 0 8px 18px rgba(38,59,42,.17);
+      transition: transform .2s, background .2s;
+    }
+    .button:hover { background: var(--leaf); transform: translateY(-2px); }
+    footer {
+      background: var(--forest-deep);
+      color: #e6eadf;
+      text-align: center;
+      padding: 27px 20px;
+      font: .86rem/1.8 Arial, sans-serif;
+    }
+    footer strong { color: #f0d9a2; }
+    footer p { margin: 3px 0; }
+    @media (max-width: 700px) {
+      .nav { width: min(100% - 28px, 1120px); min-height: 72px; gap: 10px; }
+      .brand img { width: 48px; height: 48px; }
+      .brand-name { font-size: .88rem; }
+      .brand-tag { font-size: .59rem; letter-spacing: .06em; }
+      .nav-links a { padding: 9px 12px; font-size: .82rem; }
+      .hero-inner { padding: 76px 0 83px; }
+      .story-grid { grid-template-columns: 1fr; margin: 54px auto; gap: 16px; }
+      .value-list { grid-template-columns: 1fr; gap: 12px; }
+      .intro { padding: 27px 23px; }
+    }
+    @media (max-width: 390px) {
+      .brand-tag { display: none; }
+      .nav-links a { padding: 8px 10px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topline"></div>
+
+  <header>
+    <nav class="nav" aria-label="Main navigation">
+      <a class="brand" href="index.html" aria-label="AKS Food Products home">
+        <img src="assets/AKS Homemade Food Products Logo1.png" alt="AKS Homemade Food Products logo">
+        <span>
+          <span class="brand-name">AKS FOOD PRODUCTS</span>
+          <span class="brand-tag">Homemade with love</span>
+        </span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+       
+      </div>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="eyebrow">Rooted in tradition</div>
+      <h1>Our Story</h1>
+      <p class="hero-subtitle">From our home in Enapatti to your home with love.</p>
+      <div class="hero-note">Matha Kovil · Enapatti</div>
+    </div>
+  </section>
+
+  <main>
+    <section class="intro" aria-label="Our story introduction">
+      <p><span class="dropcap">A</span>t AKS Food Products, our journey began with a simple family dream: to share the comforting taste of traditional homemade snacks with every home. Inspired by our village, our family, and the recipes we cherish, we are proud to bring a little taste of Enapatti to your table.</p>
+    </section>
+
+    <section class="story-grid" aria-label="Our journey">
+      <article class="story-card">
+        <div class="icon" aria-hidden="true">🌾</div>
+        <h2>Our Journey Begins in Enapatti</h2>
+        <p>In the heart of Matha Kovil, Enapatti, our journey began at home. What started as a family tradition grew into a passion for preparing delicious traditional snacks with care. We dreamed of sharing the familiar flavours of our village with more families while building a better future for our own.</p>
+      </article>
+
+      <article class="story-card">
+        <div class="icon" aria-hidden="true">❤️</div>
+        <h2>Homemade with Love</h2>
+        <p>Every snack represents our family's dedication, hard work, and love for good food. We believe that great taste begins with thoughtfully selected ingredients, careful preparation, and attention to quality. Our aim is to make snacks that people can enjoy during tea time, celebrations, and everyday family moments.</p>
+      </article>
+
+      <article class="story-card">
+        <div class="icon" aria-hidden="true">🌱</div>
+        <h2>Our Village, Our Identity</h2>
+        <p>Enapatti is where our roots lie and where our dream began. We are proud of the village traditions that inspire us. Through AKS Food Products, we hope to share the flavours of our hometown, support our family's livelihood, and contribute positively to our local community.</p>
+      </article>
+
+      <article class="story-card">
+        <div class="icon" aria-hidden="true">🏡</div>
+        <h2>A Little Taste of Home</h2>
+        <p>Some of life's best memories are made by sharing food with the people we love. Whether you enjoy our snacks with evening tea, serve them to guests, or share them during a special occasion, we hope every bite brings warmth, happiness, and a feeling of home.</p>
+      </article>
+    </section>
+
+    <section class="values">
+      <div class="values-inner">
+        <h2>What We Believe In</h2>
+        <p class="values-intro">A small family business, guided by the values we grew up with.</p>
+        <div class="value-list">
+          <div class="value-item">
+            <strong>Traditional Taste</strong>
+            <span>Inspired by the flavours and food traditions of our village.</span>
+          </div>
+          <div class="value-item">
+            <strong>Care in Every Batch</strong>
+            <span>Prepared with attention, care, and a commitment to quality.</span>
+          </div>
+          <div class="value-item">
+            <strong>Family Values</strong>
+            <span>Made with the hope of bringing people together over good food.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="closing">
+      <div class="heart" aria-hidden="true">💚</div>
+      <h2>From Our Family to Yours</h2>
+      <p>Thank you for supporting our family business and being part of our journey. Every customer helps our small dream from Enapatti grow, one snack and one smile at a time.</p>
+      <a class="button" href="index.html">← Back to Home</a>
+    </section>
+  </main>
+
+  <footer>
+    <p><strong>AKS FOOD PRODUCTS</strong></p>
+    <p>Born in Enapatti. Made with Love. Shared with Every Home.</p>
+    <p>Matha Kovil, Enapatti</p>
+    <p>© <span id="year"></span> AKS Food Products. All rights reserved.</p>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
