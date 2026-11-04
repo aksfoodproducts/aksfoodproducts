@@ -469,6 +469,47 @@ footer p {
         padding: 17px;
     }
 }
+
+.product-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    margin-top: 10px;
+}
+
+.quantity-selector {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 5px 10px;
+    border: 1px solid #d8ded8;
+    border-radius: 8px;
+    background: #fffaf1;
+}
+
+.quantity-selector button {
+    width: 34px;
+    height: 32px;
+    border: none;
+    border-radius: 6px;
+    background: #17452e;
+    color: white;
+    font-size: 21px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.quantity-selector span {
+    min-width: 24px;
+    text-align: center;
+    font-weight: 700;
+}
+
+.product .product-actions .btn {
+    width: 100%;
+}
+
 </style>
 </head>
 
@@ -532,7 +573,29 @@ footer p {
                 <select id="pack-0" onchange="updatePrice(0)">
                     <option value="80">250 g — ₹80</option>
                 </select>
-                <button class="btn btn-green" onclick="addToCart(0)">＋ Add to Cart</button>
+                
+<div class="product-actions">
+    <div class="quantity-selector">
+        <button type="button"
+                onclick="changeProductQty(0, -1)">−</button>
+
+        <span id="qty-0">0</span>
+
+        <button type="button"
+                onclick="changeProductQty(0, 1)">+</button>
+    </div>
+
+    <button type="button" class="btn btn-green"
+            onclick="addSelectedToCart(0)">
+        Add to Cart
+    </button>
+
+    <button type="button" class="btn btn-gold"
+            onclick="orderSelectedNow(0)">
+        Order Now
+    </button>
+</div>
+
             </div>
         </article>
 
@@ -552,7 +615,29 @@ footer p {
                 <select id="pack-1" onchange="updatePrice(1)">
                     <option value="80">250 g — ₹80</option>
                 </select>
-                <button class="btn btn-green" onclick="addToCart(1)">＋ Add to Cart</button>
+
+<div class="product-actions">
+    <div class="quantity-selector">
+        <button type="button"
+                onclick="changeProductQty(1, -1)">−</button>
+
+        <span id="qty-1">0</span>
+
+        <button type="button"
+                onclick="changeProductQty(1, 1)">+</button>
+    </div>
+
+    <button type="button" class="btn btn-green"
+            onclick="addSelectedToCart(1)">
+        Add to Cart
+    </button>
+
+    <button type="button" class="btn btn-gold"
+            onclick="orderSelectedNow(1)">
+        Order Now
+    </button>
+</div>
+
             </div>
         </article>
 
@@ -572,7 +657,29 @@ footer p {
                 <select id="pack-2" onchange="updatePrice(2)">
                     <option value="80">250 g — ₹80</option>
                 </select>
-                <button class="btn btn-green" onclick="addToCart(2)">＋ Add to Cart</button>
+                
+<div class="product-actions">
+    <div class="quantity-selector">
+        <button type="button"
+                onclick="changeProductQty(2, -1)">−</button>
+
+        <span id="qty-2">0</span>
+
+        <button type="button"
+                onclick="changeProductQty(2, 1)">+</button>
+    </div>
+
+    <button type="button" class="btn btn-green"
+            onclick="addSelectedToCart(2)">
+        Add to Cart
+    </button>
+
+    <button type="button" class="btn btn-gold"
+            onclick="orderSelectedNow(2)">
+        Order Now
+    </button>
+</div>
+
             </div>
         </article>
 
@@ -592,7 +699,29 @@ footer p {
                 <select id="pack-3" onchange="updatePrice(3)">
                     <option value="80">250 g — ₹80</option>
                 </select>
-                <button class="btn btn-green" onclick="addToCart(3)">＋ Add to Cart</button>
+                
+<div class="product-actions">
+    <div class="quantity-selector">
+        <button type="button"
+                onclick="changeProductQty(3, -1)">−</button>
+
+        <span id="qty-3">0</span>
+
+        <button type="button"
+                onclick="changeProductQty(3, 1)">+</button>
+    </div>
+
+    <button type="button" class="btn btn-green"
+            onclick="addSelectedToCart(3)">
+        Add to Cart
+    </button>
+
+    <button type="button" class="btn btn-gold"
+            onclick="orderSelectedNow(3)">
+        Order Now
+    </button>
+</div>
+
             </div>
         </article>
 
@@ -602,17 +731,39 @@ footer p {
           id="badge-4"
           style="display:none;">0</span>
 
-            <img src="assets\images (6).jpg" alt="Somose"
+            <img src="assets\images (6).jpg" alt="somose"
                  onerror="this.onerror=null;this.src='https://placehold.co/500x350/f3ead7/17452e?text=somose'">
             <div class="product-info">
-                <h3>Somose</h3>
+                <h3>somose</h3>
                 <p class="description">A classic homemade sweet with a traditional flavour.</p>
                 <p class="price">₹<span id="price-4">80</span> <small>/ pack</small></p>
                 <label for="pack-4">Choose pack size</label>
                 <select id="pack-4" onchange="updatePrice(4)">
                     <option value="80">250 g — ₹80</option>
                 </select>
-                <button class="btn btn-green" onclick="addToCart(4)">＋ Add to Cart</button>
+                
+<div class="product-actions">
+    <div class="quantity-selector">
+        <button type="button"
+                onclick="changeProductQty(4, -1)">−</button>
+
+        <span id="qty-4">0</span>
+
+        <button type="button"
+                onclick="changeProductQty(4, 1)">+</button>
+    </div>
+
+    <button type="button" class="btn btn-green"
+            onclick="addSelectedToCart(4)">
+        Add to Cart
+    </button>
+
+    <button type="button" class="btn btn-gold"
+            onclick="orderSelectedNow(4)">
+        Order Now
+    </button>
+</div>
+
             </div>
         </article>
 
@@ -623,16 +774,38 @@ footer p {
           style="display:none;">0</span>
 
             <img src="assets\images (7).jpg" alt="Ellu Urundai"
-                 onerror="this.onerror=null;this.src='https://placehold.co/500x350/f3ead7/17452e?text=somose'">
+                 onerror="this.onerror=null;this.src='https://placehold.co/500x350/f3ead7/17452e?text=Ellu Urundai'">
             <div class="product-info">
                 <h3>Ellu Urundai</h3>
                 <p class="description">A classic homemade sweet with a traditional flavour.</p>
                 <p class="price">₹<span id="price-5">80</span> <small>/ pack</small></p>
                 <label for="pack-5">Choose pack size</label>
-                <select id="pack-5" onchange="updatePrice(4)">
+                <select id="pack-5" onchange="updatePrice(5)">
                     <option value="80">250 g — ₹80</option>
                 </select>
-                <button class="btn btn-green" onclick="addToCart(5)">＋ Add to Cart</button>
+                
+<div class="product-actions">
+    <div class="quantity-selector">
+        <button type="button"
+                onclick="changeProductQty(5, -1)">−</button>
+
+        <span id="qty-5">0</span>
+
+        <button type="button"
+                onclick="changeProductQty(5, 1)">+</button>
+    </div>
+
+    <button type="button" class="btn btn-green"
+            onclick="addSelectedToCart(5)">
+        Add to Cart
+    </button>
+
+    <button type="button" class="btn btn-gold"
+            onclick="orderSelectedNow(5)">
+        Order Now
+    </button>
+</div>
+
             </div>
         </article>
         
@@ -759,7 +932,7 @@ const BUSINESS_EMAIL = "aksfoodproducts1607@gmail.com"; // Replace with your rea
 
 // SAMPLE PRICES IN INDIAN RUPEES. Edit these to match your actual rates.
 const products = [
-    { name: "Kelvaragu Murukku", sizes: [
+    { name: "Kavuni Murukku", sizes: [
         { label: "250 g", price: 80 }
     ]},
     { name: "Kelvaragu Urundai", sizes: [
@@ -794,28 +967,88 @@ function updatePrice(index) {
         money(Number(select.value));
 }
 
-function addToCart(index) {
+
+
+
+const productQuantities = [0, 0, 0, 0, 0, 0];
+
+function changeProductQty(index, change) {
     const select = document.getElementById("pack-" + index);
     const size = products[index].sizes[select.selectedIndex];
     const key = index + "|" + size.label;
 
-    if (cart.has(key)) {
-        cart.get(key).quantity += 1;
+    // Find the current quantity of this product in the cart.
+    const currentItem = cart.get(key);
+    const currentQty = currentItem ? currentItem.quantity : 0;
+
+    // Increase or decrease by exactly one.
+    const newQty = Math.max(0, currentQty + change);
+
+    if (newQty === 0) {
+        cart.delete(key);
+    } else if (currentItem) {
+        currentItem.quantity = newQty;
     } else {
         cart.set(key, {
             productIndex: index,
             name: products[index].name,
             size: size.label,
             price: size.price,
-            quantity: 1
+            quantity: newQty
+        });
+    }
+
+    productQuantities[index] = newQty;
+
+    document.getElementById("qty-" + index).textContent = newQty;
+
+    renderCart();
+
+    document.getElementById("order-status").textContent =
+        products[index].name + " quantity: " + newQty;
+}
+
+function addSelectedToCart(index) {
+    changeProductQty(index, 1);
+}
+
+function orderSelectedNow(index) {
+    changeProductQty(index, 1);
+
+    document.getElementById("checkout").scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+
+    document.getElementById("order-status").textContent =
+        products[index].name +
+        " added to cart. Complete your details to place the order.";
+}
+
+function addToCart(index, quantity = 1) {
+    const select = document.getElementById("pack-" + index);
+    const size = products[index].sizes[select.selectedIndex];
+    const key = index + "|" + size.label;
+
+    if (cart.has(key)) {
+        cart.get(key).quantity += quantity;
+    } else {
+        cart.set(key, {
+            productIndex: index,
+            name: products[index].name,
+            size: size.label,
+            price: size.price,
+            quantity: quantity
         });
     }
 
     renderCart();
 
     document.getElementById("order-status").textContent =
+        quantity + " pack(s) of " +
         products[index].name + " added to your cart.";
 }
+
 
 function removeFromCart(key) {
     cart.delete(key);
