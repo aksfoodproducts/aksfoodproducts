@@ -1013,7 +1013,7 @@ function addSelectedToCart(index) {
 }
 
 function orderSelectedNow(index) {
-    changeProductQty(index, 1);
+    changeProductQty(index, 0);
 
     document.getElementById("checkout").scrollIntoView({
         behavior: "smooth",
