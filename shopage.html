@@ -708,6 +708,51 @@ footer p {
     text-align: center;
     font-weight: bold;
 }
+
+/* Small floating cart icon */
+.floating-cart.is-collapsed {
+    width: 62px;
+    height: 62px;
+    border-radius: 50%;
+    overflow: visible;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+.floating-cart.is-collapsed .floating-cart-header {
+    width: 62px;
+    height: 62px;
+    padding: 0;
+    border-radius: 50%;
+    justify-content: center;
+    position: relative;
+    box-shadow: 0 5px 18px rgba(0,0,0,.25);
+}
+
+.floating-cart.is-collapsed .floating-cart-heading {
+    gap: 0;
+}
+
+.floating-cart.is-collapsed .floating-cart-heading span:nth-child(1) {
+    font-size: 27px;
+}
+
+.floating-cart.is-collapsed .floating-cart-heading span:nth-child(2),
+.floating-cart.is-collapsed .floating-cart-chevron {
+    display: none;
+}
+
+.floating-cart.is-collapsed .floating-cart-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    border: 2px solid white;
+}
+
+.floating-cart.is-collapsed .floating-cart-body {
+    display: none;
+}
 </style>
 </head>
 
@@ -1116,10 +1161,12 @@ footer p {
 
 
 <!-- Floating Cart Widget -->
-<aside class="floating-cart" id="floating-cart" aria-label="Floating shopping cart">
+<aside class="floating-cart is-collapsed"
+       id="floating-cart"
+       aria-label="Floating shopping cart">
     <button class="floating-cart-header" type="button"
             id="floating-cart-toggle"
-            aria-expanded="true"
+            aria-expanded="false"
             aria-controls="floating-cart-body">
         <span class="floating-cart-heading">
             <span aria-hidden="true">🛒</span>
