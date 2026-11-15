@@ -337,6 +337,25 @@ nav a:hover {
     cursor: pointer;
 }
 
+.delivery-estimator {
+    background: #fff8e9;
+    border: 1px solid #ead8ae;
+    border-radius: 10px;
+    padding: 14px;
+}
+.delivery-estimator p { margin: 7px 0; }
+.delivery-estimator small { display: block; color: #687268; line-height: 1.5; margin-top: 8px; }
+.cart-summary { display: grid; gap: 7px; }
+.cart-summary > div, .cart-summary > strong,
+.floating-cart-summary > div, .floating-cart-summary > strong {
+    display: flex; justify-content: space-between; gap: 12px;
+}
+.cart-summary > strong { border-top: 1px solid #e7dfd0; padding-top: 8px; }
+.floating-cart-summary { display: grid; gap: 7px; }
+.floating-cart-summary > strong { border-top: 1px solid #e9e4d9; padding-top: 8px; }
+.floating-cart-summary > div { font-size: .85rem; font-weight: 500; }
+.floating-cart-summary > strong { font-size: .95rem; }
+
 .cart-total {
     text-align: right;
     color: var(--green);
@@ -656,103 +675,67 @@ footer p {
         max-height: 250px;
     }
 }
-.floating-cart-qty {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    margin-top: 5px;
-}
 
-.floating-cart-qty button {
-    width: 25px;
-    height: 25px;
-    border: 0;
-    border-radius: 6px;
-    background: var(--green);
-    color: #fff;
-    font-size: 17px;
-    font-weight: 700;
-    cursor: pointer;
-}
 
-.floating-cart-qty span {
-    min-width: 18px;
-    text-align: center;
-    font-weight: 700;
-}
-.floating-cart-qty {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 8px;
-}
 
-.floating-cart-qty button {
-    width: 27px;
-    height: 27px;
-    border: none;
-    border-radius: 6px;
-    background: #17452e;
-    color: white;
-    font-size: 18px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.floating-cart-qty button:hover {
-    background: #286b45;
-}
-
-.floating-cart-qty span {
-    min-width: 20px;
-    text-align: center;
-    font-weight: bold;
-}
-
-/* Small floating cart icon */
-.floating-cart.is-collapsed {
-    width: 62px;
-    height: 62px;
-    border-radius: 50%;
+/* Compact floating cart icon */
+.floating-cart {
+    width: auto;
+    right: 22px;
+    bottom: 22px;
     overflow: visible;
+    border: 0;
+    border-radius: 0;
     background: transparent;
-    border: none;
     box-shadow: none;
 }
-
-.floating-cart.is-collapsed .floating-cart-header {
-    width: 62px;
-    height: 62px;
-    padding: 0;
-    border-radius: 50%;
-    justify-content: center;
+.floating-cart-header {
     position: relative;
-    box-shadow: 0 5px 18px rgba(0,0,0,.25);
+    width: 60px;
+    height: 60px;
+    padding: 0;
+    justify-content: center;
+    border-radius: 50%;
+    box-shadow: 0 6px 20px rgba(16, 41, 29, .28);
 }
-
-.floating-cart.is-collapsed .floating-cart-heading {
-    gap: 0;
-}
-
-.floating-cart.is-collapsed .floating-cart-heading span:nth-child(1) {
-    font-size: 27px;
-}
-
-.floating-cart.is-collapsed .floating-cart-heading span:nth-child(2),
-.floating-cart.is-collapsed .floating-cart-chevron {
-    display: none;
-}
-
-.floating-cart.is-collapsed .floating-cart-count {
+.floating-cart-heading { gap: 0; }
+.floating-cart-heading > span:first-child { font-size: 1.55rem; line-height: 1; }
+.floating-cart-heading > span:nth-child(2),
+.floating-cart-chevron { display: none; }
+.floating-cart-count {
     position: absolute;
     top: -5px;
     right: -5px;
-    border: 2px solid white;
+    min-width: 23px;
+    height: 23px;
+    border: 2px solid var(--cream);
+    font-size: .72rem;
+}
+.floating-cart-body {
+    position: absolute;
+    right: 0;
+    bottom: 72px;
+    width: min(360px, calc(100vw - 28px));
+    max-height: min(430px, calc(100vh - 115px));
+    overflow-y: auto;
+    padding: 13px 15px 15px;
+    border: 1px solid #d8e2d7;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 12px 35px rgba(16, 41, 29, .24);
+}
+.floating-cart.is-collapsed .floating-cart-body { display: none; }
+@media (max-width: 520px) {
+    .floating-cart { right: 14px; bottom: 14px; width: auto; }
+    .floating-cart-header { width: 56px; height: 56px; }
+    .floating-cart-body {
+        right: 0;
+        bottom: 66px;
+        width: min(340px, calc(100vw - 28px));
+        max-height: calc(100vh - 100px);
+    }
 }
 
-.floating-cart.is-collapsed .floating-cart-body {
-    display: none;
-}
 </style>
 </head>
 
@@ -1067,8 +1050,10 @@ footer p {
         <div id="cart-items">
             <p class="cart-empty">Your cart is empty. Add some delicious products!</p>
         </div>
-        <div class="cart-total">
-            Total: ₹<span id="cart-total">0</span>
+        <div class="cart-total cart-summary">
+            <div>Products: ₹<span id="cart-subtotal">0</span></div>
+            <div>Delivery: ₹<span id="cart-delivery">0</span></div>
+            <strong>Total: ₹<span id="cart-total">0</span></strong>
         </div>
         <button class="btn btn-outline" onclick="clearCart()">Clear Cart</button>
     </div>
@@ -1111,6 +1096,14 @@ footer p {
                         <textarea id="customer-address" required maxlength="500"
                                   autocomplete="street-address"
                                   placeholder="Enter your complete delivery address"></textarea>
+                    </div>
+
+                    <div class="field full delivery-estimator" id="delivery-estimator">
+                        <strong>📍 Delivery Charge Calculator</strong>
+                        <p>Delivery is free within 10 km of AKS Food Products, Lenavilakku. Beyond 10 km, the charge is ₹5 per additional km.</p>
+                        <button type="button" class="btn btn-outline" id="detect-location-btn" onclick="detectDeliveryLocation()">Detect My Location</button>
+                        <p id="delivery-status" class="status" aria-live="polite">Detect your location to calculate the estimated delivery charge.</p>
+                        <small>Distance is estimated as a straight-line radius from the shop. Final delivery charge will be confirmed by AKS Food Products.</small>
                     </div>
 
                     <div class="field full">
@@ -1161,11 +1154,10 @@ footer p {
 
 
 <!-- Floating Cart Widget -->
-<aside class="floating-cart is-collapsed"
-       id="floating-cart"
-       aria-label="Floating shopping cart">
+<aside class="floating-cart is-collapsed" id="floating-cart" aria-label="Floating shopping cart">
     <button class="floating-cart-header" type="button"
             id="floating-cart-toggle"
+            aria-label="Open shopping cart"
             aria-expanded="false"
             aria-controls="floating-cart-body">
         <span class="floating-cart-heading">
@@ -1179,9 +1171,10 @@ footer p {
         <div id="floating-cart-items">
             <p class="floating-cart-empty">Your cart is empty. Add a product!</p>
         </div>
-        <div class="floating-cart-footer">
-            <span>Total</span>
-            <span>₹<span id="floating-cart-total">0</span></span>
+        <div class="floating-cart-footer floating-cart-summary">
+            <div><span>Products</span><span>₹<span id="floating-cart-subtotal">0</span></span></div>
+            <div><span>Delivery</span><span>₹<span id="floating-cart-delivery">0</span></span></div>
+            <strong><span>Total</span><span>₹<span id="floating-cart-total">0</span></span></strong>
         </div>
         <div class="floating-cart-actions">
             <a class="floating-cart-view" href="#cart">View Cart</a>
@@ -1228,6 +1221,65 @@ const products = [
 
 // Cart key = product index + pack size label.
 const cart = new Map();
+
+// Delivery policy: free within 10 km; ₹5 for each additional started km.
+const SHOP_LOCATION = { latitude: 10.2841098, longitude: 78.7630395 };
+const FREE_DELIVERY_RADIUS_KM = 10;
+const DELIVERY_RATE_PER_KM = 5;
+let deliveryEstimate = null;
+
+function calculateDistanceKm(lat1, lon1, lat2, lon2) {
+    const toRad = value => value * Math.PI / 180;
+    const earthRadiusKm = 6371;
+    const dLat = toRad(lat2 - lat1);
+    const dLon = toRad(lon2 - lon1);
+    const a = Math.sin(dLat / 2) ** 2 +
+        Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+        Math.sin(dLon / 2) ** 2;
+    return 2 * earthRadiusKm * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+function getDeliveryCharge() {
+    return deliveryEstimate ? deliveryEstimate.charge : 0;
+}
+
+function detectDeliveryLocation() {
+    const status = document.getElementById("delivery-status");
+    const button = document.getElementById("detect-location-btn");
+    if (!navigator.geolocation) {
+        status.textContent = "Location detection is not supported by this browser. Please contact us to confirm delivery charges.";
+        return;
+    }
+    button.disabled = true;
+    button.textContent = "Detecting location…";
+    status.textContent = "Please allow location access in your browser.";
+    navigator.geolocation.getCurrentPosition(position => {
+        const distance = calculateDistanceKm(
+            SHOP_LOCATION.latitude, SHOP_LOCATION.longitude,
+            position.coords.latitude, position.coords.longitude
+        );
+        const extraKm = Math.ceil(Math.max(0, distance - FREE_DELIVERY_RADIUS_KM));
+        const charge = extraKm * DELIVERY_RATE_PER_KM;
+        deliveryEstimate = { distance, extraKm, charge };
+        status.textContent = distance <= FREE_DELIVERY_RADIUS_KM
+            ? `Estimated distance: ${distance.toFixed(1)} km — Free delivery (within 10 km).`
+            : `Estimated distance: ${distance.toFixed(1)} km — ${extraKm} additional km × ₹5 = ₹${money(charge)} delivery charge.`;
+        button.disabled = false;
+        button.textContent = "Refresh My Location";
+        renderCart();
+    }, error => {
+        deliveryEstimate = null;
+        const messages = {
+            1: "Location permission was denied. Allow location access and try again, or contact us to confirm the delivery charge.",
+            2: "Your location could not be determined. Please try again.",
+            3: "Location request timed out. Please try again."
+        };
+        status.textContent = messages[error.code] || "Unable to detect location. Please try again.";
+        button.disabled = false;
+        button.textContent = "Try Detecting Again";
+        renderCart();
+    }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 60000 });
+}
 
 function money(amount) {
     return Number(amount).toLocaleString("en-IN", {
@@ -1344,32 +1396,6 @@ function getTotal() {
     return total;
 }
 
-function changeFloatingCartQty(key, change) {
-    const item = cart.get(key);
-    if (!item) return;
-
-    item.quantity += change;
-
-    if (item.quantity <= 0) {
-        cart.delete(key);
-    }
-
-    renderCart();
-}
-
-function changeFloatingCartQty(key, change) {
-    const item = cart.get(key);
-
-    if (!item) return;
-
-    item.quantity += change;
-
-    if (item.quantity <= 0) {
-        cart.delete(key);
-    }
-
-    renderCart();
-}
 
 function renderFloatingCart() {
     const itemsContainer = document.getElementById("floating-cart-items");
@@ -1383,7 +1409,9 @@ function renderFloatingCart() {
     );
 
     countElement.textContent = totalItems;
-    totalElement.textContent = money(getTotal());
+    totalElement.textContent = money(getTotal() + getDeliveryCharge());
+    document.getElementById("floating-cart-subtotal").textContent = money(getTotal());
+    document.getElementById("floating-cart-delivery").textContent = money(getDeliveryCharge());
     itemsContainer.replaceChildren();
 
     if (cart.size === 0) {
@@ -1399,44 +1427,17 @@ function renderFloatingCart() {
         row.className = "floating-cart-item";
 
         const info = document.createElement("div");
-
         const name = document.createElement("span");
         name.className = "floating-cart-item-name";
         name.textContent = item.name;
 
         const detail = document.createElement("small");
         detail.className = "floating-cart-item-detail";
-        detail.textContent = item.size + " | ₹" + money(item.price) + " each";
+        detail.textContent = item.size + " × " + item.quantity +
+            " | ₹" + money(item.price) + " each";
 
         info.append(name, detail);
 
-        // QUANTITY CONTROLS
-        const quantityControls = document.createElement("div");
-        quantityControls.className = "floating-cart-qty";
-
-        const minus = document.createElement("button");
-        minus.type = "button";
-        minus.textContent = "−";
-        minus.setAttribute("aria-label", "Decrease quantity");
-        minus.addEventListener("click", () => {
-            changeFloatingCartQty(key, -1);
-        });
-
-        const quantity = document.createElement("span");
-        quantity.textContent = item.quantity;
-
-        const plus = document.createElement("button");
-        plus.type = "button";
-        plus.textContent = "+";
-        plus.setAttribute("aria-label", "Increase quantity");
-        plus.addEventListener("click", () => {
-            changeFloatingCartQty(key, 1);
-        });
-
-        quantityControls.append(minus, quantity, plus);
-        info.appendChild(quantityControls);
-
-        // RIGHT SIDE
         const right = document.createElement("div");
         right.className = "floating-cart-item-right";
 
@@ -1480,7 +1481,9 @@ function renderCart() {
         badge.style.display = quantity > 0 ? "flex" : "none";
     }
 });
-    document.getElementById("cart-total").textContent = money(getTotal());
+    document.getElementById("cart-subtotal").textContent = money(getTotal());
+    document.getElementById("cart-delivery").textContent = money(getDeliveryCharge());
+    document.getElementById("cart-total").textContent = money(getTotal() + getDeliveryCharge());
     products.forEach((product, index) => {
         const selected = document.getElementById("pack-" + index);
         const selectedSize = product.sizes[selected.selectedIndex];
@@ -1551,6 +1554,12 @@ function getOrderDetails() {
         return null;
     }
 
+    if (!deliveryEstimate) {
+        alert("Please detect your delivery location first so the delivery charge can be estimated.");
+        document.getElementById("delivery-estimator").scrollIntoView({ behavior: "smooth", block: "center" });
+        return null;
+    }
+
     const lines = [...cart.values()].map((item, i) =>
         (i + 1) + ". " + item.name + " (" + item.size + ")" +
         " x " + item.quantity + " = ₹" +
@@ -1567,7 +1576,10 @@ function getOrderDetails() {
         "ORDER ITEMS:",
         ...lines,
         "",
-        "TOTAL: ₹" + money(getTotal()),
+        "Products Subtotal: ₹" + money(getTotal()),
+        "Delivery Distance (estimated): " + deliveryEstimate.distance.toFixed(1) + " km",
+        "Delivery Charge: ₹" + money(getDeliveryCharge()),
+        "TOTAL INCLUDING DELIVERY: ₹" + money(getTotal() + getDeliveryCharge()),
         "",
         "Delivery Address: " + address,
         "Instructions: " + (notes || "None"),
