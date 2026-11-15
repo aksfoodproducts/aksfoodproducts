@@ -510,6 +510,204 @@ footer p {
     width: 100%;
 }
 
+
+/* Floating shopping cart */
+.floating-cart {
+    position: fixed;
+    right: 22px;
+    bottom: 22px;
+    width: min(360px, calc(100vw - 28px));
+    z-index: 9999;
+    background: #fff;
+    border: 1px solid #d8e2d7;
+    border-radius: 16px;
+    box-shadow: 0 12px 35px rgba(16, 41, 29, .24);
+    overflow: hidden;
+}
+.floating-cart-header {
+    width: 100%;
+    border: 0;
+    background: var(--green);
+    color: #fff;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    cursor: pointer;
+    text-align: left;
+    font-weight: 700;
+}
+.floating-cart-heading {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+.floating-cart-count {
+    min-width: 25px;
+    height: 25px;
+    padding: 0 7px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50px;
+    background: var(--gold);
+    color: #18291d;
+    font-size: .8rem;
+}
+.floating-cart-chevron {
+    font-size: 1.1rem;
+    transition: transform .2s ease;
+}
+.floating-cart.is-collapsed .floating-cart-chevron {
+    transform: rotate(180deg);
+}
+.floating-cart-body {
+    padding: 13px 15px 15px;
+    max-height: 310px;
+    overflow-y: auto;
+}
+.floating-cart.is-collapsed .floating-cart-body {
+    display: none;
+}
+.floating-cart-empty {
+    color: #737b73;
+    font-size: .9rem;
+    padding: 8px 0 12px;
+}
+.floating-cart-item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee9df;
+    font-size: .87rem;
+}
+.floating-cart-item-name {
+    color: var(--green);
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+.floating-cart-item-detail {
+    display: block;
+    color: #737b73;
+    font-size: .78rem;
+    margin-top: 2px;
+}
+.floating-cart-item-right {
+    text-align: right;
+    white-space: nowrap;
+}
+.floating-cart-item-price {
+    color: var(--green);
+    font-weight: 700;
+}
+.floating-cart-remove {
+    display: block;
+    margin: 4px 0 0 auto;
+    border: 0;
+    background: transparent;
+    color: #a32c20;
+    font-size: .75rem;
+    text-decoration: underline;
+    cursor: pointer;
+}
+.floating-cart-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding-top: 12px;
+    margin-top: 4px;
+    border-top: 1px solid #e9e4d9;
+    color: var(--green);
+    font-weight: 700;
+}
+.floating-cart-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+}
+.floating-cart-actions a {
+    flex: 1;
+    padding: 9px 10px;
+    border-radius: 7px;
+    text-align: center;
+    text-decoration: none;
+    font-size: .82rem;
+    font-weight: 700;
+}
+.floating-cart-view {
+    border: 1px solid var(--green);
+    color: var(--green);
+    background: #fff;
+}
+.floating-cart-checkout {
+    background: var(--gold);
+    color: #18291d;
+}
+@media (max-width: 520px) {
+    .floating-cart {
+        right: 10px;
+        bottom: 10px;
+        width: min(340px, calc(100vw - 20px));
+    }
+    .floating-cart-body {
+        max-height: 250px;
+    }
+}
+.floating-cart-qty {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: 5px;
+}
+
+.floating-cart-qty button {
+    width: 25px;
+    height: 25px;
+    border: 0;
+    border-radius: 6px;
+    background: var(--green);
+    color: #fff;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.floating-cart-qty span {
+    min-width: 18px;
+    text-align: center;
+    font-weight: 700;
+}
+.floating-cart-qty {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.floating-cart-qty button {
+    width: 27px;
+    height: 27px;
+    border: none;
+    border-radius: 6px;
+    background: #17452e;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.floating-cart-qty button:hover {
+    background: #286b45;
+}
+
+.floating-cart-qty span {
+    min-width: 20px;
+    text-align: center;
+    font-weight: bold;
+}
 </style>
 </head>
 
@@ -916,6 +1114,35 @@ footer p {
 </section>
 </main>
 
+
+<!-- Floating Cart Widget -->
+<aside class="floating-cart" id="floating-cart" aria-label="Floating shopping cart">
+    <button class="floating-cart-header" type="button"
+            id="floating-cart-toggle"
+            aria-expanded="true"
+            aria-controls="floating-cart-body">
+        <span class="floating-cart-heading">
+            <span aria-hidden="true">🛒</span>
+            <span>My Cart</span>
+            <span class="floating-cart-count" id="floating-cart-count">0</span>
+        </span>
+        <span class="floating-cart-chevron" aria-hidden="true">⌄</span>
+    </button>
+    <div class="floating-cart-body" id="floating-cart-body">
+        <div id="floating-cart-items">
+            <p class="floating-cart-empty">Your cart is empty. Add a product!</p>
+        </div>
+        <div class="floating-cart-footer">
+            <span>Total</span>
+            <span>₹<span id="floating-cart-total">0</span></span>
+        </div>
+        <div class="floating-cart-actions">
+            <a class="floating-cart-view" href="#cart">View Cart</a>
+            <a class="floating-cart-checkout" href="#checkout">Checkout</a>
+        </div>
+    </div>
+</aside>
+
 <footer>
     <p><strong>AKS FOOD PRODUCTS</strong></p>
     <p>Homemade with Love • Traditional Taste</p>
@@ -1070,6 +1297,119 @@ function getTotal() {
     return total;
 }
 
+function changeFloatingCartQty(key, change) {
+    const item = cart.get(key);
+    if (!item) return;
+
+    item.quantity += change;
+
+    if (item.quantity <= 0) {
+        cart.delete(key);
+    }
+
+    renderCart();
+}
+
+function changeFloatingCartQty(key, change) {
+    const item = cart.get(key);
+
+    if (!item) return;
+
+    item.quantity += change;
+
+    if (item.quantity <= 0) {
+        cart.delete(key);
+    }
+
+    renderCart();
+}
+
+function renderFloatingCart() {
+    const itemsContainer = document.getElementById("floating-cart-items");
+    const countElement = document.getElementById("floating-cart-count");
+    const totalElement = document.getElementById("floating-cart-total");
+
+    if (!itemsContainer || !countElement || !totalElement) return;
+
+    const totalItems = [...cart.values()].reduce(
+        (sum, item) => sum + item.quantity, 0
+    );
+
+    countElement.textContent = totalItems;
+    totalElement.textContent = money(getTotal());
+    itemsContainer.replaceChildren();
+
+    if (cart.size === 0) {
+        const empty = document.createElement("p");
+        empty.className = "floating-cart-empty";
+        empty.textContent = "Your cart is empty. Add a product!";
+        itemsContainer.appendChild(empty);
+        return;
+    }
+
+    for (const [key, item] of cart.entries()) {
+        const row = document.createElement("div");
+        row.className = "floating-cart-item";
+
+        const info = document.createElement("div");
+
+        const name = document.createElement("span");
+        name.className = "floating-cart-item-name";
+        name.textContent = item.name;
+
+        const detail = document.createElement("small");
+        detail.className = "floating-cart-item-detail";
+        detail.textContent = item.size + " | ₹" + money(item.price) + " each";
+
+        info.append(name, detail);
+
+        // QUANTITY CONTROLS
+        const quantityControls = document.createElement("div");
+        quantityControls.className = "floating-cart-qty";
+
+        const minus = document.createElement("button");
+        minus.type = "button";
+        minus.textContent = "−";
+        minus.setAttribute("aria-label", "Decrease quantity");
+        minus.addEventListener("click", () => {
+            changeFloatingCartQty(key, -1);
+        });
+
+        const quantity = document.createElement("span");
+        quantity.textContent = item.quantity;
+
+        const plus = document.createElement("button");
+        plus.type = "button";
+        plus.textContent = "+";
+        plus.setAttribute("aria-label", "Increase quantity");
+        plus.addEventListener("click", () => {
+            changeFloatingCartQty(key, 1);
+        });
+
+        quantityControls.append(minus, quantity, plus);
+        info.appendChild(quantityControls);
+
+        // RIGHT SIDE
+        const right = document.createElement("div");
+        right.className = "floating-cart-item-right";
+
+        const subtotal = document.createElement("span");
+        subtotal.className = "floating-cart-item-price";
+        subtotal.textContent = "₹" + money(item.price * item.quantity);
+
+        const remove = document.createElement("button");
+        remove.type = "button";
+        remove.className = "floating-cart-remove";
+        remove.textContent = "Remove";
+        remove.setAttribute("aria-label", "Remove " + item.name);
+        remove.addEventListener("click", () => removeFromCart(key));
+
+        right.append(subtotal, remove);
+        row.append(info, right);
+        itemsContainer.appendChild(row);
+    }
+}
+
 function renderCart() {
     const container = document.getElementById("cart-items");
     const totalItems = [...cart.values()].reduce(
@@ -1094,6 +1434,15 @@ function renderCart() {
     }
 });
     document.getElementById("cart-total").textContent = money(getTotal());
+    products.forEach((product, index) => {
+        const selected = document.getElementById("pack-" + index);
+        const selectedSize = product.sizes[selected.selectedIndex];
+        const selectedKey = index + "|" + selectedSize.label;
+        const selectedItem = cart.get(selectedKey);
+        document.getElementById("qty-" + index).textContent =
+            selectedItem ? selectedItem.quantity : 0;
+    });
+    renderFloatingCart();
 
     container.replaceChildren();
 
@@ -1222,6 +1571,13 @@ function sendEmail() {
 }
 
 document.getElementById("year").textContent = new Date().getFullYear();
+
+const floatingCart = document.getElementById("floating-cart");
+const floatingCartToggle = document.getElementById("floating-cart-toggle");
+floatingCartToggle.addEventListener("click", () => {
+    const collapsed = floatingCart.classList.toggle("is-collapsed");
+    floatingCartToggle.setAttribute("aria-expanded", String(!collapsed));
+});
 
 renderCart();
 </script>
