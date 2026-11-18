@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,12 +11,14 @@
 
 <style>
 * { box-sizing: border-box; }
+
 body {
   margin: 0;
   font-family: Arial, sans-serif;
   background: #fffaf1;
   color: #243329;
 }
+
 header {
   background: #17452e;
   color: white;
@@ -26,7 +29,9 @@ header {
   flex-wrap: wrap;
   gap: 12px;
 }
+
 header h2 { margin: 0; }
+
 button {
   border: 0;
   padding: 10px 15px;
@@ -34,23 +39,48 @@ button {
   cursor: pointer;
   font-weight: bold;
 }
+
+button:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+}
+
 .logout { background: #d8a64d; color: #173b2a; }
-main { max-width: 1100px; margin: 25px auto; padding: 15px; }
+
+main {
+  max-width: 1100px;
+  margin: 25px auto;
+  padding: 15px;
+}
+
 .stats {
   display: grid;
   grid-template-columns: repeat(auto-fit,minmax(160px,1fr));
   gap: 15px;
 }
+
 .stat, .panel {
   background: white;
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0 2px 10px #00000010;
 }
-.stat h3 { color: #286b45; margin-top: 0; }
-.stat p { font-size: 25px; font-weight: bold; margin-bottom: 0; }
+
+.stat h3 {
+  color: #286b45;
+  margin-top: 0;
+}
+
+.stat p {
+  font-size: 25px;
+  font-weight: bold;
+  margin-bottom: 0;
+}
+
 .panel { margin-top: 22px; }
-input, textarea {
+
+input:not([type="checkbox"]):not([type="file"]),
+textarea {
   width: 100%;
   padding: 11px;
   margin: 7px 0 13px;
@@ -58,18 +88,126 @@ input, textarea {
   border-radius: 7px;
   font: inherit;
 }
-textarea { min-height: 75px; resize: vertical; }
+
+textarea {
+  min-height: 75px;
+  resize: vertical;
+}
+
 label { font-weight: bold; }
+
 .primary { background: #17452e; color: white; }
 .secondary { background: #d8a64d; color: #173b2a; }
 .danger { background: #b83232; color: white; }
-table { width: 100%; border-collapse: collapse; min-width: 650px; }
-th, td { padding: 12px; border-bottom: 1px solid #eee; text-align: left; }
-th { background: #17452e; color: white; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 650px;
+}
+
+th, td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}
+
+th {
+  background: #17452e;
+  color: white;
+}
+
 .table-wrap { overflow-x: auto; }
-.actions { display: flex; gap: 6px; flex-wrap: wrap; }
-#status { margin-top: 12px; font-weight: bold; }
-.hidden { display: none; }
+
+.actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+#status {
+  margin-top: 12px;
+  font-weight: bold;
+  overflow-wrap: anywhere;
+}
+
+.hidden { display: none !important; }
+
+/* IMAGE UPLOAD */
+
+.upload-box {
+  border: 2px dashed #9db7a1;
+  border-radius: 12px;
+  background: #f7faf5;
+  padding: 25px 15px;
+  text-align: center;
+  margin: 10px 0 15px;
+}
+
+.upload-icon {
+  font-size: 42px;
+  margin-bottom: 10px;
+}
+
+.upload-box p {
+  color: #666;
+  font-size: 14px;
+}
+
+.upload-button {
+  display: inline-block;
+  background: #17452e;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 7px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 8px;
+}
+
+.upload-button:hover {
+  background: #286b45;
+}
+
+#imageFile {
+  display: none;
+}
+
+#imagePreview {
+  display: block;
+  max-width: 220px;
+  max-height: 200px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  margin: 15px auto 5px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+#fileName {
+  font-size: 13px;
+  color: #17452e;
+  overflow-wrap: anywhere;
+}
+
+.image-actions {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.image-note {
+  font-size: 12px;
+  color: #777;
+}
+
+@media(max-width:600px) {
+  main { padding: 10px; }
+  .panel { padding: 15px; }
+}
 </style>
 </head>
 
@@ -81,71 +219,162 @@ th { background: #17452e; color: white; }
 </header>
 
 <main>
+
+  <!-- DASHBOARD STATISTICS -->
+
   <section class="stats">
+
     <div class="stat">
       <h3>Total Products</h3>
       <p id="totalProducts">0</p>
     </div>
+
     <div class="stat">
       <h3>Active Products</h3>
       <p id="activeProducts">0</p>
     </div>
+
     <div class="stat">
       <h3>Inactive Products</h3>
       <p id="inactiveProducts">0</p>
     </div>
+
   </section>
 
+  <!-- ADD / EDIT PRODUCT -->
+
   <section class="panel">
+
     <h2 id="formTitle">Add New Product</h2>
 
     <form id="productForm">
+
       <input type="hidden" id="productId">
 
       <label>Product Name</label>
       <input id="name" required placeholder="Product name">
 
       <label>Description</label>
-      <textarea id="description" placeholder="Product description"></textarea>
+      <textarea id="description"
+        placeholder="Product description"></textarea>
 
       <label>Category</label>
       <input id="category" placeholder="Snacks / Sweets">
 
       <label>Price (₹)</label>
-      <input id="price" type="number" min="0" step="0.01" required>
+      <input id="price" type="number" min="0"
+        step="0.01" required placeholder="80">
 
       <label>Pack Size</label>
       <input id="pack_size" placeholder="250 g">
 
       <label>Stock Quantity</label>
-      <input id="stock_quantity" type="number" min="0" step="1" value="0">
+      <input id="stock_quantity" type="number"
+        min="0" step="1" value="0">
 
-      <label>Product Image URL</label>
-      <input id="image_url" type="url" placeholder="https://...">
+      <!-- IMAGE UPLOAD -->
+
+      <h3>Product Image Upload</h3>
+
+      <div class="upload-box">
+
+        <div class="upload-icon">📷</div>
+
+        <h3>Choose Product Image</h3>
+
+        <p>Upload an image from your computer or mobile device.</p>
+
+        <label for="imageFile" class="upload-button">
+          📁 Choose from This PC / Device
+        </label>
+
+        <input
+          type="file"
+          id="imageFile"
+          accept="image/jpeg,image/png,image/webp"
+        >
+
+        <p id="fileName">No image selected</p>
+
+        <img
+          id="imagePreview"
+          class="hidden"
+          alt="Product image preview"
+        >
+
+        <div class="image-actions">
+
+          <button
+            type="button"
+            id="removeImageBtn"
+            class="danger hidden">
+            Remove Selected Image
+          </button>
+
+        </div>
+
+        <p class="image-note">
+          Supported formats: JPG, JPEG, PNG and WEBP.
+          Maximum size: 5 MB.
+        </p>
+
+      </div>
+
+      <!-- IMAGE URL OPTION -->
+
+      <label>Or Enter Product Image URL</label>
+
+      <input
+        id="image_url"
+        type="url"
+        placeholder="https://example.com/image.jpg"
+      >
 
       <label>
-        <input id="is_active" type="checkbox" checked
-          style="width:auto;margin-right:7px">
+        <input
+          id="is_active"
+          type="checkbox"
+          checked
+          style="width:auto;margin-right:7px"
+        >
         Active product
       </label>
 
       <br><br>
-      <button class="primary" type="submit" id="saveBtn">Save Product</button>
-      <button class="secondary" type="button" id="cancelBtn">Cancel Edit</button>
+
+      <button class="primary" type="submit" id="saveBtn">
+        Save Product
+      </button>
+
+      <button class="secondary" type="button" id="cancelBtn">
+        Cancel Edit
+      </button>
+
     </form>
 
     <p id="status" role="status"></p>
+
   </section>
 
+  <!-- MANAGE PRODUCTS -->
+
   <section class="panel">
+
     <h2>Manage Products</h2>
-    <button class="secondary" id="refreshBtn">Refresh Products</button>
+
+    <button class="secondary" id="refreshBtn">
+      Refresh Products
+    </button>
+
     <br><br>
 
     <div class="table-wrap">
+
       <table>
+
         <thead>
           <tr>
+            <th>Image</th>
             <th>Name</th>
             <th>Price</th>
             <th>Pack</th>
@@ -154,38 +383,247 @@ th { background: #17452e; color: white; }
             <th>Actions</th>
           </tr>
         </thead>
+
         <tbody id="productList">
-          <tr><td colspan="6">Loading...</td></tr>
+          <tr>
+            <td colspan="7">Loading...</td>
+          </tr>
         </tbody>
+
       </table>
+
     </div>
+
   </section>
+
 </main>
 
 <script>
+
+// =======================================
+// SUPABASE STORAGE SETTINGS
+// =======================================
+
+const BUCKET_NAME = "product-images";
+
 const statusBox = document.getElementById("status");
+
 let products = [];
+let selectedImageFile = null;
+let imagePreviewUrl = null;
+
+// =======================================
+// STATUS MESSAGE
+// =======================================
 
 function showStatus(message, isError = false) {
+
   statusBox.textContent = message;
-  statusBox.style.color = isError ? "#b83232" : "#286b45";
+
+  statusBox.style.color =
+    isError ? "#b83232" : "#286b45";
+
 }
+
+// =======================================
+// RESET FORM
+// =======================================
 
 function resetForm() {
+
   document.getElementById("productForm").reset();
+
   document.getElementById("productId").value = "";
+
   document.getElementById("is_active").checked = true;
-  document.getElementById("formTitle").textContent = "Add New Product";
-  document.getElementById("saveBtn").textContent = "Save Product";
+
+  document.getElementById("formTitle").textContent =
+    "Add New Product";
+
+  document.getElementById("saveBtn").textContent =
+    "Save Product";
+
+  clearSelectedImage();
+
+  showStatus("");
+
 }
 
+// =======================================
+// CLEAR IMAGE SELECTION
+// =======================================
+
+function clearSelectedImage() {
+
+  selectedImageFile = null;
+
+  document.getElementById("imageFile").value = "";
+
+  document.getElementById("fileName").textContent =
+    "No image selected";
+
+  document.getElementById("imagePreview").classList.add("hidden");
+
+  document.getElementById("imagePreview").removeAttribute("src");
+
+  document.getElementById("removeImageBtn").classList.add("hidden");
+
+  if (imagePreviewUrl) {
+    URL.revokeObjectURL(imagePreviewUrl);
+    imagePreviewUrl = null;
+  }
+
+}
+
+// =======================================
+// SELECT IMAGE FROM THIS PC / DEVICE
+// =======================================
+
+document.getElementById("imageFile")
+.addEventListener("change", function() {
+
+  const file = this.files[0];
+
+  if (!file) return;
+
+  const allowedTypes = [
+    "image/jpeg",
+    "image/png",
+    "image/webp"
+  ];
+
+  if (!allowedTypes.includes(file.type)) {
+
+    showStatus(
+      "Invalid image format. Choose JPG, PNG or WEBP.",
+      true
+    );
+
+    this.value = "";
+    return;
+
+  }
+
+  if (file.size > 5 * 1024 * 1024) {
+
+    showStatus(
+      "Image is too large. Maximum allowed size is 5 MB.",
+      true
+    );
+
+    this.value = "";
+    return;
+
+  }
+
+  clearPreviewOnly();
+
+  selectedImageFile = file;
+
+  document.getElementById("fileName").textContent =
+    "Selected: " + file.name;
+
+  imagePreviewUrl = URL.createObjectURL(file);
+
+  const preview = document.getElementById("imagePreview");
+
+  preview.src = imagePreviewUrl;
+
+  preview.classList.remove("hidden");
+
+  document.getElementById("removeImageBtn")
+    .classList.remove("hidden");
+
+  document.getElementById("image_url").value = "";
+
+  showStatus("Image selected successfully. Preview it before saving.");
+
+});
+
+// =======================================
+// CLEAR PREVIEW WITHOUT CLEARING FILE
+// =======================================
+
+function clearPreviewOnly() {
+
+  const preview = document.getElementById("imagePreview");
+
+  preview.classList.add("hidden");
+  preview.removeAttribute("src");
+
+  if (imagePreviewUrl) {
+    URL.revokeObjectURL(imagePreviewUrl);
+    imagePreviewUrl = null;
+  }
+
+}
+
+// =======================================
+// REMOVE SELECTED IMAGE
+// =======================================
+
+document.getElementById("removeImageBtn")
+.addEventListener("click", function() {
+
+  clearSelectedImage();
+
+  showStatus("Selected image removed.");
+
+});
+
+// =======================================
+// UPLOAD IMAGE TO SUPABASE STORAGE
+// =======================================
+
+async function uploadProductImage(file) {
+
+  const extension = file.type === "image/jpeg" ? "jpg" :
+                    file.type === "image/png" ? "png" : "webp";
+
+  const filePath =
+    "products/" + crypto.randomUUID() + "." + extension;
+
+  showStatus("Uploading image to Supabase Storage...");
+
+  const { data, error } = await db.storage
+    .from(BUCKET_NAME)
+    .upload(filePath, file, {
+      cacheControl: "3600",
+      upsert: false,
+      contentType: file.type
+    });
+
+  if (error) {
+    throw new Error("Image upload failed: " + error.message);
+  }
+
+  const { data: publicData } = db.storage
+    .from(BUCKET_NAME)
+    .getPublicUrl(data.path);
+
+  if (!publicData.publicUrl) {
+    throw new Error("Could not generate public image URL.");
+  }
+
+  return publicData.publicUrl;
+
+}
+
+// =======================================
+// ADMIN AUTHENTICATION CHECK
+// =======================================
+
 async function checkAdmin() {
+
   const { data: sessionData, error: sessionError } =
     await db.auth.getSession();
 
   if (sessionError || !sessionData.session) {
+
     window.location.replace("admin.html");
+
     return false;
+
   }
 
   const userId = sessionData.session.user.id;
@@ -197,16 +635,27 @@ async function checkAdmin() {
     .maybeSingle();
 
   if (error || !admin) {
+
     await db.auth.signOut();
+
     alert("You are not authorized to access this dashboard.");
+
     window.location.replace("admin.html");
+
     return false;
+
   }
 
   return true;
+
 }
 
+// =======================================
+// LOAD PRODUCTS
+// =======================================
+
 async function loadProducts() {
+
   showStatus("Loading products...");
 
   const { data, error } = await db
@@ -215,165 +664,421 @@ async function loadProducts() {
     .order("created_at", { ascending: false });
 
   if (error) {
-    showStatus("Could not load products: " + error.message, true);
+
+    showStatus(
+      "Could not load products: " + error.message,
+      true
+    );
+
     return;
+
   }
 
   products = data || [];
 
-  document.getElementById("totalProducts").textContent = products.length;
+  document.getElementById("totalProducts").textContent =
+    products.length;
+
   document.getElementById("activeProducts").textContent =
     products.filter(p => p.is_active).length;
+
   document.getElementById("inactiveProducts").textContent =
     products.filter(p => !p.is_active).length;
 
   const list = document.getElementById("productList");
+
   list.replaceChildren();
 
   if (!products.length) {
+
     const row = document.createElement("tr");
+
     const cell = document.createElement("td");
-    cell.colSpan = 6;
-    cell.textContent = "No products found. Add your first product above.";
+
+    cell.colSpan = 7;
+
+    cell.textContent =
+      "No products found. Add your first product above.";
+
     row.appendChild(cell);
+
     list.appendChild(row);
+
   }
 
   products.forEach(product => {
+
     const row = document.createElement("tr");
 
+    // IMAGE COLUMN
+
+    const imageCell = document.createElement("td");
+
+    if (product.image_url) {
+
+      const img = document.createElement("img");
+
+      img.src = product.image_url;
+
+      img.alt = product.name;
+
+      img.style.width = "65px";
+      img.style.height = "60px";
+      img.style.objectFit = "cover";
+      img.style.borderRadius = "8px";
+
+      imageCell.appendChild(img);
+
+    } else {
+
+      imageCell.textContent = "No image";
+
+    }
+
+    row.appendChild(imageCell);
+
     function cell(value) {
+
       const td = document.createElement("td");
+
       td.textContent = value;
+
       row.appendChild(td);
+
     }
 
     cell(product.name);
+
     cell("₹" + product.price);
+
     cell(product.pack_size || "-");
+
     cell(String(product.stock_quantity ?? 0));
+
     cell(product.is_active ? "Active" : "Inactive");
 
+    // ACTION BUTTONS
+
     const actionCell = document.createElement("td");
+
     const actions = document.createElement("div");
+
     actions.className = "actions";
 
     const editButton = document.createElement("button");
+
     editButton.className = "secondary";
+
     editButton.textContent = "Edit";
-    editButton.addEventListener("click", () => editProduct(product.id));
+
+    editButton.addEventListener("click", () =>
+      editProduct(product.id)
+    );
 
     const deleteButton = document.createElement("button");
+
     deleteButton.className = "danger";
+
     deleteButton.textContent = "Delete";
-    deleteButton.addEventListener("click", () => deleteProduct(product.id));
+
+    deleteButton.addEventListener("click", () =>
+      deleteProduct(product.id)
+    );
 
     actions.append(editButton, deleteButton);
+
     actionCell.appendChild(actions);
+
     row.appendChild(actionCell);
+
     list.appendChild(row);
+
   });
 
   showStatus("Products loaded successfully.");
+
 }
 
-document.getElementById("productForm").addEventListener("submit", async (event) => {
+// =======================================
+// ADD OR UPDATE PRODUCT
+// =======================================
+
+document.getElementById("productForm")
+.addEventListener("submit", async (event) => {
+
   event.preventDefault();
 
-  const id = document.getElementById("productId").value;
-
-  const product = {
-    name: document.getElementById("name").value.trim(),
-    description: document.getElementById("description").value.trim(),
-    category: document.getElementById("category").value.trim(),
-    price: Number(document.getElementById("price").value),
-    pack_size: document.getElementById("pack_size").value.trim(),
-    stock_quantity: Number(document.getElementById("stock_quantity").value || 0),
-    image_url: document.getElementById("image_url").value.trim() || null,
-    is_active: document.getElementById("is_active").checked
-  };
-
-  if (!product.name || !Number.isFinite(product.price) ||
-      product.price < 0 || !Number.isInteger(product.stock_quantity) ||
-      product.stock_quantity < 0) {
-    showStatus("Please enter valid product details.", true);
-    return;
-  }
-
   const saveBtn = document.getElementById("saveBtn");
+
   saveBtn.disabled = true;
 
-  let result;
+  const originalText = saveBtn.textContent;
 
-  if (id) {
-    result = await db.from("products").update(product).eq("id", id);
-  } else {
-    result = await db.from("products").insert(product);
+  saveBtn.textContent = "Please wait...";
+
+  try {
+
+    const id = document.getElementById("productId").value;
+
+    const name = document.getElementById("name").value.trim();
+
+    const price = Number(
+      document.getElementById("price").value
+    );
+
+    const stock = Number(
+      document.getElementById("stock_quantity").value || 0
+    );
+
+    if (!name) {
+      throw new Error("Product name is required.");
+    }
+
+    if (!Number.isFinite(price) || price < 0) {
+      throw new Error("Enter a valid product price.");
+    }
+
+    if (!Number.isInteger(stock) || stock < 0) {
+      throw new Error("Enter a valid stock quantity.");
+    }
+
+    // IMAGE URL
+
+    let imageUrl =
+      document.getElementById("image_url").value.trim();
+
+    // UPLOAD SELECTED IMAGE FIRST
+
+    if (selectedImageFile) {
+
+      imageUrl = await uploadProductImage(selectedImageFile);
+
+    }
+
+    // KEEP THE EXISTING DATABASE COLUMNS
+
+    const product = {
+
+      name: name,
+
+      description:
+        document.getElementById("description").value.trim(),
+
+      category:
+        document.getElementById("category").value.trim(),
+
+      price: price,
+
+      pack_size:
+        document.getElementById("pack_size").value.trim(),
+
+      stock_quantity: stock,
+
+      image_url: imageUrl || null,
+
+      is_active:
+        document.getElementById("is_active").checked
+
+    };
+
+    let result;
+
+    if (id) {
+
+      result = await db
+        .from("products")
+        .update(product)
+        .eq("id", id);
+
+    } else {
+
+      result = await db
+        .from("products")
+        .insert(product);
+
+    }
+
+    if (result.error) {
+      throw result.error;
+    }
+
+    showStatus(
+      id
+        ? "Product updated successfully!"
+        : "Product added successfully!"
+    );
+
+    resetForm();
+
+    await loadProducts();
+
+  } catch(error) {
+
+    showStatus(error.message, true);
+
+  } finally {
+
+    saveBtn.disabled = false;
+
+    saveBtn.textContent = originalText;
+
   }
 
-  saveBtn.disabled = false;
-
-  if (result.error) {
-    showStatus("Save failed: " + result.error.message, true);
-    return;
-  }
-
-  showStatus(id ? "Product updated!" : "Product added!");
-  resetForm();
-  await loadProducts();
 });
+
+// =======================================
+// EDIT PRODUCT
+// =======================================
 
 function editProduct(id) {
-  const p = products.find(item => String(item.id) === String(id));
+
+  const p = products.find(
+    item => String(item.id) === String(id)
+  );
+
   if (!p) return;
 
-  document.getElementById("productId").value = p.id;
-  document.getElementById("name").value = p.name || "";
-  document.getElementById("description").value = p.description || "";
-  document.getElementById("category").value = p.category || "";
-  document.getElementById("price").value = p.price ?? "";
-  document.getElementById("pack_size").value = p.pack_size || "";
-  document.getElementById("stock_quantity").value = p.stock_quantity ?? 0;
-  document.getElementById("image_url").value = p.image_url || "";
-  document.getElementById("is_active").checked = !!p.is_active;
+  resetForm();
 
-  document.getElementById("formTitle").textContent = "Edit Product";
-  document.getElementById("saveBtn").textContent = "Update Product";
-  showStatus("Editing: " + p.name);
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  document.getElementById("productId").value = p.id;
+
+  document.getElementById("name").value = p.name || "";
+
+  document.getElementById("description").value =
+    p.description || "";
+
+  document.getElementById("category").value =
+    p.category || "";
+
+  document.getElementById("price").value =
+    p.price ?? "";
+
+  document.getElementById("pack_size").value =
+    p.pack_size || "";
+
+  document.getElementById("stock_quantity").value =
+    p.stock_quantity ?? 0;
+
+  document.getElementById("image_url").value =
+    p.image_url || "";
+
+  document.getElementById("is_active").checked =
+    !!p.is_active;
+
+  // SHOW EXISTING IMAGE PREVIEW
+
+  if (p.image_url) {
+
+    const preview = document.getElementById("imagePreview");
+
+    preview.src = p.image_url;
+
+    preview.classList.remove("hidden");
+
+    document.getElementById("fileName").textContent =
+      "Current product image";
+
+  }
+
+  document.getElementById("formTitle").textContent =
+    "Edit Product";
+
+  document.getElementById("saveBtn").textContent =
+    "Update Product";
+
+  showStatus(
+    "Editing: " + p.name +
+    ". Select a new image if you want to replace the current image."
+  );
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+
 }
+
+// =======================================
+// DELETE PRODUCT
+// =======================================
 
 async function deleteProduct(id) {
-  const p = products.find(item => String(item.id) === String(id));
-  if (!p || !confirm("Delete " + p.name + "? This cannot be undone.")) return;
 
-  const { error } = await db.from("products").delete().eq("id", id);
+  const p = products.find(
+    item => String(item.id) === String(id)
+  );
+
+  if (!p) return;
+
+  if (!confirm(
+    "Delete " + p.name + "? This cannot be undone."
+  )) return;
+
+  const { error } = await db
+    .from("products")
+    .delete()
+    .eq("id", id);
 
   if (error) {
-    showStatus("Delete failed: " + error.message, true);
+
+    showStatus(
+      "Delete failed: " + error.message,
+      true
+    );
+
     return;
+
   }
 
-  showStatus("Product deleted.");
+  showStatus("Product deleted successfully.");
+
   await loadProducts();
+
 }
 
-document.getElementById("cancelBtn").addEventListener("click", resetForm);
-document.getElementById("refreshBtn").addEventListener("click", loadProducts);
+// =======================================
+// BUTTON EVENTS
+// =======================================
 
-document.getElementById("logoutBtn").addEventListener("click", async () => {
+document.getElementById("cancelBtn")
+.addEventListener("click", resetForm);
+
+document.getElementById("refreshBtn")
+.addEventListener("click", loadProducts);
+
+document.getElementById("logoutBtn")
+.addEventListener("click", async () => {
+
   const { error } = await db.auth.signOut();
+
   if (error) {
+
     showStatus("Logout failed: " + error.message, true);
+
     return;
+
   }
+
   window.location.replace("admin.html");
+
 });
 
+// =======================================
+// START DASHBOARD
+// =======================================
+
 (async function startDashboard() {
+
   const authorized = await checkAdmin();
-  if (authorized) await loadProducts();
+
+  if (authorized) {
+
+    await loadProducts();
+
+  }
+
 })();
+
 </script>
 
 </body>
