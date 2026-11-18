@@ -412,6 +412,40 @@
                 transition: none !important;
             }
         }
+
+        /* Navigation buttons */
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.nav-admin {
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    border-radius: 30px;
+    padding: 10px 22px;
+    font-weight: 700;
+    font-size: 14px;
+    transition: .3s;
+}
+
+.nav-admin:hover {
+    background: var(--gold);
+    color: var(--green);
+}
+
+@media (max-width: 650px) {
+    .nav-actions {
+        gap: 7px;
+    }
+
+    .nav-admin {
+        padding: 9px 12px;
+        font-size: 12px;
+    }
+}
     </style>
 </head>
 
@@ -424,9 +458,20 @@
                 AKS <span>FOOD PRODUCTS</span>
             </a>
 
-            <a class="nav-contact" href="https://wa.me/919787256249" target="_blank" rel="noopener noreferrer">
-                Contact Us
-            </a>
+            <div class="nav-actions">
+
+    <a class="nav-contact"
+       href="https://wa.me/919787256249"
+       target="_blank"
+       rel="noopener noreferrer">
+        Contact Us
+    </a>
+
+    <a class="nav-admin" href="admin.html">
+        🔐 Admin Login
+    </a>
+
+</div>
         </nav>
     </header>
 
@@ -439,7 +484,7 @@
                 <img src="assets/AKS Homemade Food Products Logo1.png" alt="AKS Food Products Logo" class="logo" width="145" height="125">
 
                 <p class="eyebrow">Homemade goodness • Made with love</p>
-                
+                <h5>WISH YOU HAPPY DIWALI</h5>
                 <h1>
                     Welcome To
                     <span>AKS FOOD PRODUCTS</span>
