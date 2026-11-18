@@ -19,17 +19,25 @@
     --gold: #d8a64d;
     --cream: #fffaf1;
     --text: #243329;
+    --footer: #10291d;
     --white: #ffffff;
+    --muted: #6b776e;
+    --border: #e8e8df;
+    --danger: #b83232;
 }
 
 * {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
 }
 
 body {
-    font-family: 'DM Sans', sans-serif;
+    font-family: "DM Sans", sans-serif;
     background: var(--cream);
     color: var(--text);
     line-height: 1.6;
@@ -39,24 +47,35 @@ button, input, select, textarea {
     font: inherit;
 }
 
+button {
+    cursor: pointer;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* HEADER */
+
 header {
     background: var(--green);
     color: white;
-    padding: 18px 6%;
+    padding: 12px 5%;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    gap: 16px;
+    justify-content: space-between;
+    gap: 20px;
     flex-wrap: wrap;
 }
 
-.logo-area {
+.brand {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 12px;
 }
 
-.logo-area img {
+.brand img {
     width: 65px;
     height: 60px;
     object-fit: contain;
@@ -65,709 +84,599 @@ header {
     padding: 4px;
 }
 
-.logo-area h2 {
-    font-size: 1.1rem;
+.brand-name {
+    font-size: 19px;
+    font-weight: 700;
     letter-spacing: 1px;
 }
 
-.logo-area span {
-    display: block;
-    font-size: .75rem;
-    color: var(--gold);
+.brand-tagline {
+    font-size: 12px;
+    color: #e8d7ad;
 }
 
 nav {
     display: flex;
-    gap: 18px;
     align-items: center;
+    gap: 22px;
+    flex-wrap: wrap;
 }
 
 nav a {
-    color: white;
-    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: color .2s;
 }
 
 nav a:hover {
     color: var(--gold);
 }
 
+.cart-nav {
+    background: var(--gold);
+    color: var(--green);
+    padding: 8px 14px;
+    border-radius: 20px;
+}
+
+/* HERO */
+
 .hero {
+    padding: 75px 20px 65px;
     text-align: center;
-    padding: 65px 20px 55px;
-    background: linear-gradient(135deg, #e8f0e4, #fff5dd);
-}
-
-.eyebrow {
-    color: var(--green-light);
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    font-size: .78rem;
-    font-weight: 700;
-}
-
-.product-quantity-badge {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    min-width: 34px;
-    height: 34px;
-    padding: 0 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #17452e;
+    background: linear-gradient(135deg, #17452e, #286b45);
     color: white;
-    border: 2px solid white;
-    border-radius: 50px;
-    font-size: 14px;
+}
+
+.hero-label {
+    color: var(--gold);
+    font-size: 13px;
     font-weight: 700;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-    z-index: 2;
+    letter-spacing: 2px;
+    text-transform: uppercase;
 }
 
 .hero h1 {
-    font-family: 'Playfair Display', serif;
-    color: var(--green);
-    font-size: clamp(2.3rem, 5vw, 4rem);
+    font-family: "Playfair Display", serif;
+    font-size: clamp(32px, 5vw, 52px);
     line-height: 1.2;
-    margin: 12px 0;
+    margin: 15px 0;
 }
 
 .hero h1 span {
-    color: #b58228;
+    color: var(--gold);
 }
 
 .hero p {
-    max-width: 620px;
+    max-width: 650px;
     margin: 0 auto;
-    color: #59655b;
+    color: #e7eee8;
+    font-size: 15px;
 }
 
-.badges {
+.hero-badges {
     display: flex;
     justify-content: center;
+    gap: 12px;
     flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 22px;
+    margin-top: 25px;
 }
 
-.badges span {
-    background: white;
+.hero-badges span {
+    border: 1px solid #ffffff55;
     padding: 8px 14px;
-    border-radius: 30px;
-    font-size: .86rem;
-    border: 1px solid #e8dfcc;
+    border-radius: 25px;
+    font-size: 13px;
 }
+
+/* MAIN */
 
 .section {
-    max-width: 1200px;
-    padding: 45px 22px;
-    margin: auto;
+    padding: 65px 5%;
 }
 
-.section-title {
+.section-heading {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 35px;
 }
 
-.section-title h2 {
+.section-heading h2 {
+    font-family: "Playfair Display", serif;
+    font-size: 34px;
     color: var(--green);
-    font-family: 'Playfair Display', serif;
-    font-size: 2.2rem;
 }
 
-.section-title p {
-    color: #68746a;
+.section-heading p {
+    color: var(--muted);
+    font-size: 14px;
+    margin-top: 8px;
 }
 
 .products {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 22px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 25px;
+    max-width: 1200px;
+    margin: auto;
 }
 
 .product {
     background: white;
     border-radius: 16px;
     overflow: hidden;
-    border: 1px solid #eee6d7;
-    box-shadow: 0 6px 22px rgba(27, 54, 36, .06);
+    box-shadow: 0 5px 20px #183c2510;
+    border: 1px solid var(--border);
     transition: transform .25s, box-shadow .25s;
+    position: relative;
 }
 
 .product:hover {
     transform: translateY(-5px);
-    box-shadow: 0 12px 28px rgba(27, 54, 36, .12);
+    box-shadow: 0 12px 25px #183c2520;
 }
 
-.product img {
+.product-image {
+    height: 220px;
+    background: #f0eee5;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.product-image img {
     width: 100%;
-    height: 205px;
+    height: 100%;
     object-fit: cover;
-    background: #f2eadb;
+}
+
+.image-fallback {
+    color: var(--green);
+    font-weight: 700;
+    text-align: center;
+    padding: 20px;
+}
+
+.product-quantity-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: var(--gold);
+    color: var(--green);
+    border-radius: 20px;
+    padding: 5px 10px;
+    font-size: 12px;
+    font-weight: 700;
+    display: none;
 }
 
 .product-info {
-    padding: 17px;
+    padding: 20px;
 }
 
-.product h3 {
+.product-info h3 {
     color: var(--green);
-    font-size: 1.05rem;
-    min-height: 52px;
-    line-height: 1.4;
+    font-size: 19px;
+    margin-bottom: 7px;
 }
 
-.product .description {
-    color: #788078;
-    font-size: .84rem;
-    min-height: 44px;
-    margin: 6px 0 12px;
+.product-info p {
+    font-size: 13px;
+    color: var(--muted);
+    min-height: 42px;
 }
 
-.price {
-    color: #a66e16;
-    font-size: 1.3rem;
+.product-price {
+    color: var(--green);
+    font-size: 22px;
     font-weight: 700;
-    margin-bottom: 12px;
+    margin: 13px 0;
 }
 
-.price small {
-    font-size: .78rem;
-    color: #777;
+.product-price small {
+    font-size: 12px;
+    color: var(--muted);
     font-weight: 400;
 }
 
-.product label {
-    font-size: .85rem;
-    display: block;
-    margin-bottom: 5px;
-}
-
-.product select {
+.pack-select {
     width: 100%;
-    padding: 9px;
-    border: 1px solid #d8ded8;
-    border-radius: 7px;
+    padding: 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
     background: white;
     margin-bottom: 12px;
 }
 
-.btn {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    gap: 7px;
-    border: none;
-    border-radius: 8px;
-    padding: 11px 15px;
-    cursor: pointer;
-    text-decoration: none;
-    font-weight: 700;
-    transition: .2s;
+.stock-text {
+    font-size: 12px;
+    color: var(--green-light);
+    margin-bottom: 12px;
 }
 
-.btn:hover {
-    filter: brightness(1.06);
-    transform: translateY(-1px);
+.stock-text.out {
+    color: var(--danger);
+}
+
+.product-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.quantity-selector {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.quantity-selector button {
+    border: none;
+    background: #f4f5ef;
+    color: var(--green);
+    width: 32px;
+    height: 36px;
+    font-size: 18px;
+}
+
+.quantity-selector span {
+    min-width: 30px;
+    text-align: center;
+    font-weight: 700;
+}
+
+.btn {
+    border: none;
+    border-radius: 8px;
+    padding: 10px 13px;
+    font-size: 12px;
+    font-weight: 700;
+    transition: .2s;
 }
 
 .btn-green {
     background: var(--green);
     color: white;
+    flex: 1;
+}
+
+.btn-green:hover {
+    background: var(--green-light);
 }
 
 .btn-gold {
     background: var(--gold);
-    color: #18291d;
-}
-
-.btn-outline {
-    border: 1px solid var(--green);
-    background: white;
     color: var(--green);
+    flex: 1;
 }
 
-.product .btn {
-    width: 100%;
+.btn-gold:hover {
+    background: #c9973f;
 }
 
-.cart-box {
+.btn:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+/* CART AND CHECKOUT */
+
+.cart-section {
+    background: #f2f4ec;
+}
+
+.content-box {
+    max-width: 900px;
+    margin: auto;
     background: white;
-    border: 1px solid #e8dfcc;
-    border-radius: 16px;
-    padding: 25px;
-}
-
-.cart-box h2 {
-    font-family: 'Playfair Display', serif;
-    color: var(--green);
-    margin-bottom: 15px;
+    padding: 28px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px #183c2510;
 }
 
 .cart-empty {
-    color: #737b73;
-    padding: 12px 0;
+    text-align: center;
+    color: var(--muted);
+    padding: 20px 0;
 }
 
 .cart-item {
     display: flex;
     justify-content: space-between;
-    gap: 12px;
-    padding: 14px 0;
-    border-bottom: 1px solid #eee9df;
     align-items: center;
+    gap: 15px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
 }
 
-.cart-item-info {
-    flex: 1;
-}
-
-.cart-item small {
-    color: #737b73;
+.cart-item-info strong {
     display: block;
-}
-
-.remove-btn {
-    border: none;
-    background: #f9e8e5;
-    color: #a32c20;
-    padding: 7px 10px;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-.delivery-estimator {
-    background: #fff8e9;
-    border: 1px solid #ead8ae;
-    border-radius: 10px;
-    padding: 14px;
-}
-.delivery-estimator p { margin: 7px 0; }
-.delivery-estimator small { display: block; color: #687268; line-height: 1.5; margin-top: 8px; }
-.cart-summary { display: grid; gap: 7px; }
-.cart-summary > div, .cart-summary > strong,
-.floating-cart-summary > div, .floating-cart-summary > strong {
-    display: flex; justify-content: space-between; gap: 12px;
-}
-.cart-summary > strong { border-top: 1px solid #e7dfd0; padding-top: 8px; }
-.floating-cart-summary { display: grid; gap: 7px; }
-.floating-cart-summary > strong { border-top: 1px solid #e9e4d9; padding-top: 8px; }
-.floating-cart-summary > div { font-size: .85rem; font-weight: 500; }
-.floating-cart-summary > strong { font-size: .95rem; }
-
-.cart-total {
-    text-align: right;
     color: var(--green);
-    font-size: 1.5rem;
-    font-weight: 700;
-    padding: 20px 0;
 }
 
-.checkout {
+.cart-item-info small {
+    color: var(--muted);
+}
+
+.cart-item-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.cart-item-actions button {
+    border: none;
+    border-radius: 6px;
+    padding: 5px 9px;
+    background: #edf1e9;
+    color: var(--green);
+}
+
+.remove-item {
+    color: var(--danger) !important;
+    background: #fff0f0 !important;
+}
+
+.cart-summary {
     margin-top: 20px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 25px;
+    max-width: 350px;
+    margin-left: auto;
 }
 
-.form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    font-size: 14px;
 }
 
-.field {
+.summary-total {
+    border-top: 1px solid var(--border);
+    margin-top: 8px;
+    padding-top: 13px;
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--green);
+}
+
+.cart-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.clear-btn {
+    border: 1px solid #e5baba;
+    color: var(--danger);
+    background: white;
+    padding: 9px 15px;
+    border-radius: 8px;
+}
+
+.delivery-note {
+    background: #f6f8f1;
+    padding: 12px;
+    border-radius: 8px;
+    margin-top: 15px;
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.checkout-section {
+    background: var(--cream);
+}
+
+.checkout-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.form-group {
     display: flex;
     flex-direction: column;
     gap: 6px;
 }
 
-.field.full {
+.form-group.full {
     grid-column: 1 / -1;
 }
 
-.field label {
-    font-weight: 600;
-    font-size: .9rem;
+.form-group label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--green);
 }
 
-.field input, .field textarea, .field select {
+.form-group input,
+.form-group textarea {
     width: 100%;
-    padding: 11px;
-    border: 1px solid #d8ded8;
-    border-radius: 8px;
-    background: white;
-    color: var(--text);
-}
-
-.field textarea {
-    resize: vertical;
-    min-height: 85px;
-}
-
-.payment-note {
-    background: #fff4d9;
-    border-radius: 8px;
     padding: 12px;
-    font-size: .85rem;
-    margin-top: 16px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    outline: none;
+    background: white;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: var(--green-light);
+}
+
+.form-group textarea {
+    min-height: 85px;
+    resize: vertical;
+}
+
+.order-info {
+    background: #f5f7f1;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 20px 0;
+    font-size: 13px;
+    color: var(--muted);
 }
 
 .checkout-buttons {
     display: flex;
+    gap: 12px;
     flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 20px;
 }
 
-.checkout-buttons .btn {
+.checkout-buttons button {
     flex: 1;
-    min-width: 190px;
+    min-width: 180px;
+    padding: 13px;
+    font-size: 14px;
 }
 
-.status {
-    margin-top: 12px;
-    font-size: .9rem;
+#order-status {
+    margin-top: 15px;
+    font-size: 13px;
     color: var(--green);
+    font-weight: 600;
 }
+
+/* FOOTER */
 
 footer {
+    background: var(--footer);
+    color: white;
     text-align: center;
-    padding: 30px 20px;
-    background: #10291d;
-    color: #e8eee8;
+    padding: 30px 15px;
+    font-size: 13px;
 }
 
-footer a {
+footer strong {
     color: var(--gold);
-    text-decoration: none;
 }
 
-footer p {
-    margin: 5px 0;
+/* FLOATING CART */
+
+.floating-cart {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 50;
+    background: var(--gold);
+    color: var(--green);
+    border: none;
+    border-radius: 30px;
+    padding: 13px 18px;
+    font-weight: 700;
+    box-shadow: 0 5px 20px #0003;
+}
+
+.loading-message,
+.error-message {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 35px 15px;
+    background: white;
+    border-radius: 12px;
+}
+
+.error-message {
+    color: var(--danger);
 }
 
 @media (max-width: 950px) {
     .products {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
-
-    .checkout {
-        grid-template-columns: 1fr;
-    }
 }
 
-@media (max-width: 520px) {
+@media (max-width: 600px) {
     header {
         justify-content: center;
     }
 
     nav {
         justify-content: center;
-        flex-wrap: wrap;
+        gap: 13px;
+    }
+
+    .hero {
+        padding: 55px 18px;
+    }
+
+    .section {
+        padding: 45px 4%;
     }
 
     .products {
         grid-template-columns: 1fr;
+        max-width: 420px;
     }
 
-    .product img {
+    .product-image {
         height: 240px;
     }
 
-    .form-grid {
+    .checkout-form {
         grid-template-columns: 1fr;
     }
 
-    .field.full {
+    .form-group.full {
         grid-column: auto;
     }
 
-    .cart-box {
-        padding: 17px;
+    .content-box {
+        padding: 18px;
+    }
+
+    .cart-item {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .cart-item-actions {
+        width: 100%;
     }
 }
-
-.product-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 9px;
-    margin-top: 10px;
-}
-
-.quantity-selector {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    padding: 5px 10px;
-    border: 1px solid #d8ded8;
-    border-radius: 8px;
-    background: #fffaf1;
-}
-
-.quantity-selector button {
-    width: 34px;
-    height: 32px;
-    border: none;
-    border-radius: 6px;
-    background: #17452e;
-    color: white;
-    font-size: 21px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.quantity-selector span {
-    min-width: 24px;
-    text-align: center;
-    font-weight: 700;
-}
-
-.product .product-actions .btn {
-    width: 100%;
-}
-
-
-/* Floating shopping cart */
-.floating-cart {
-    position: fixed;
-    right: 22px;
-    bottom: 22px;
-    width: min(360px, calc(100vw - 28px));
-    z-index: 9999;
-    background: #fff;
-    border: 1px solid #d8e2d7;
-    border-radius: 16px;
-    box-shadow: 0 12px 35px rgba(16, 41, 29, .24);
-    overflow: hidden;
-}
-.floating-cart-header {
-    width: 100%;
-    border: 0;
-    background: var(--green);
-    color: #fff;
-    padding: 14px 16px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    cursor: pointer;
-    text-align: left;
-    font-weight: 700;
-}
-.floating-cart-heading {
-    display: flex;
-    align-items: center;
-    gap: 9px;
-}
-.floating-cart-count {
-    min-width: 25px;
-    height: 25px;
-    padding: 0 7px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50px;
-    background: var(--gold);
-    color: #18291d;
-    font-size: .8rem;
-}
-.floating-cart-chevron {
-    font-size: 1.1rem;
-    transition: transform .2s ease;
-}
-.floating-cart.is-collapsed .floating-cart-chevron {
-    transform: rotate(180deg);
-}
-.floating-cart-body {
-    padding: 13px 15px 15px;
-    max-height: 310px;
-    overflow-y: auto;
-}
-.floating-cart.is-collapsed .floating-cart-body {
-    display: none;
-}
-.floating-cart-empty {
-    color: #737b73;
-    font-size: .9rem;
-    padding: 8px 0 12px;
-}
-.floating-cart-item {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 8px;
-    padding: 10px 0;
-    border-bottom: 1px solid #eee9df;
-    font-size: .87rem;
-}
-.floating-cart-item-name {
-    color: var(--green);
-    font-weight: 700;
-    overflow-wrap: anywhere;
-}
-.floating-cart-item-detail {
-    display: block;
-    color: #737b73;
-    font-size: .78rem;
-    margin-top: 2px;
-}
-.floating-cart-item-right {
-    text-align: right;
-    white-space: nowrap;
-}
-.floating-cart-item-price {
-    color: var(--green);
-    font-weight: 700;
-}
-.floating-cart-remove {
-    display: block;
-    margin: 4px 0 0 auto;
-    border: 0;
-    background: transparent;
-    color: #a32c20;
-    font-size: .75rem;
-    text-decoration: underline;
-    cursor: pointer;
-}
-.floating-cart-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    padding-top: 12px;
-    margin-top: 4px;
-    border-top: 1px solid #e9e4d9;
-    color: var(--green);
-    font-weight: 700;
-}
-.floating-cart-actions {
-    display: flex;
-    gap: 8px;
-    margin-top: 12px;
-}
-.floating-cart-actions a {
-    flex: 1;
-    padding: 9px 10px;
-    border-radius: 7px;
-    text-align: center;
-    text-decoration: none;
-    font-size: .82rem;
-    font-weight: 700;
-}
-.floating-cart-view {
-    border: 1px solid var(--green);
-    color: var(--green);
-    background: #fff;
-}
-.floating-cart-checkout {
-    background: var(--gold);
-    color: #18291d;
-}
-@media (max-width: 520px) {
-    .floating-cart {
-        right: 10px;
-        bottom: 10px;
-        width: min(340px, calc(100vw - 20px));
-    }
-    .floating-cart-body {
-        max-height: 250px;
-    }
-}
-
-
-
-/* Compact floating cart icon */
-.floating-cart {
-    width: auto;
-    right: 22px;
-    bottom: 22px;
-    overflow: visible;
-    border: 0;
-    border-radius: 0;
-    background: transparent;
-    box-shadow: none;
-}
-.floating-cart-header {
-    position: relative;
-    width: 60px;
-    height: 60px;
-    padding: 0;
-    justify-content: center;
-    border-radius: 50%;
-    box-shadow: 0 6px 20px rgba(16, 41, 29, .28);
-}
-.floating-cart-heading { gap: 0; }
-.floating-cart-heading > span:first-child { font-size: 1.55rem; line-height: 1; }
-.floating-cart-heading > span:nth-child(2),
-.floating-cart-chevron { display: none; }
-.floating-cart-count {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    min-width: 23px;
-    height: 23px;
-    border: 2px solid var(--cream);
-    font-size: .72rem;
-}
-.floating-cart-body {
-    position: absolute;
-    right: 0;
-    bottom: 72px;
-    width: min(360px, calc(100vw - 28px));
-    max-height: min(430px, calc(100vh - 115px));
-    overflow-y: auto;
-    padding: 13px 15px 15px;
-    border: 1px solid #d8e2d7;
-    border-radius: 16px;
-    background: #fff;
-    box-shadow: 0 12px 35px rgba(16, 41, 29, .24);
-}
-.floating-cart.is-collapsed .floating-cart-body { display: none; }
-@media (max-width: 520px) {
-    .floating-cart { right: 14px; bottom: 14px; width: auto; }
-    .floating-cart-header { width: 56px; height: 56px; }
-    .floating-cart-body {
-        right: 0;
-        bottom: 66px;
-        width: min(340px, calc(100vw - 28px));
-        max-height: calc(100vh - 100px);
-    }
-}
-
 </style>
 </head>
 
 <body>
 
 <header>
-    <a href="index.html" class="logo-area" style="color:white;text-decoration:none">
+    <a href="index.html" class="brand">
         <img src="assets/AKS Homemade Food Products Logo1.png"
              alt="AKS Food Products Logo">
-        <h2>AKS FOOD PRODUCTS
-            <span>Homemade with Love</span>
-        </h2>
+        <div>
+            <div class="brand-name">AKS FOOD PRODUCTS</div>
+            <div class="brand-tagline">Homemade with Love</div>
+        </div>
     </a>
 
-    <nav aria-label="Main navigation">
+    <nav>
         <a href="index.html">Home</a>
         <a href="#products">Our Products</a>
-        <a href="#cart">My Cart (<span id="cart-count">0</span>)</a>
+        <a href="#cart" class="cart-nav">
+            My Cart (<span id="cart-count">0</span>)
+        </a>
         <a href="#checkout">Place Order</a>
     </nav>
 </header>
 
 <section class="hero">
-    <p class="eyebrow">Traditional Taste • Homemade Goodness</p>
-    <h1>Our Products <span>Are Made with Love</span></h1>
+    <div class="hero-label">Traditional Taste • Homemade Goodness</div>
+
+    <h1>Our Products Are <span>Made with Love</span></h1>
+
     <p>
-        Discover our delicious homemade snacks and traditional sweets.
-        Choose your favourite products, select a pack size, and send
-        your order directly through WhatsApp or Email.
+        Enjoy delicious homemade snacks prepared with care.
+        Choose your products, select the pack size and place
+        your order easily through WhatsApp or Email.
     </p>
 
-    <div class="badges">
+    <div class="hero-badges">
         <span>🌿 Homemade Snacks</span>
         <span>❤️ Made with Care</span>
         <span>🍲 Traditional Taste</span>
@@ -775,870 +684,874 @@ footer p {
 </section>
 
 <main>
+
 <section class="section" id="products">
-    <div class="section-title">
-        <h2>Our Special Products</h2>
-        <p>Choose your products and add them to your cart.</p>
+    <div class="section-heading">
+        <h2>Our Products</h2>
+        <p>Fresh homemade snacks prepared with traditional goodness.</p>
     </div>
 
-    <div class="products">
-
-        <article class="product">
-    
-    <span class="product-quantity-badge"
-          id="badge-0"
-          style="display:none;">0</span>
-
-            <img src="assets/images kavuni.jpg" alt="Kavuni Murukku"
-                 onerror="this.onerror=null;this.src='https://placehold.co/500x350/f3ead7/17452e?text=Kelvaragu+Murukku'">
-            <div class="product-info">
-                <h3>Kavuni Murukku</h3>
-                <p class="description">A traditional crunchy snack made with a homemade touch.</p>
-                <p class="price">₹<span id="price-0">80</span> <small>/ pack</small></p>
-                <label for="pack-0">Choose pack size</label>
-                <select id="pack-0" onchange="updatePrice(0)">
-                    <option value="80">250 g — ₹80</option>
-                </select>
-                
-<div class="product-actions">
-    <div class="quantity-selector">
-        <button type="button"
-                onclick="changeProductQty(0, -1)">−</button>
-
-        <span id="qty-0">0</span>
-
-        <button type="button"
-                onclick="changeProductQty(0, 1)">+</button>
-    </div>
-
-    <button type="button" class="btn btn-green"
-            onclick="addSelectedToCart(0)">
-        Add to Cart
-    </button>
-
-    <button type="button" class="btn btn-gold"
-            onclick="orderSelectedNow(0)">
-        Order Now
-    </button>
-</div>
-
-            </div>
-        </article>
-
-        <article class="product">
-
-            <span class="product-quantity-badge"
-          id="badge-1"
-          style="display:none;">0</span>
-
-            <img src="assets\images (1).jpg" alt="Kelvaragu Urundai"
-                 onerror="this.onerror=null;this.src='https://placehold.co/500x350/f3ead7/17452e?text=Kelvaragu+Urundai'">
-            <div class="product-info">
-                <h3>Kelvaragu Urundai</h3>
-                <p class="description">A traditional homemade sweet for everyday enjoyment.</p>
-                <p class="price">₹<span id="price-1">80</span> <small>/ pack</small></p>
-                <label for="pack-1">Choose pack size</label>
-                <select id="pack-1" onchange="updatePrice(1)">
-                    <option value="80">250 g — ₹80</option>
-                </select>
-
-<div class="product-actions">
-    <div class="quantity-selector">
-        <button type="button"
-                onclick="changeProductQty(1, -1)">−</button>
-
-        <span id="qty-1">0</span>
-
-        <button type="button"
-                onclick="changeProductQty(1, 1)">+</button>
-    </div>
-
-    <button type="button" class="btn btn-green"
-            onclick="addSelectedToCart(1)">
-        Add to Cart
-    </button>
-
-    <button type="button" class="btn btn-gold"
-            onclick="orderSelectedNow(1)">
-        Order Now
-    </button>
-</div>
-
-            </div>
-        </article>
-
-        <article class="product">
-
-             <span class="product-quantity-badge"
-          id="badge-2"
-          style="display:none;">0</span>
-
-            <img src="assets\images (2).jpg" alt="Karuppu Ulundhu Urundai"
-                 onerror="this.onerror=null;this.src='https://placehold.co/500x350/f3ead7/17452e?text=Karuppu+Ulundhu+Urundai'">
-            <div class="product-info">
-                <h3>Karuppu Ulundhu Urundai</h3>
-                <p class="description">A traditional-style urundai prepared with care.</p>
-                <p class="price">₹<span id="price-2">80</span> <small>/ pack</small></p>
-                <label for="pack-2">Choose pack size</label>
-                <select id="pack-2" onchange="updatePrice(2)">
-                    <option value="80">250 g — ₹80</option>
-                </select>
-                
-<div class="product-actions">
-    <div class="quantity-selector">
-        <button type="button"
-                onclick="changeProductQty(2, -1)">−</button>
-
-        <span id="qty-2">0</span>
-
-        <button type="button"
-                onclick="changeProductQty(2, 1)">+</button>
-    </div>
-
-    <button type="button" class="btn btn-green"
-            onclick="addSelectedToCart(2)">
-        Add to Cart
-    </button>
-
-    <button type="button" class="btn btn-gold"
-            onclick="orderSelectedNow(2)">
-        Order Now
-    </button>
-</div>
-
-            </div>
-        </article>
-
-        <article class="product">
-
-             <span class="product-quantity-badge"
-          id="badge-3"
-          style="display:none;">0</span>
-
-            <img src="assets\images (3).jpg" alt="Pasi Paruppu Urundai"
-                 onerror="this.onerror=null;this.src='https://placehold.co/500x350/f3ead7/17452e?text=Pasi+Paruppu+Urundai'">
-            <div class="product-info">
-                <h3>Pasi Paruppu Urundai</h3>
-                <p class="description">A classic homemade sweet with a traditional flavour.</p>
-                <p class="price">₹<span id="price-3">80</span> <small>/ pack</small></p>
-                <label for="pack-3">Choose pack size</label>
-                <select id="pack-3" onchange="updatePrice(3)">
-                    <option value="80">250 g — ₹80</option>
-                </select>
-                
-<div class="product-actions">
-    <div class="quantity-selector">
-        <button type="button"
-                onclick="changeProductQty(3, -1)">−</button>
-
-        <span id="qty-3">0</span>
-
-        <button type="button"
-                onclick="changeProductQty(3, 1)">+</button>
-    </div>
-
-    <button type="button" class="btn btn-green"
-            onclick="addSelectedToCart(3)">
-        Add to Cart
-    </button>
-
-    <button type="button" class="btn btn-gold"
-            onclick="orderSelectedNow(3)">
-        Order Now
-    </button>
-</div>
-
-            </div>
-        </article>
-
-        <article class="product">
-
-             <span class="product-quantity-badge"
-          id="badge-4"
-          style="display:none;">0</span>
-
-            <img src="assets\images (6).jpg" alt="somose"
-                 onerror="this.onerror=null;this.src='https://placehold.co/500x350/f3ead7/17452e?text=somose'">
-            <div class="product-info">
-                <h3>somose</h3>
-                <p class="description">A classic homemade sweet with a traditional flavour.</p>
-                <p class="price">₹<span id="price-4">80</span> <small>/ pack</small></p>
-                <label for="pack-4">Choose pack size</label>
-                <select id="pack-4" onchange="updatePrice(4)">
-                    <option value="80">250 g — ₹80</option>
-                </select>
-                
-<div class="product-actions">
-    <div class="quantity-selector">
-        <button type="button"
-                onclick="changeProductQty(4, -1)">−</button>
-
-        <span id="qty-4">0</span>
-
-        <button type="button"
-                onclick="changeProductQty(4, 1)">+</button>
-    </div>
-
-    <button type="button" class="btn btn-green"
-            onclick="addSelectedToCart(4)">
-        Add to Cart
-    </button>
-
-    <button type="button" class="btn btn-gold"
-            onclick="orderSelectedNow(4)">
-        Order Now
-    </button>
-</div>
-
-            </div>
-        </article>
-
-        <article class="product">
-
-             <span class="product-quantity-badge"
-          id="badge-5"
-          style="display:none;">0</span>
-
-            <img src="assets\images (7).jpg" alt="Ellu Urundai"
-                 onerror="this.onerror=null;this.src='https://placehold.co/500x350/f3ead7/17452e?text=Ellu Urundai'">
-            <div class="product-info">
-                <h3>Ellu Urundai</h3>
-                <p class="description">A classic homemade sweet with a traditional flavour.</p>
-                <p class="price">₹<span id="price-5">80</span> <small>/ pack</small></p>
-                <label for="pack-5">Choose pack size</label>
-                <select id="pack-5" onchange="updatePrice(5)">
-                    <option value="80">250 g — ₹80</option>
-                </select>
-                
-<div class="product-actions">
-    <div class="quantity-selector">
-        <button type="button"
-                onclick="changeProductQty(5, -1)">−</button>
-
-        <span id="qty-5">0</span>
-
-        <button type="button"
-                onclick="changeProductQty(5, 1)">+</button>
-    </div>
-
-    <button type="button" class="btn btn-green"
-            onclick="addSelectedToCart(5)">
-        Add to Cart
-    </button>
-
-    <button type="button" class="btn btn-gold"
-            onclick="orderSelectedNow(5)">
-        Order Now
-    </button>
-</div>
-
-            </div>
-        </article>
-        
-
+    <div class="products" id="products-container">
+        <p class="loading-message">Loading products...</p>
     </div>
 </section>
 
-<section class="section" id="cart">
-    <div class="section-title">
-        <h2>Your Shopping Cart</h2>
-        <p>Review your selected products before ordering.</p>
+<section class="section cart-section" id="cart">
+    <div class="section-heading">
+        <h2>My Shopping Cart</h2>
+        <p>Review your selected products before placing your order.</p>
     </div>
 
-    <div class="cart-box">
-        <h2>🛒 My Cart</h2>
+    <div class="content-box">
         <div id="cart-items">
-            <p class="cart-empty">Your cart is empty. Add some delicious products!</p>
-        </div>
-        <div class="cart-total cart-summary">
-            <div>Products: ₹<span id="cart-subtotal">0</span></div>
-            <div>Delivery: ₹<span id="cart-delivery">0</span></div>
-            <strong>Total: ₹<span id="cart-total">0</span></strong>
-        </div>
-        <button class="btn btn-outline" onclick="clearCart()">Clear Cart</button>
-    </div>
-</section>
-
-<section class="section" id="checkout">
-    <div class="section-title">
-        <h2>Place Your Order</h2>
-        <p>Enter your details and send your order to AKS Food Products.</p>
-    </div>
-
-    <div class="checkout">
-        <div class="cart-box">
-            <h2>Customer Details</h2>
-
-            <form id="order-form">
-                <div class="form-grid">
-                    <div class="field">
-                        <label for="customer-name">Full Name *</label>
-                        <input id="customer-name" required maxlength="100"
-                               autocomplete="name" placeholder="Your name">
-                    </div>
-
-                    <div class="field">
-                        <label for="customer-phone">Phone Number *</label>
-                        <input id="customer-phone" required type="tel"
-                               autocomplete="tel" maxlength="20"
-                               placeholder="Your phone number">
-                    </div>
-
-                    <div class="field full">
-                        <label for="customer-email">Email Address</label>
-                        <input id="customer-email" type="email"
-                               autocomplete="email" maxlength="150"
-                               placeholder="you@example.com">
-                    </div>
-
-                    <div class="field full">
-                        <label for="customer-address">Delivery Address *</label>
-                        <textarea id="customer-address" required maxlength="500"
-                                  autocomplete="street-address"
-                                  placeholder="Enter your complete delivery address"></textarea>
-                    </div>
-
-                    <div class="field full delivery-estimator" id="delivery-estimator">
-                        <strong>📍 Delivery Charge Calculator</strong>
-                        <p>Delivery is free within 10 km of AKS Food Products, Lenavilakku. Beyond 10 km, the charge is ₹5 per additional km.</p>
-                        <button type="button" class="btn btn-outline" id="detect-location-btn" onclick="detectDeliveryLocation()">Detect My Location</button>
-                        <p id="delivery-status" class="status" aria-live="polite">Detect your location to calculate the estimated delivery charge.</p>
-                        <small>Distance is estimated as a straight-line radius from the shop. Final delivery charge will be confirmed by AKS Food Products.</small>
-                    </div>
-
-                    <div class="field full">
-                        <label for="customer-notes">Additional Instructions</label>
-                        <textarea id="customer-notes" maxlength="500"
-                                  placeholder="Optional: preferred delivery time or other requests"></textarea>
-                    </div>
-                </div>
-
-                <div class="payment-note">
-                    <strong>Order process:</strong> Your order details will be
-                    sent to you via WhatsApp or Email for confirmation.
-                    Payment and delivery arrangements can be confirmed directly
-                    with AKS Food Products.
-                </div>
-            </form>
+            <p class="cart-empty">Your cart is empty.</p>
         </div>
 
-        <div class="cart-box">
-            <h2>Confirm Your Order</h2>
-            <p>
-                Check the total in your cart, then choose how you want
-                to send your order. Prices below are sample prices that
-                you can edit.
-            </p>
-
-            <div class="checkout-buttons">
-                <button class="btn btn-green" onclick="sendWhatsApp()">
-                    Send Order on WhatsApp
-                </button>
-
-                <button class="btn btn-gold" onclick="sendEmail()">
-                    Send Order by Email
-                </button>
+        <div class="cart-summary">
+            <div class="summary-row">
+                <span>Subtotal</span>
+                <strong id="cart-subtotal">₹0</strong>
             </div>
 
-            <p id="order-status" class="status" aria-live="polite"></p>
+            <div class="summary-row">
+                <span>Delivery Charge</span>
+                <strong id="delivery-charge">₹0</strong>
+            </div>
 
-            <p style="font-size:.82rem;color:#747c74;margin-top:16px">
-                WhatsApp opens a chat with your order message. Email opens
-                your default email application with the order prepared.
-                Sending is completed by you in that application.
-            </p>
+            <div class="summary-row summary-total">
+                <span>Total</span>
+                <strong id="cart-total">₹0</strong>
+            </div>
+        </div>
+
+        <div class="delivery-note" id="delivery-note">
+            Delivery charge will be calculated after you enter your delivery address.
+        </div>
+
+        <div class="cart-buttons">
+            <button class="clear-btn" onclick="clearCart()">
+                Clear Cart
+            </button>
+
+            <a href="#checkout" class="btn btn-green">
+                Proceed to Checkout
+            </a>
         </div>
     </div>
 </section>
-</main>
 
-
-<!-- Floating Cart Widget -->
-<aside class="floating-cart is-collapsed" id="floating-cart" aria-label="Floating shopping cart">
-    <button class="floating-cart-header" type="button"
-            id="floating-cart-toggle"
-            aria-label="Open shopping cart"
-            aria-expanded="false"
-            aria-controls="floating-cart-body">
-        <span class="floating-cart-heading">
-            <span aria-hidden="true">🛒</span>
-            <span>My Cart</span>
-            <span class="floating-cart-count" id="floating-cart-count">0</span>
-        </span>
-        <span class="floating-cart-chevron" aria-hidden="true">⌄</span>
-    </button>
-    <div class="floating-cart-body" id="floating-cart-body">
-        <div id="floating-cart-items">
-            <p class="floating-cart-empty">Your cart is empty. Add a product!</p>
-        </div>
-        <div class="floating-cart-footer floating-cart-summary">
-            <div><span>Products</span><span>₹<span id="floating-cart-subtotal">0</span></span></div>
-            <div><span>Delivery</span><span>₹<span id="floating-cart-delivery">0</span></span></div>
-            <strong><span>Total</span><span>₹<span id="floating-cart-total">0</span></span></strong>
-        </div>
-        <div class="floating-cart-actions">
-            <a class="floating-cart-view" href="#cart">View Cart</a>
-            <a class="floating-cart-checkout" href="#checkout">Checkout</a>
-        </div>
+<section class="section checkout-section" id="checkout">
+    <div class="section-heading">
+        <h2>Place Your Order</h2>
+        <p>Enter your details to send your order to AKS Food Products.</p>
     </div>
-</aside>
+
+    <div class="content-box">
+
+        <form id="checkout-form" class="checkout-form">
+
+            <div class="form-group">
+                <label for="customer-name">Full Name *</label>
+                <input type="text" id="customer-name"
+                       placeholder="Enter your full name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="customer-phone">Phone Number *</label>
+                <input type="tel" id="customer-phone"
+                       placeholder="Enter your phone number"
+                       pattern="[0-9+\-\s]{10,15}" required>
+            </div>
+
+            <div class="form-group full">
+                <label for="customer-email">Email Address</label>
+                <input type="email" id="customer-email"
+                       placeholder="Enter your email address">
+            </div>
+
+            <div class="form-group full">
+                <label for="customer-address">Delivery Address *</label>
+                <textarea id="customer-address"
+                          placeholder="Enter your complete delivery address"
+                          required></textarea>
+            </div>
+
+            <div class="form-group full">
+                <label for="customer-notes">Additional Instructions</label>
+                <textarea id="customer-notes"
+                          placeholder="Any special instructions?"></textarea>
+            </div>
+
+        </form>
+
+        <div class="order-info">
+            <strong>Order Process:</strong><br>
+            Your order details will be sent through WhatsApp or Email.
+            AKS Food Products will contact you to confirm the order,
+            payment and delivery details.
+        </div>
+
+        <div class="checkout-buttons">
+            <button class="btn btn-green" onclick="sendWhatsApp()">
+                Order Through WhatsApp
+            </button>
+
+            <button class="btn btn-gold" onclick="sendEmail()">
+                Order Through Email
+            </button>
+        </div>
+
+        <p id="order-status"></p>
+    </div>
+</section>
+
+</main>
 
 <footer>
     <p><strong>AKS FOOD PRODUCTS</strong></p>
-    <p>Homemade with Love • Traditional Taste</p>
-    <p>&copy; <span id="year"></span> AKS FOOD PRODUCTS. All rights reserved.</p>
-    <p><a href="index.html">Back to Home</a></p>
+    <p>Homemade with Love • Traditional Taste • Made with Care</p>
+    <p>© 2026 AKS Food Products. All Rights Reserved.</p>
 </footer>
 
+<button class="floating-cart" onclick="goToCart()">
+    🛒 Cart (<span id="floating-cart-count">0</span>)
+</button>
+
+<!-- Supabase connection -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+
 <script>
-"use strict";
+/* =========================================
+   AKS FOOD PRODUCTS - SHOP SCRIPT
+========================================= */
 
-// EDIT THESE CONTACT DETAILS BEFORE PUBLISHING.
-const WHATSAPP_NUMBER = "919787256249"; // Country code + number, digits only
-const BUSINESS_EMAIL = "aksfoodproducts1607@gmail.com"; // Replace with your real email
+let products = [];
 
-// SAMPLE PRICES IN INDIAN RUPEES. Edit these to match your actual rates.
-const products = [
-    { name: "Kavuni Murukku", sizes: [
-        { label: "250 g", price: 80 }
-    ]},
-    { name: "Kelvaragu Urundai", sizes: [
-        { label: "250 g", price: 80 }
-    ]},
-    { name: "Karuppu Ulundhu Urundai", sizes: [
-        { label: "250 g", price: 80 }
-    ]},
-    { name: "Pasi Paruppu Urundai", sizes: [
-        { label: "250 g", price: 80 }
-    ]},
-    { name: "Somose", sizes: [
-        { label: "250 g", price: 80 }
-    ]},
-        { name: "Ellu Urundai", sizes: [
-        { label: "250 g", price: 80 }
-    ]}
-];
-
-// Cart key = product index + pack size label.
+/*
+  Cart format:
+  key = product ID + pack size
+  value = product details and quantity
+*/
 const cart = new Map();
 
-// Delivery policy: free within 10 km; ₹5 for each additional started km.
-const SHOP_LOCATION = { latitude: 10.2841098, longitude: 78.7630395 };
-const FREE_DELIVERY_RADIUS_KM = 10;
-const DELIVERY_RATE_PER_KM = 5;
-let deliveryEstimate = null;
+/* Quantity selected on each product card */
+let selectedQuantities = {};
 
-function calculateDistanceKm(lat1, lon1, lat2, lon2) {
-    const toRad = value => value * Math.PI / 180;
-    const earthRadiusKm = 6371;
-    const dLat = toRad(lat2 - lat1);
-    const dLon = toRad(lon2 - lon1);
-    const a = Math.sin(dLat / 2) ** 2 +
-        Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
-        Math.sin(dLon / 2) ** 2;
-    return 2 * earthRadiusKm * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-}
+/* Delivery settings */
+const SHOP_LOCATION = {
+    latitude: 10.2841098,
+    longitude: 78.7630395
+};
 
-function getDeliveryCharge() {
-    return deliveryEstimate ? deliveryEstimate.charge : 0;
-}
+const FREE_DELIVERY_KM = 10;
+const EXTRA_KM_CHARGE = 5;
 
-function detectDeliveryLocation() {
-    const status = document.getElementById("delivery-status");
-    const button = document.getElementById("detect-location-btn");
-    if (!navigator.geolocation) {
-        status.textContent = "Location detection is not supported by this browser. Please contact us to confirm delivery charges.";
-        return;
-    }
-    button.disabled = true;
-    button.textContent = "Detecting location…";
-    status.textContent = "Please allow location access in your browser.";
-    navigator.geolocation.getCurrentPosition(position => {
-        const distance = calculateDistanceKm(
-            SHOP_LOCATION.latitude, SHOP_LOCATION.longitude,
-            position.coords.latitude, position.coords.longitude
-        );
-        const extraKm = Math.ceil(Math.max(0, distance - FREE_DELIVERY_RADIUS_KM));
-        const charge = extraKm * DELIVERY_RATE_PER_KM;
-        deliveryEstimate = { distance, extraKm, charge };
-        status.textContent = distance <= FREE_DELIVERY_RADIUS_KM
-            ? `Estimated distance: ${distance.toFixed(1)} km — Free delivery (within 10 km).`
-            : `Estimated distance: ${distance.toFixed(1)} km — ${extraKm} additional km × ₹5 = ₹${money(charge)} delivery charge.`;
-        button.disabled = false;
-        button.textContent = "Refresh My Location";
-        renderCart();
-    }, error => {
-        deliveryEstimate = null;
-        const messages = {
-            1: "Location permission was denied. Allow location access and try again, or contact us to confirm the delivery charge.",
-            2: "Your location could not be determined. Please try again.",
-            3: "Location request timed out. Please try again."
-        };
-        status.textContent = messages[error.code] || "Unable to detect location. Please try again.";
-        button.disabled = false;
-        button.textContent = "Try Detecting Again";
-        renderCart();
-    }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 60000 });
-}
+let deliveryCharge = 0;
+let deliveryDistance = null;
 
-function money(amount) {
-    return Number(amount).toLocaleString("en-IN", {
-        maximumFractionDigits: 2
+/* WhatsApp and email details */
+const WHATSAPP_NUMBER = "919787256249";
+const BUSINESS_EMAIL = "aksfoodproducts1607@gmail.com";
+
+
+/* =========================================
+   HTML ESCAPING
+========================================= */
+
+function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, function(char) {
+        return {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#039;"
+        }[char];
     });
 }
 
-function updatePrice(index) {
-    const select = document.getElementById("pack-" + index);
-    document.getElementById("price-" + index).textContent =
-        money(Number(select.value));
+
+/* =========================================
+   LOAD PRODUCTS FROM SUPABASE
+========================================= */
+
+async function loadShopProducts() {
+    const container = document.getElementById("products-container");
+
+    try {
+        if (typeof db === "undefined") {
+            throw new Error("Supabase client 'db' was not found. Check supabase.js.");
+        }
+
+        const { data, error } = await db
+            .from("products")
+            .select("*")
+            .eq("is_active", true)
+            .order("created_at", { ascending: false });
+
+        if (error) {
+            throw error;
+        }
+
+        products = (data || []).map(function(row) {
+            return {
+                id: row.id,
+                name: row.name || "Unnamed Product",
+                description: row.description || "",
+                category: row.category || "",
+                image_url: row.image_url || "",
+                stock_quantity: Number(row.stock_quantity || 0),
+                sizes: [{
+                    label: row.pack_size || "Standard pack",
+                    price: Number(row.price || 0)
+                }]
+            };
+        });
+
+        selectedQuantities = {};
+
+        renderShopProducts();
+        renderCart();
+
+        if (products.length === 0) {
+            container.innerHTML =
+                '<p class="loading-message">No products are currently available. Please visit again soon.</p>';
+        }
+
+    } catch (error) {
+        console.error("Product loading error:", error);
+
+        container.innerHTML =
+            '<p class="error-message">Unable to load products. Please check your Supabase connection and try again.</p>';
+    }
 }
 
 
+/* =========================================
+   DISPLAY PRODUCT CARDS
+========================================= */
 
+function renderShopProducts() {
+    const container = document.getElementById("products-container");
 
-const productQuantities = [0, 0, 0, 0, 0, 0];
-
-function changeProductQty(index, change) {
-    const select = document.getElementById("pack-" + index);
-    const size = products[index].sizes[select.selectedIndex];
-    const key = index + "|" + size.label;
-
-    // Find the current quantity of this product in the cart.
-    const currentItem = cart.get(key);
-    const currentQty = currentItem ? currentItem.quantity : 0;
-
-    // Increase or decrease by exactly one.
-    const newQty = Math.max(0, currentQty + change);
-
-    if (newQty === 0) {
-        cart.delete(key);
-    } else if (currentItem) {
-        currentItem.quantity = newQty;
-    } else {
-        cart.set(key, {
-            productIndex: index,
-            name: products[index].name,
-            size: size.label,
-            price: size.price,
-            quantity: newQty
-        });
+    if (!products.length) {
+        container.innerHTML =
+            '<p class="loading-message">No products available.</p>';
+        return;
     }
 
-    productQuantities[index] = newQty;
+    container.innerHTML = products.map(function(product, index) {
 
-    document.getElementById("qty-" + index).textContent = newQty;
+        const size = product.sizes[0];
+        const price = Number(size.price || 0);
+        const stock = Number(product.stock_quantity || 0);
+        const quantity = selectedQuantities[index] || 1;
 
-    renderCart();
+        const imageHTML = product.image_url
+            ? `<img src="${escapeHTML(product.image_url)}"
+                    alt="${escapeHTML(product.name)}"
+                    onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+               <div class="image-fallback" style="display:none;">
+                    ${escapeHTML(product.name)}
+               </div>`
+            : `<div class="image-fallback">${escapeHTML(product.name)}</div>`;
 
-    document.getElementById("order-status").textContent =
-        products[index].name + " quantity: " + newQty;
+        const stockHTML = stock > 0
+            ? `<div class="stock-text">Available: ${stock} pack(s)</div>`
+            : `<div class="stock-text out">Currently out of stock</div>`;
+
+        return `
+            <article class="product">
+
+                <div class="product-image">
+                    ${imageHTML}
+                    <span class="product-quantity-badge"
+                          id="badge-${index}"></span>
+                </div>
+
+                <div class="product-info">
+
+                    <h3>${escapeHTML(product.name)}</h3>
+
+                    <p>${escapeHTML(product.description)}</p>
+
+                    <div class="product-price">
+                        ₹${price.toFixed(2)}
+                        <small>/ ${escapeHTML(size.label)}</small>
+                    </div>
+
+                    <select class="pack-select"
+                            id="pack-${index}"
+                            onchange="updatePrice(${index})">
+                        <option value="0">
+                            ${escapeHTML(size.label)} — ₹${price.toFixed(2)}
+                        </option>
+                    </select>
+
+                    ${stockHTML}
+
+                    <div class="product-actions">
+
+                        <div class="quantity-selector">
+                            <button type="button"
+                                    onclick="changeSelectedQty(${index}, -1)"
+                                    ${stock <= 0 ? "disabled" : ""}>−</button>
+
+                            <span id="qty-${index}">${quantity}</span>
+
+                            <button type="button"
+                                    onclick="changeSelectedQty(${index}, 1)"
+                                    ${stock <= 0 ? "disabled" : ""}>+</button>
+                        </div>
+
+                        <button class="btn btn-green"
+                                onclick="addSelectedToCart(${index})"
+                                ${stock <= 0 ? "disabled" : ""}>
+                            Add to Cart
+                        </button>
+
+                        <button class="btn btn-gold"
+                                onclick="orderSelectedNow(${index})"
+                                ${stock <= 0 ? "disabled" : ""}>
+                            Order Now
+                        </button>
+
+                    </div>
+                </div>
+            </article>
+        `;
+    }).join("");
+
+    updateProductBadges();
 }
+
+
+/* =========================================
+   PRODUCT QUANTITY
+========================================= */
+
+function changeSelectedQty(index, change) {
+    const product = products[index];
+
+    if (!product) return;
+
+    const current = selectedQuantities[index] || 1;
+    const next = current + change;
+
+    if (next < 1) return;
+
+    if (next > product.stock_quantity) {
+        alert("Only " + product.stock_quantity + " pack(s) are available.");
+        return;
+    }
+
+    selectedQuantities[index] = next;
+
+    const quantityElement = document.getElementById("qty-" + index);
+
+    if (quantityElement) {
+        quantityElement.textContent = next;
+    }
+}
+
+
+/* =========================================
+   UPDATE SELECTED PRODUCT PRICE
+========================================= */
+
+function updatePrice(index) {
+    const product = products[index];
+
+    if (!product) return;
+
+    const select = document.getElementById("pack-" + index);
+    const size = product.sizes[select.selectedIndex];
+
+    if (!size) return;
+
+    const priceElement = document.getElementById("price-" + index);
+
+    if (priceElement) {
+        priceElement.textContent = "₹" + Number(size.price).toFixed(2);
+    }
+}
+
+
+/* =========================================
+   ADD PRODUCT TO CART
+========================================= */
 
 function addSelectedToCart(index) {
-    changeProductQty(index, 1);
+    const product = products[index];
+
+    if (!product) return;
+
+    const quantity = selectedQuantities[index] || 1;
+
+    addProductToCart(index, quantity);
 }
 
+
+function addProductToCart(index, quantity) {
+    const product = products[index];
+
+    if (!product || quantity < 1) return;
+
+    const select = document.getElementById("pack-" + index);
+    const size = product.sizes[select ? select.selectedIndex : 0];
+
+    if (!size) return;
+
+    const key = String(product.id) + "|" + size.label;
+    const existing = cart.get(key);
+    const currentQuantity = existing ? existing.quantity : 0;
+    const newQuantity = currentQuantity + quantity;
+
+    if (newQuantity > product.stock_quantity) {
+        alert("Only " + product.stock_quantity + " pack(s) are available for " + product.name + ".");
+        return;
+    }
+
+    cart.set(key, {
+        productId: product.id,
+        name: product.name,
+        pack: size.label,
+        price: Number(size.price),
+        quantity: newQuantity
+    });
+
+    renderCart();
+    updateProductBadges();
+
+    document.getElementById("order-status").textContent =
+        product.name + " added to your cart.";
+}
+
+
+/* =========================================
+   ORDER NOW
+========================================= */
+
 function orderSelectedNow(index) {
-    changeProductQty(index, 0);
+    const product = products[index];
+
+    if (!product) return;
+
+    const select = document.getElementById("pack-" + index);
+    const size = product.sizes[select ? select.selectedIndex : 0];
+
+    if (!size) return;
+
+    const key = String(product.id) + "|" + size.label;
+    const existing = cart.get(key);
+
+    if (!existing) {
+        addProductToCart(index, selectedQuantities[index] || 1);
+    }
 
     document.getElementById("checkout").scrollIntoView({
         behavior: "smooth",
         block: "start"
     });
-
-    document.getElementById("order-status").textContent =
-        products[index].name +
-        " added to cart. Complete your details to place the order.";
 }
 
-function addToCart(index, quantity = 1) {
-    const select = document.getElementById("pack-" + index);
-    const size = products[index].sizes[select.selectedIndex];
-    const key = index + "|" + size.label;
 
-    if (cart.has(key)) {
-        cart.get(key).quantity += quantity;
-    } else {
-        cart.set(key, {
-            productIndex: index,
-            name: products[index].name,
-            size: size.label,
-            price: size.price,
-            quantity: quantity
+/* =========================================
+   CART BADGES
+========================================= */
+
+function updateProductBadges() {
+    products.forEach(function(product, index) {
+
+        const badge = document.getElementById("badge-" + index);
+
+        if (!badge) return;
+
+        let totalQuantity = 0;
+
+        cart.forEach(function(item) {
+            if (String(item.productId) === String(product.id)) {
+                totalQuantity += item.quantity;
+            }
         });
+
+        if (totalQuantity > 0) {
+            badge.textContent = totalQuantity + " in cart";
+            badge.style.display = "block";
+        } else {
+            badge.style.display = "none";
+        }
+    });
+}
+
+
+/* =========================================
+   RENDER CART
+========================================= */
+
+function renderCart() {
+    const cartItems = document.getElementById("cart-items");
+
+    let subtotal = 0;
+    let totalQuantity = 0;
+
+    if (cart.size === 0) {
+        cartItems.innerHTML =
+            '<p class="cart-empty">Your cart is empty.</p>';
+    } else {
+
+        let html = "";
+
+        cart.forEach(function(item, key) {
+
+            const itemTotal = item.price * item.quantity;
+
+            subtotal += itemTotal;
+            totalQuantity += item.quantity;
+
+            html += `
+                <div class="cart-item">
+
+                    <div class="cart-item-info">
+                        <strong>${escapeHTML(item.name)}</strong>
+                        <small>
+                            ${escapeHTML(item.pack)} × ${item.quantity}
+                            — ₹${itemTotal.toFixed(2)}
+                        </small>
+                    </div>
+
+                    <div class="cart-item-actions">
+
+                        <button onclick="changeCartQuantity('${encodeURIComponent(key)}', -1)">−</button>
+
+                        <strong>${item.quantity}</strong>
+
+                        <button onclick="changeCartQuantity('${encodeURIComponent(key)}', 1)">+</button>
+
+                        <button class="remove-item"
+                                onclick="removeCartItem('${encodeURIComponent(key)}')">
+                            Remove
+                        </button>
+
+                    </div>
+                </div>
+            `;
+        });
+
+        cartItems.innerHTML = html;
+    }
+
+    const total = subtotal + deliveryCharge;
+
+    document.getElementById("cart-subtotal").textContent =
+        "₹" + subtotal.toFixed(2);
+
+    document.getElementById("delivery-charge").textContent =
+        "₹" + deliveryCharge.toFixed(2);
+
+    document.getElementById("cart-total").textContent =
+        "₹" + total.toFixed(2);
+
+    document.getElementById("cart-count").textContent = totalQuantity;
+    document.getElementById("floating-cart-count").textContent = totalQuantity;
+
+    updateProductBadges();
+}
+
+
+/* =========================================
+   CHANGE CART QUANTITY
+========================================= */
+
+function changeCartQuantity(encodedKey, change) {
+    const key = decodeURIComponent(encodedKey);
+    const item = cart.get(key);
+
+    if (!item) return;
+
+    const product = products.find(function(p) {
+        return String(p.id) === String(item.productId);
+    });
+
+    if (!product) return;
+
+    const newQuantity = item.quantity + change;
+
+    if (newQuantity <= 0) {
+        cart.delete(key);
+    } else {
+        if (newQuantity > product.stock_quantity) {
+            alert("Only " + product.stock_quantity + " pack(s) are available.");
+            return;
+        }
+
+        item.quantity = newQuantity;
+        cart.set(key, item);
     }
 
     renderCart();
-
-    document.getElementById("order-status").textContent =
-        quantity + " pack(s) of " +
-        products[index].name + " added to your cart.";
 }
 
 
-function removeFromCart(key) {
+/* =========================================
+   REMOVE CART ITEM
+========================================= */
+
+function removeCartItem(encodedKey) {
+    const key = decodeURIComponent(encodedKey);
     cart.delete(key);
     renderCart();
 }
 
+
+/* =========================================
+   CLEAR CART
+========================================= */
+
 function clearCart() {
-    cart.clear();
-    renderCart();
-    document.getElementById("order-status").textContent =
-        "Your cart has been cleared.";
-}
+    if (cart.size === 0) return;
 
-function getTotal() {
-    let total = 0;
-    for (const item of cart.values()) {
-        total += item.price * item.quantity;
-    }
-    return total;
-}
+    if (confirm("Are you sure you want to clear your cart?")) {
+        cart.clear();
+        deliveryCharge = 0;
+        deliveryDistance = null;
+        renderCart();
 
-
-function renderFloatingCart() {
-    const itemsContainer = document.getElementById("floating-cart-items");
-    const countElement = document.getElementById("floating-cart-count");
-    const totalElement = document.getElementById("floating-cart-total");
-
-    if (!itemsContainer || !countElement || !totalElement) return;
-
-    const totalItems = [...cart.values()].reduce(
-        (sum, item) => sum + item.quantity, 0
-    );
-
-    countElement.textContent = totalItems;
-    totalElement.textContent = money(getTotal() + getDeliveryCharge());
-    document.getElementById("floating-cart-subtotal").textContent = money(getTotal());
-    document.getElementById("floating-cart-delivery").textContent = money(getDeliveryCharge());
-    itemsContainer.replaceChildren();
-
-    if (cart.size === 0) {
-        const empty = document.createElement("p");
-        empty.className = "floating-cart-empty";
-        empty.textContent = "Your cart is empty. Add a product!";
-        itemsContainer.appendChild(empty);
-        return;
-    }
-
-    for (const [key, item] of cart.entries()) {
-        const row = document.createElement("div");
-        row.className = "floating-cart-item";
-
-        const info = document.createElement("div");
-        const name = document.createElement("span");
-        name.className = "floating-cart-item-name";
-        name.textContent = item.name;
-
-        const detail = document.createElement("small");
-        detail.className = "floating-cart-item-detail";
-        detail.textContent = item.size + " × " + item.quantity +
-            " | ₹" + money(item.price) + " each";
-
-        info.append(name, detail);
-
-        const right = document.createElement("div");
-        right.className = "floating-cart-item-right";
-
-        const subtotal = document.createElement("span");
-        subtotal.className = "floating-cart-item-price";
-        subtotal.textContent = "₹" + money(item.price * item.quantity);
-
-        const remove = document.createElement("button");
-        remove.type = "button";
-        remove.className = "floating-cart-remove";
-        remove.textContent = "Remove";
-        remove.setAttribute("aria-label", "Remove " + item.name);
-        remove.addEventListener("click", () => removeFromCart(key));
-
-        right.append(subtotal, remove);
-        row.append(info, right);
-        itemsContainer.appendChild(row);
+        document.getElementById("delivery-note").textContent =
+            "Delivery charge will be calculated after you enter your delivery address.";
     }
 }
 
-function renderCart() {
-    const container = document.getElementById("cart-items");
-    const totalItems = [...cart.values()].reduce(
-        (sum, item) => sum + item.quantity, 0
-    );
 
-    document.getElementById("cart-count").textContent = totalItems;
-    products.forEach((product, index) => {
-    const badge = document.getElementById("badge-" + index);
+/* =========================================
+   FLOATING CART
+========================================= */
 
-    if (badge) {
-        let quantity = 0;
-
-        for (const item of cart.values()) {
-            if (item.productIndex === index) {
-                quantity += item.quantity;
-            }
-        }
-
-        badge.textContent = quantity;
-        badge.style.display = quantity > 0 ? "flex" : "none";
-    }
-});
-    document.getElementById("cart-subtotal").textContent = money(getTotal());
-    document.getElementById("cart-delivery").textContent = money(getDeliveryCharge());
-    document.getElementById("cart-total").textContent = money(getTotal() + getDeliveryCharge());
-    products.forEach((product, index) => {
-        const selected = document.getElementById("pack-" + index);
-        const selectedSize = product.sizes[selected.selectedIndex];
-        const selectedKey = index + "|" + selectedSize.label;
-        const selectedItem = cart.get(selectedKey);
-        document.getElementById("qty-" + index).textContent =
-            selectedItem ? selectedItem.quantity : 0;
+function goToCart() {
+    document.getElementById("cart").scrollIntoView({
+        behavior: "smooth"
     });
-    renderFloatingCart();
+}
 
-    container.replaceChildren();
 
-    if (cart.size === 0) {
-        const empty = document.createElement("p");
-        empty.className = "cart-empty";
-        empty.textContent =
-            "Your cart is empty. Add some delicious products!";
-        container.appendChild(empty);
+/* =========================================
+   DELIVERY DISTANCE CALCULATION
+========================================= */
+
+function calculateDistance(lat1, lon1, lat2, lon2) {
+    const earthRadius = 6371;
+
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+
+    const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1 * Math.PI / 180) *
+        Math.cos(lat2 * Math.PI / 180) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    return earthRadius * c;
+}
+
+
+function calculateDeliveryCharge() {
+    const note = document.getElementById("delivery-note");
+
+    if (!navigator.geolocation) {
+        note.textContent =
+            "Location is not available on this device. Delivery charges will be confirmed by AKS Food Products.";
         return;
     }
 
-    for (const [key, item] of cart.entries()) {
-        const row = document.createElement("div");
-        row.className = "cart-item";
+    note.textContent = "Calculating delivery distance...";
 
-        const info = document.createElement("div");
-        info.className = "cart-item-info";
+    navigator.geolocation.getCurrentPosition(
+        function(position) {
 
-        const title = document.createElement("strong");
-        title.textContent = item.name;
+            const customerLat = position.coords.latitude;
+            const customerLon = position.coords.longitude;
 
-        const detail = document.createElement("small");
-        detail.textContent = item.size + " × " + item.quantity +
-            " | ₹" + money(item.price) + " each";
+            deliveryDistance = calculateDistance(
+                SHOP_LOCATION.latitude,
+                SHOP_LOCATION.longitude,
+                customerLat,
+                customerLon
+            );
 
-        info.append(title, detail);
+            if (deliveryDistance <= FREE_DELIVERY_KM) {
+                deliveryCharge = 0;
 
-        const subtotal = document.createElement("strong");
-        subtotal.textContent = "₹" + money(item.price * item.quantity);
+                note.textContent =
+                    "Your location is approximately " +
+                    deliveryDistance.toFixed(1) +
+                    " km away. Free delivery is available within " +
+                    FREE_DELIVERY_KM + " km.";
+            } else {
+                const extraKm = Math.ceil(
+                    deliveryDistance - FREE_DELIVERY_KM
+                );
 
-        const remove = document.createElement("button");
-        remove.type = "button";
-        remove.className = "remove-btn";
-        remove.textContent = "Remove";
-        remove.setAttribute("aria-label", "Remove " + item.name);
-        remove.addEventListener("click", () => removeFromCart(key));
+                deliveryCharge = extraKm * EXTRA_KM_CHARGE;
 
-        row.append(info, subtotal, remove);
-        container.appendChild(row);
-    }
+                note.textContent =
+                    "Your location is approximately " +
+                    deliveryDistance.toFixed(1) +
+                    " km away. Estimated delivery charge: ₹" +
+                    deliveryCharge +
+                    ". Final delivery charges will be confirmed by AKS Food Products.";
+            }
+
+            renderCart();
+        },
+        function() {
+            deliveryCharge = 0;
+
+            note.textContent =
+                "Location permission was not provided. Delivery charges will be confirmed by AKS Food Products.";
+
+            renderCart();
+        },
+        {
+            enableHighAccuracy: false,
+            timeout: 10000,
+            maximumAge: 60000
+        }
+    );
 }
+
+
+/* =========================================
+   GET CHECKOUT DETAILS
+========================================= */
 
 function getOrderDetails() {
-    const name = document.getElementById("customer-name").value.trim();
-    const phone = document.getElementById("customer-phone").value.trim();
-    const email = document.getElementById("customer-email").value.trim();
-    const address = document.getElementById("customer-address").value.trim();
-    const notes = document.getElementById("customer-notes").value.trim();
-
-    if (cart.size === 0) {
-        alert("Please add at least one product to your cart.");
-        return null;
-    }
-
-    const form = document.getElementById("order-form");
+    const form = document.getElementById("checkout-form");
 
     if (!form.reportValidity()) {
         return null;
     }
 
-    if (!deliveryEstimate) {
-        alert("Please detect your delivery location first so the delivery charge can be estimated.");
-        document.getElementById("delivery-estimator").scrollIntoView({ behavior: "smooth", block: "center" });
+    if (cart.size === 0) {
+        alert("Your cart is empty. Please add products first.");
         return null;
     }
 
-    const lines = [...cart.values()].map((item, i) =>
-        (i + 1) + ". " + item.name + " (" + item.size + ")" +
-        " x " + item.quantity + " = ₹" +
-        money(item.price * item.quantity)
-    );
+    const customer = {
+        name: document.getElementById("customer-name").value.trim(),
+        phone: document.getElementById("customer-phone").value.trim(),
+        email: document.getElementById("customer-email").value.trim(),
+        address: document.getElementById("customer-address").value.trim(),
+        notes: document.getElementById("customer-notes").value.trim()
+    };
+
+    if (!customer.name || !customer.phone || !customer.address) {
+        alert("Please complete all required fields.");
+        return null;
+    }
+
+    let subtotal = 0;
+    let productLines = [];
+
+    cart.forEach(function(item) {
+
+        const itemTotal = item.price * item.quantity;
+        subtotal += itemTotal;
+
+        productLines.push(
+            item.name +
+            " (" + item.pack + ")" +
+            " × " + item.quantity +
+            " = ₹" + itemTotal.toFixed(2)
+        );
+    });
+
+    const total = subtotal + deliveryCharge;
 
     const message = [
-        "NEW ORDER - AKS FOOD PRODUCTS",
-        "--------------------------------",
-        "Customer: " + name,
-        "Phone: " + phone,
-        "Email: " + (email || "Not provided"),
+        "AKS FOOD PRODUCTS - NEW ORDER",
         "",
-        "ORDER ITEMS:",
-        ...lines,
+        "Customer Name: " + customer.name,
+        "Phone Number: " + customer.phone,
+        "Email: " + (customer.email || "Not provided"),
         "",
-        "Products Subtotal: ₹" + money(getTotal()),
-        "Delivery Distance (estimated): " + deliveryEstimate.distance.toFixed(1) + " km",
-        "Delivery Charge: ₹" + money(getDeliveryCharge()),
-        "TOTAL INCLUDING DELIVERY: ₹" + money(getTotal() + getDeliveryCharge()),
+        "DELIVERY ADDRESS:",
+        customer.address,
         "",
-        "Delivery Address: " + address,
-        "Instructions: " + (notes || "None"),
+        "ORDER DETAILS:",
+        ...productLines,
         "",
-        "Please confirm my order and delivery details."
+        "Subtotal: ₹" + subtotal.toFixed(2),
+        "Delivery Charge: ₹" + deliveryCharge.toFixed(2),
+        "TOTAL: ₹" + total.toFixed(2),
+        "",
+        "Additional Instructions: " + (customer.notes || "None"),
+        "",
+        "Please confirm my order. Thank you!"
     ].join("\n");
 
-    return { message, email, name };
+    return {
+        customer: customer,
+        message: message
+    };
 }
+
+
+/* =========================================
+   SEND ORDER THROUGH WHATSAPP
+========================================= */
 
 function sendWhatsApp() {
     const order = getOrderDetails();
+
     if (!order) return;
 
-    if (!/^\d{10,15}$/.test(WHATSAPP_NUMBER)) {
-        alert("Please set WHATSAPP_NUMBER in the code to your country code and phone number, using digits only.");
-        return;
-    }
+    const url =
+        "https://wa.me/" +
+        WHATSAPP_NUMBER +
+        "?text=" +
+        encodeURIComponent(order.message);
 
-    const url = "https://wa.me/" + WHATSAPP_NUMBER +
-        "?text=" + encodeURIComponent(order.message);
-
-    window.open(url, "_blank", "noopener,noreferrer");
+    window.open(url, "_blank");
 
     document.getElementById("order-status").textContent =
-        "Review your order message in WhatsApp and press Send.";
+        "Your order message is ready. Please send it in WhatsApp to complete your order.";
 }
+
+
+/* =========================================
+   SEND ORDER THROUGH EMAIL
+========================================= */
 
 function sendEmail() {
     const order = getOrderDetails();
+
     if (!order) return;
 
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(BUSINESS_EMAIL) ||
-        BUSINESS_EMAIL === "YOUR_EMAIL@example.com") {
-        alert("Please replace BUSINESS_EMAIL in the code with your real business email address.");
-        return;
-    }
-
     const subject = "New Order - AKS Food Products";
-    const url = "mailto:" + BUSINESS_EMAIL +
+
+    const url =
+        "mailto:" +
+        BUSINESS_EMAIL +
         "?subject=" + encodeURIComponent(subject) +
         "&body=" + encodeURIComponent(order.message);
 
     window.location.href = url;
 
     document.getElementById("order-status").textContent =
-        "Your email application should open with the order details prepared.";
+        "Your email order message is ready. Please send the email to complete your order.";
 }
 
-document.getElementById("year").textContent = new Date().getFullYear();
 
-const floatingCart = document.getElementById("floating-cart");
-const floatingCartToggle = document.getElementById("floating-cart-toggle");
-floatingCartToggle.addEventListener("click", () => {
-    const collapsed = floatingCart.classList.toggle("is-collapsed");
-    floatingCartToggle.setAttribute("aria-expanded", String(!collapsed));
-});
+/* =========================================
+   INITIALIZE SHOP
+========================================= */
 
 renderCart();
+loadShopProducts();
+
 </script>
 
 </body>
