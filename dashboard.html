@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AKS Admin Dashboard</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+
+<style>
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #fffaf1;
+  color: #243329;
+}
+header {
+  background: #17452e;
+  color: white;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+header h2 { margin: 0; }
+button {
+  border: 0;
+  padding: 10px 15px;
+  border-radius: 7px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.logout { background: #d8a64d; color: #173b2a; }
+main { max-width: 1100px; margin: 25px auto; padding: 15px; }
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(160px,1fr));
+  gap: 15px;
+}
+.stat, .panel {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px #00000010;
+}
+.stat h3 { color: #286b45; margin-top: 0; }
+.stat p { font-size: 25px; font-weight: bold; margin-bottom: 0; }
+.panel { margin-top: 22px; }
+input, textarea {
+  width: 100%;
+  padding: 11px;
+  margin: 7px 0 13px;
+  border: 1px solid #ccc;
+  border-radius: 7px;
+  font: inherit;
+}
+textarea { min-height: 75px; resize: vertical; }
+label { font-weight: bold; }
+.primary { background: #17452e; color: white; }
+.secondary { background: #d8a64d; color: #173b2a; }
+.danger { background: #b83232; color: white; }
+table { width: 100%; border-collapse: collapse; min-width: 650px; }
+th, td { padding: 12px; border-bottom: 1px solid #eee; text-align: left; }
+th { background: #17452e; color: white; }
+.table-wrap { overflow-x: auto; }
+.actions { display: flex; gap: 6px; flex-wrap: wrap; }
+#status { margin-top: 12px; font-weight: bold; }
+.hidden { display: none; }
+</style>
+</head>
+
+<body>
+
+<header>
+  <h2>AKS FOOD PRODUCTS | Admin</h2>
+  <button class="logout" id="logoutBtn">Logout</button>
+</header>
+
+<main>
+  <section class="stats">
+    <div class="stat">
+      <h3>Total Products</h3>
+      <p id="totalProducts">0</p>
+    </div>
+    <div class="stat">
+      <h3>Active Products</h3>
+      <p id="activeProducts">0</p>
+    </div>
+    <div class="stat">
+      <h3>Inactive Products</h3>
+      <p id="inactiveProducts">0</p>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2 id="formTitle">Add New Product</h2>
+
+    <form id="productForm">
+      <input type="hidden" id="productId">
+
+      <label>Product Name</label>
+      <input id="name" required placeholder="Product name">
+
+      <label>Description</label>
+      <textarea id="description" placeholder="Product description"></textarea>
+
+      <label>Category</label>
+      <input id="category" placeholder="Snacks / Sweets">
+
+      <label>Price (₹)</label>
+      <input id="price" type="number" min="0" step="0.01" required>
+
+      <label>Pack Size</label>
+      <input id="pack_size" placeholder="250 g">
+
+      <label>Stock Quantity</label>
+      <input id="stock_quantity" type="number" min="0" step="1" value="0">
+
+      <label>Product Image URL</label>
+      <input id="image_url" type="url" placeholder="https://...">
+
+      <label>
+        <input id="is_active" type="checkbox" checked
+          style="width:auto;margin-right:7px">
+        Active product
+      </label>
+
+      <br><br>
+      <button class="primary" type="submit" id="saveBtn">Save Product</button>
+      <button class="secondary" type="button" id="cancelBtn">Cancel Edit</button>
+    </form>
+
+    <p id="status" role="status"></p>
+  </section>
+
+  <section class="panel">
+    <h2>Manage Products</h2>
+    <button class="secondary" id="refreshBtn">Refresh Products</button>
+    <br><br>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Pack</th>
+            <th>Stock</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="productList">
+          <tr><td colspan="6">Loading...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<script>
+const statusBox = document.getElementById("status");
+let products = [];
+
+function showStatus(message, isError = false) {
+  statusBox.textContent = message;
+  statusBox.style.color = isError ? "#b83232" : "#286b45";
+}
+
+function resetForm() {
+  document.getElementById("productForm").reset();
+  document.getElementById("productId").value = "";
+  document.getElementById("is_active").checked = true;
+  document.getElementById("formTitle").textContent = "Add New Product";
+  document.getElementById("saveBtn").textContent = "Save Product";
+}
+
+async function checkAdmin() {
+  const { data: sessionData, error: sessionError } =
+    await db.auth.getSession();
+
+  if (sessionError || !sessionData.session) {
+    window.location.replace("admin.html");
+    return false;
+  }
+
+  const userId = sessionData.session.user.id;
+
+  const { data: admin, error } = await db
+    .from("admin_users")
+    .select("user_id")
+    .eq("user_id", userId)
+    .maybeSingle();
+
+  if (error || !admin) {
+    await db.auth.signOut();
+    alert("You are not authorized to access this dashboard.");
+    window.location.replace("admin.html");
+    return false;
+  }
+
+  return true;
+}
+
+async function loadProducts() {
+  showStatus("Loading products...");
+
+  const { data, error } = await db
+    .from("products")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    showStatus("Could not load products: " + error.message, true);
+    return;
+  }
+
+  products = data || [];
+
+  document.getElementById("totalProducts").textContent = products.length;
+  document.getElementById("activeProducts").textContent =
+    products.filter(p => p.is_active).length;
+  document.getElementById("inactiveProducts").textContent =
+    products.filter(p => !p.is_active).length;
+
+  const list = document.getElementById("productList");
+  list.replaceChildren();
+
+  if (!products.length) {
+    const row = document.createElement("tr");
+    const cell = document.createElement("td");
+    cell.colSpan = 6;
+    cell.textContent = "No products found. Add your first product above.";
+    row.appendChild(cell);
+    list.appendChild(row);
+  }
+
+  products.forEach(product => {
+    const row = document.createElement("tr");
+
+    function cell(value) {
+      const td = document.createElement("td");
+      td.textContent = value;
+      row.appendChild(td);
+    }
+
+    cell(product.name);
+    cell("₹" + product.price);
+    cell(product.pack_size || "-");
+    cell(String(product.stock_quantity ?? 0));
+    cell(product.is_active ? "Active" : "Inactive");
+
+    const actionCell = document.createElement("td");
+    const actions = document.createElement("div");
+    actions.className = "actions";
+
+    const editButton = document.createElement("button");
+    editButton.className = "secondary";
+    editButton.textContent = "Edit";
+    editButton.addEventListener("click", () => editProduct(product.id));
+
+    const deleteButton = document.createElement("button");
+    deleteButton.className = "danger";
+    deleteButton.textContent = "Delete";
+    deleteButton.addEventListener("click", () => deleteProduct(product.id));
+
+    actions.append(editButton, deleteButton);
+    actionCell.appendChild(actions);
+    row.appendChild(actionCell);
+    list.appendChild(row);
+  });
+
+  showStatus("Products loaded successfully.");
+}
+
+document.getElementById("productForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const id = document.getElementById("productId").value;
+
+  const product = {
+    name: document.getElementById("name").value.trim(),
+    description: document.getElementById("description").value.trim(),
+    category: document.getElementById("category").value.trim(),
+    price: Number(document.getElementById("price").value),
+    pack_size: document.getElementById("pack_size").value.trim(),
+    stock_quantity: Number(document.getElementById("stock_quantity").value || 0),
+    image_url: document.getElementById("image_url").value.trim() || null,
+    is_active: document.getElementById("is_active").checked
+  };
+
+  if (!product.name || !Number.isFinite(product.price) ||
+      product.price < 0 || !Number.isInteger(product.stock_quantity) ||
+      product.stock_quantity < 0) {
+    showStatus("Please enter valid product details.", true);
+    return;
+  }
+
+  const saveBtn = document.getElementById("saveBtn");
+  saveBtn.disabled = true;
+
+  let result;
+
+  if (id) {
+    result = await db.from("products").update(product).eq("id", id);
+  } else {
+    result = await db.from("products").insert(product);
+  }
+
+  saveBtn.disabled = false;
+
+  if (result.error) {
+    showStatus("Save failed: " + result.error.message, true);
+    return;
+  }
+
+  showStatus(id ? "Product updated!" : "Product added!");
+  resetForm();
+  await loadProducts();
+});
+
+function editProduct(id) {
+  const p = products.find(item => String(item.id) === String(id));
+  if (!p) return;
+
+  document.getElementById("productId").value = p.id;
+  document.getElementById("name").value = p.name || "";
+  document.getElementById("description").value = p.description || "";
+  document.getElementById("category").value = p.category || "";
+  document.getElementById("price").value = p.price ?? "";
+  document.getElementById("pack_size").value = p.pack_size || "";
+  document.getElementById("stock_quantity").value = p.stock_quantity ?? 0;
+  document.getElementById("image_url").value = p.image_url || "";
+  document.getElementById("is_active").checked = !!p.is_active;
+
+  document.getElementById("formTitle").textContent = "Edit Product";
+  document.getElementById("saveBtn").textContent = "Update Product";
+  showStatus("Editing: " + p.name);
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+async function deleteProduct(id) {
+  const p = products.find(item => String(item.id) === String(id));
+  if (!p || !confirm("Delete " + p.name + "? This cannot be undone.")) return;
+
+  const { error } = await db.from("products").delete().eq("id", id);
+
+  if (error) {
+    showStatus("Delete failed: " + error.message, true);
+    return;
+  }
+
+  showStatus("Product deleted.");
+  await loadProducts();
+}
+
+document.getElementById("cancelBtn").addEventListener("click", resetForm);
+document.getElementById("refreshBtn").addEventListener("click", loadProducts);
+
+document.getElementById("logoutBtn").addEventListener("click", async () => {
+  const { error } = await db.auth.signOut();
+  if (error) {
+    showStatus("Logout failed: " + error.message, true);
+    return;
+  }
+  window.location.replace("admin.html");
+});
+
+(async function startDashboard() {
+  const authorized = await checkAdmin();
+  if (authorized) await loadProducts();
+})();
+</script>
+
+</body>
+</html>
