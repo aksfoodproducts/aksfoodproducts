@@ -208,14 +208,163 @@ th {
   main { padding: 10px; }
   .panel { padding: 15px; }
 }
+
+/* ===== AKS PROFESSIONAL ADMIN THEME ===== */
+:root{
+  --aks-forest:#173b2a;
+  --aks-deep:#0c2117;
+  --aks-leaf:#286b45;
+  --aks-gold:#d8a64d;
+  --aks-gold-light:#f4d58b;
+  --aks-cream:#fffaf1;
+  --aks-ink:#243329;
+  --aks-muted:#718075;
+  --aks-line:#e7ece5;
+}
+body{
+  font-family:'DM Sans',Arial,sans-serif;
+  background:linear-gradient(180deg,#f3f7f1 0%,#fffaf1 48%,#f6f8f3 100%);
+  color:var(--aks-ink);
+  min-height:100vh;
+}
+.admin-header{
+  min-height:104px;
+  padding:16px clamp(18px,5vw,64px);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  background:linear-gradient(115deg,#091d13 0%,#173b2a 58%,#245239 100%);
+  color:#fff;
+  border-bottom:3px solid var(--aks-gold);
+  box-shadow:0 8px 28px rgba(12,33,23,.18);
+}
+.admin-brand{display:flex;align-items:center;gap:16px;min-width:0}
+.admin-logo-frame{
+  width:70px;height:70px;flex:0 0 70px;
+  display:grid;place-items:center;position:relative;
+  padding:5px;border-radius:18px;
+  background:#fffdf7;
+  border:1px solid rgba(244,213,139,.85);
+  box-shadow:0 5px 18px rgba(0,0,0,.22);
+  overflow:hidden;
+}
+.admin-logo{width:100%;height:100%;object-fit:contain;border-radius:12px}
+.logo-fallback{
+  display:none;position:absolute;inset:5px;place-items:center;
+  border-radius:12px;background:#fffaf1;color:var(--aks-forest);
+  font-family:Georgia,serif;font-size:20px;font-weight:800;letter-spacing:1px;
+}
+.admin-brand-copy{min-width:0}
+.brand-kicker{
+  margin:0 0 4px;color:var(--aks-gold-light);
+  font-size:10px;font-weight:800;letter-spacing:2px;
+}
+.admin-brand-copy h1{
+  margin:0;color:#fff;font:700 clamp(20px,3vw,28px)/1.15 Georgia,serif;
+  letter-spacing:.1px;
+}
+.admin-brand-copy h1 span{color:var(--aks-gold-light)}
+.admin-subtitle{margin:5px 0 0;color:rgba(255,255,255,.72);font-size:12px}
+.logout{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  min-height:43px;padding:10px 19px;border-radius:999px;
+  border:1px solid var(--aks-gold-light);
+  background:linear-gradient(135deg,#f5d88e,#d5a64b);
+  color:#173b2a;font-size:13px;font-weight:800;
+  box-shadow:0 5px 15px rgba(0,0,0,.15);
+  transition:transform .2s,box-shadow .2s;
+}
+.logout:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.2)}
+main{max-width:1200px;margin:30px auto 55px;padding:0 22px}
+.stats{gap:18px}
+.stat,.panel{
+  background:rgba(255,255,255,.94);
+  border:1px solid rgba(23,59,42,.08);
+  border-radius:17px;
+  box-shadow:0 8px 28px rgba(23,59,42,.065);
+}
+.stat{position:relative;overflow:hidden;padding:23px 24px}
+.stat:before{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:4px;
+  background:linear-gradient(180deg,var(--aks-gold),var(--aks-leaf));
+}
+.stat h3{font-size:13px;text-transform:uppercase;letter-spacing:1px;color:var(--aks-muted);margin:0 0 13px}
+.stat p{font:700 34px/1 Georgia,serif;color:var(--aks-forest);margin:0}
+.panel{margin-top:22px;padding:26px}
+.panel h2{margin:0 0 20px;color:var(--aks-forest);font:700 23px/1.2 Georgia,serif}
+.panel h3{color:var(--aks-forest)}
+label{font-size:13px;color:#35483b}
+input:not([type="checkbox"]):not([type="file"]),textarea{
+  border:1px solid #dce5dc;border-radius:9px;background:#fff;
+  padding:12px 13px;color:var(--aks-ink);transition:border-color .2s,box-shadow .2s;
+}
+input:not([type="checkbox"]):not([type="file"]):focus,textarea:focus{
+  outline:none;border-color:var(--aks-leaf);
+  box-shadow:0 0 0 3px rgba(40,107,69,.12);
+}
+button{border-radius:9px;transition:transform .2s,filter .2s,box-shadow .2s}
+button:not(:disabled):hover{filter:brightness(1.04);transform:translateY(-1px)}
+.primary{background:linear-gradient(135deg,#245d3c,#17452e);color:#fff;padding:12px 20px}
+.secondary{background:linear-gradient(135deg,#f4d58b,#d8a64d);color:#173b2a;padding:11px 17px}
+.danger{background:#b83232;color:#fff;padding:10px 14px}
+.upload-box{border:2px dashed #a9c0aa;background:#f7faf5;border-radius:14px}
+.upload-button{background:var(--aks-forest);border-radius:9px}
+.upload-button:hover{background:var(--aks-leaf)}
+table{border-collapse:separate;border-spacing:0;min-width:700px}
+th{background:#173b2a;color:#fff;font-size:12px;text-transform:uppercase;letter-spacing:.7px}
+th:first-child{border-top-left-radius:9px}
+th:last-child{border-top-right-radius:9px}
+td{font-size:13px;color:#405044;background:#fff}
+tbody tr:hover td{background:#fbfcf8}
+#status{padding:10px 12px;border-radius:9px}
+#status:empty{display:none}
+.hidden{display:none!important}
+@media(max-width:700px){
+  .admin-header{padding:14px 16px;min-height:unset;align-items:center}
+  .admin-logo-frame{width:56px;height:56px;flex-basis:56px;border-radius:14px}
+  .admin-brand{gap:11px}
+  .brand-kicker{font-size:8px;letter-spacing:1.2px}
+  .admin-brand-copy h1{font-size:20px}
+  .admin-subtitle{font-size:10px}
+  .logout{padding:9px 12px;min-height:39px;font-size:12px}
+  main{margin:20px auto 35px;padding:0 12px}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .stat{padding:17px 16px}
+  .stat p{font-size:28px}
+  .stat h3{font-size:10px}
+  .panel{padding:18px 15px;border-radius:14px}
+  .panel h2{font-size:20px}
+}
+@media(max-width:420px){
+  .admin-header{align-items:flex-start}
+  .admin-brand-copy h1{font-size:18px}
+  .admin-subtitle{max-width:175px;line-height:1.4}
+  .logout{font-size:11px;padding:8px 10px}
+  .stats{grid-template-columns:1fr 1fr}
+}
+
 </style>
 </head>
 
 <body>
 
-<header>
-  <h2>AKS FOOD PRODUCTS | Admin</h2>
-  <button class="logout" id="logoutBtn">Logout</button>
+<header class="admin-header">
+  <div class="admin-brand">
+    <div class="admin-logo-frame">
+      <img src="assets/AKS Homemade Food Products Logo 1.png"
+           alt="AKS Food Products logo"
+           class="admin-logo"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='grid';">
+      <span class="logo-fallback" aria-hidden="true">AKS</span>
+    </div>
+    <div class="admin-brand-copy">
+      <p class="brand-kicker">AKS HOMEMADE • MADE WITH LOVE</p>
+      <h1>Food Products <span>Admin</span></h1>
+      <p class="admin-subtitle">Manage your products and store inventory</p>
+    </div>
+  </div>
+  <button class="logout" id="logoutBtn" type="button"><span aria-hidden="true">↪</span> Logout</button>
 </header>
 
 <main>
