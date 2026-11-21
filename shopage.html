@@ -546,6 +546,39 @@ footer strong{color:var(--gold)}
   nav{gap:9px}
   nav a{font-size:11px}
 }
+
+/* GOLDEN SPECIAL CATEGORY */
+.special-category-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  width: fit-content;
+  max-width: 100%;
+  margin-bottom: 10px;
+  padding: 6px 11px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #f8df91, #d8a12e, #f5d778);
+  color: #513600;
+  border: 1px solid #c18b20;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .4px;
+  box-shadow: 0 3px 9px #d8a64d35;
+}
+
+.special-product {
+  border: 1.5px solid #d8a64d;
+  box-shadow: 0 5px 20px #d8a64d25;
+}
+
+.special-product:hover {
+  box-shadow: 0 12px 28px #d8a64d45;
+}
+
+.special-product .product-price {
+  color: #a87513;
+}
+
 </style>
 </head>
 
@@ -1389,14 +1422,26 @@ function getVisibleProductEntries() {
         activeProductCategory === "all" ||
         String(product.category || "").trim() === activeProductCategory;
 
-      return categoryOK &&
+      const searchOK =
         [product.name, product.description, product.category]
           .join(" ")
           .toLocaleLowerCase()
           .includes(productSearchText);
+
+      return categoryOK && searchOK;
+    })
+    .sort((a, b) => {
+      const aSpecial = /\bspecial\b/i.test(
+        String(a.product.category || "")
+      );
+
+      const bSpecial = /\bspecial\b/i.test(
+        String(b.product.category || "")
+      );
+
+      return Number(bSpecial) - Number(aSpecial);
     });
 }
-
 /* =========================================================
    8. PRODUCT DISPLAY
 ========================================================= */
@@ -1450,14 +1495,23 @@ function renderShopProducts() {
            📍 Verify a delivery location in an Admin-approved district to enable Order Now.
          </div>`;
 
-    return `
-      <article class="product">
+    const categoryName = String(product.category || "").trim();
+
+const isSpecialCategory = /\bspecial\b/i.test(categoryName);
+
+const specialBadge = isSpecialCategory
+  ? `<span class="special-category-badge">★ ${escapeHTML(categoryName)}</span>`
+  : "";
+
+return `
+      <article class="product ${isSpecialCategory ? "special-product" : ""}">
         <div class="product-image">
           ${image}
           <span class="product-quantity-badge" id="badge-${index}"></span>
         </div>
         <div class="product-info">
-          <h3>${escapeHTML(product.name)}</h3>
+         ${specialBadge}
+<h3>${escapeHTML(product.name)}</h3>
           <p>${escapeHTML(product.description)}</p>
           <div class="product-price">
             ₹${price.toFixed(2)}
