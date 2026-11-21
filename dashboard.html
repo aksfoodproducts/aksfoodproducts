@@ -97,6 +97,16 @@ tbody tr:hover td{background:#fbfcf8}
 .table-wrap{overflow-x:auto}
 .actions{display:flex;gap:6px;flex-wrap:wrap}
 .section-kicker{font-size:11px;letter-spacing:1.4px;text-transform:uppercase;color:#8a9a8c;font-weight:800;margin:0 0 7px}
+
+.section-brand-header{display:flex;align-items:center;gap:14px;padding:15px 17px;margin-bottom:18px;border:1px solid #e7ece5;border-radius:14px;background:linear-gradient(110deg,#fffdf8,#f4f8f1);box-shadow:0 5px 18px rgba(23,59,42,.045)}
+.section-brand-logo{width:54px;height:54px;flex:0 0 54px;object-fit:contain;padding:5px;border-radius:12px;background:#fff;border:1px solid #ead7ae;box-shadow:0 3px 10px rgba(23,59,42,.08)}
+.section-brand-copy{min-width:0}
+.section-brand-copy .section-kicker{margin:0 0 4px}
+.section-brand-copy h2{margin:0;color:var(--forest);font:700 21px/1.2 Georgia,serif}
+.section-brand-copy p:last-child{margin:4px 0 0;color:var(--muted);font-size:12px}
+#overview .section-brand-header{grid-column:1/-1}
+@media(max-width:520px){.section-brand-header{padding:12px;gap:11px}.section-brand-logo{width:46px;height:46px;flex-basis:46px}.section-brand-copy h2{font-size:18px}}
+
 .panel-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
 .panel-head h2{margin-bottom:8px}
 .field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 16px}
@@ -174,7 +184,7 @@ tbody tr:hover td{background:#fbfcf8}
     </div>
     <div class="admin-brand-copy">
       <p class="brand-kicker">AKS HOMEMADE • MADE WITH LOVE</p>
-      <h1>Food Products <span>Admin Portal</span></h1>
+      <h1>Food Products <span>Admin</span></h1>
       <p class="admin-subtitle">Manage your products, orders and store inventory</p>
     </div>
   </div>
@@ -221,6 +231,14 @@ tbody tr:hover td{background:#fbfcf8}
   <div class="admin-content">
     <main>
       <section class="stats admin-section active-section" id="overview">
+        <div class="section-brand-header">
+          <img class="section-brand-logo" src="assets/AKS Homemade Food Products Logo 1.png" alt="AKS Food Products logo" onerror="this.style.display='none'">
+          <div class="section-brand-copy">
+            <p class="section-kicker">AKS FOOD PRODUCTS • ADMIN WORKSPACE</p>
+            <h2>Overview</h2>
+            <p>A clear view of your products, orders and daily store activity.</p>
+          </div>
+        </div>
         <div class="stat"><h3>Total Products</h3><p id="totalProducts">0</p></div>
         <div class="stat"><h3>Active Products</h3><p id="activeProducts">0</p></div>
         <div class="stat"><h3>Inactive Products</h3><p id="inactiveProducts">0</p></div>
@@ -229,7 +247,14 @@ tbody tr:hover td{background:#fbfcf8}
       </section>
 
       <section class="panel admin-section" id="product-editor">
-        <p class="section-kicker">Inventory</p>
+        <div class="section-brand-header">
+          <img class="section-brand-logo" src="assets/AKS Homemade Food Products Logo 1.png" alt="AKS Food Products logo" onerror="this.style.display='none'">
+          <div class="section-brand-copy">
+            <p class="section-kicker">AKS FOOD PRODUCTS • ADMIN WORKSPACE</p>
+            <h2>Add Product</h2>
+            <p>Create a product listing and add it to your AKS catalogue.</p>
+          </div>
+        </div>
         <h2 id="formTitle">Add New Product</h2>
         <form id="productForm">
           <input type="hidden" id="productId">
@@ -240,10 +265,9 @@ tbody tr:hover td{background:#fbfcf8}
           <label for="category">Product Category</label>
           <div class="category-row">
             <select id="category"><option value="">Choose a category</option></select>
-            <input id="newCategory" placeholder="Or type a new category">
-            <button type="button" class="secondary" id="addCategoryBtn">Add</button>
+            <input id="newCategory" placeholder="Type a new category name">
           </div>
-          <small style="display:block;color:#718075;margin:-5px 0 14px">Choose an existing category or add a new one.</small>
+          <small style="display:block;color:#718075;margin:-5px 0 14px">Choose an existing category, or type a new category name. The new category will be saved when you save the product.</small>
           <label for="price">Price (₹)</label>
           <input id="price" type="number" min="0" step="0.01" required placeholder="80">
           <label for="pack_size">Pack Size</label>
@@ -273,6 +297,14 @@ tbody tr:hover td{background:#fbfcf8}
       </section>
 
       <section class="panel admin-section" id="orders-management">
+        <div class="section-brand-header">
+          <img class="section-brand-logo" src="assets/AKS Homemade Food Products Logo 1.png" alt="AKS Food Products logo" onerror="this.style.display='none'">
+          <div class="section-brand-copy">
+            <p class="section-kicker">AKS FOOD PRODUCTS • ADMIN WORKSPACE</p>
+            <h2>Orders Management</h2>
+            <p>Review customer orders, search records and update fulfilment status.</p>
+          </div>
+        </div>
         <div class="panel-head"><div><p class="section-kicker">Sales & fulfilment</p><h2>Orders Management</h2></div>
           <button class="secondary" id="refreshOrdersBtn" type="button">↻ Refresh Orders</button>
         </div>
@@ -290,7 +322,15 @@ tbody tr:hover td{background:#fbfcf8}
       </section>
 
       <section class="panel admin-section" id="delivery-settings">
-        <p class="section-kicker">Delivery coverage</p><h2>Allowed Delivery Districts</h2>
+        <div class="section-brand-header">
+          <img class="section-brand-logo" src="assets/AKS Homemade Food Products Logo 1.png" alt="AKS Food Products logo" onerror="this.style.display='none'">
+          <div class="section-brand-copy">
+            <p class="section-kicker">AKS FOOD PRODUCTS • ADMIN WORKSPACE</p>
+            <h2>Delivery Districts</h2>
+            <p>Choose the districts where customers are allowed to place orders.</p>
+          </div>
+        </div>
+        <h2>Allowed Delivery Districts</h2>
         <p>Select one or more districts where customers can place orders.</p>
         <div class="toolbar">
           <button type="button" class="secondary" id="selectAllDistricts">Select all</button>
@@ -302,6 +342,14 @@ tbody tr:hover td{background:#fbfcf8}
       </section>
 
       <section class="panel admin-section" id="manage-products">
+        <div class="section-brand-header">
+          <img class="section-brand-logo" src="assets/AKS Homemade Food Products Logo 1.png" alt="AKS Food Products logo" onerror="this.style.display='none'">
+          <div class="section-brand-copy">
+            <p class="section-kicker">AKS FOOD PRODUCTS • ADMIN WORKSPACE</p>
+            <h2>Manage Products</h2>
+            <p>View, edit, refresh and remove products in your catalogue.</p>
+          </div>
+        </div>
         <div class="panel-head"><div><p class="section-kicker">Inventory catalogue</p><h2>Manage Products</h2></div></div>
         <button class="secondary" id="refreshBtn" type="button">↻ Refresh Products</button><br><br>
         <div class="table-wrap"><table>
@@ -350,15 +398,6 @@ function refreshCategoryOptions(selected=""){
   if(selected&&!values.includes(selected))select.add(new Option(selected,selected));
   select.value=selected;
 }
-document.getElementById("addCategoryBtn").addEventListener("click",()=>{
-  const value=document.getElementById("newCategory").value.trim();
-  if(!value){showStatus("Enter a category name first.",true);return;}
-  const select=document.getElementById("category");
-  if(![...select.options].some(o=>o.value.toLowerCase()===value.toLowerCase()))select.add(new Option(value,value));
-  select.value=value;
-  document.getElementById("newCategory").value="";
-  showStatus("Category added to the product form. Save a product to use it.");
-});
 document.getElementById("category").addEventListener("change",()=>document.getElementById("newCategory").value="");
 
 function renderDistrictOptions(){
