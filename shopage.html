@@ -799,9 +799,13 @@ footer strong{color:var(--gold)}
 <script src="supabase.js"></script>
 
 <script>
+
 "use strict";
 
-/* supabase.js must create the Supabase client named db */
+/* =========================================================
+   AKS FOOD PRODUCTS
+   TAMIL NADU DISTRICT ALIAS + ORDERING SYSTEM
+========================================================= */
 
 let products = [];
 const cart = new Map();
@@ -816,8 +820,8 @@ let activeProductCategory = "all";
 let productSearchText = "";
 
 const SHOP_LOCATION = {
-  latitude:10.2841098,
-  longitude:78.7630395
+  latitude: 10.2841098,
+  longitude: 78.7630395
 };
 
 const FREE_DELIVERY_KM = 10;
@@ -825,40 +829,336 @@ const EXTRA_KM_CHARGE = 5;
 const WHATSAPP_NUMBER = "919787256249";
 const BUSINESS_EMAIL = "aksfoodproducts1607@gmail.com";
 
-function escapeHTML(value) {
-  return String(value ?? "").replace(/[&<>"']/g, c => ({
-    "&":"&amp;",
-    "<":"&lt;",
-    ">":"&gt;",
-    '"':"&quot;",
-    "'":"&#039;"
-  }[c]));
-}
+/* =========================================================
+   1. ALL 38 TAMIL NADU DISTRICTS + ALTERNATE SPELLINGS
+========================================================= */
 
-function normalizeDistrict(value) {
-  return String(value || "").normalize("NFC").toLocaleLowerCase()
-    .replace(/district|மாவட்டம்/giu,"")
-    .replace(/[^\p{L}]/gu,"")
+const TAMIL_NADU_DISTRICTS = {
+  "Ariyalur": [
+    "Ariyalur", "Ariyaloor", "Ariyalur District", "அரியலூர்"
+  ],
+
+  "Chengalpattu": [
+    "Chengalpattu", "Chengalpet", "Chengalpat",
+    "செங்கல்பட்டு"
+  ],
+
+  "Chennai": [
+    "Chennai", "Madras", "Chennai City", "சென்னை"
+  ],
+
+  "Coimbatore": [
+    "Coimbatore", "Kovai", "Coimbatur", "Coimbatore City",
+    "கோயம்புத்தூர்", "கோவை"
+  ],
+
+  "Cuddalore": [
+    "Cuddalore", "Kadalur", "Cuddalor", "கடலூர்"
+  ],
+
+  "Dharmapuri": [
+    "Dharmapuri", "Dharmapoori", "Dharmapuri District",
+    "தர்மபுரி"
+  ],
+
+  "Dindigul": [
+    "Dindigul", "Dindugal", "Thindukkal", "திண்டுக்கல்"
+  ],
+
+  "Erode": [
+    "Erode", "Erodu", "ஈரோடு"
+  ],
+
+  "Kallakurichi": [
+    "Kallakurichi", "Kallakurichy", "Kallakurichi District",
+    "கள்ளக்குறிச்சி"
+  ],
+
+  "Kanchipuram": [
+    "Kanchipuram", "Kancheepuram", "Kanchepuram",
+    "Conjeevaram", "Kanchi", "காஞ்சிபுரம்"
+  ],
+
+  "Kanniyakumari": [
+    "Kanniyakumari", "Kanyakumari", "Cape Comorin",
+    "Nagercoil", "Nagercoil District", "Kumari",
+    "கன்னியாகுமரி"
+  ],
+
+  "Karur": [
+    "Karur", "Karoor", "கரூர்"
+  ],
+
+  "Krishnagiri": [
+    "Krishnagiri", "Krishnagery", "கிருஷ்ணகிரி"
+  ],
+
+  "Madurai": [
+    "Madurai", "Madura", "மதுரை"
+  ],
+
+  "Mayiladuthurai": [
+    "Mayiladuthurai", "Mayavaram", "Mayuram",
+    "Mayiladuturai", "மயிலாடுதுறை"
+  ],
+
+  "Nagapattinam": [
+    "Nagapattinam", "Nagapatnam", "Nagapatinam",
+    "Nagapattinam District", "நாகப்பட்டினம்"
+  ],
+
+  "Namakkal": [
+    "Namakkal", "Namacal", "நாமக்கல்"
+  ],
+
+  "Perambalur": [
+    "Perambalur", "Perambaloor", "பெரம்பலூர்"
+  ],
+
+  "Pudukkottai": [
+    "Pudukkottai", "Pudukottai", "Pudukkotai",
+    "Pudukotai", "புதுக்கோட்டை"
+  ],
+
+  "Ramanathapuram": [
+    "Ramanathapuram", "Ramanad", "Ramnad",
+    "Ramanathapuram District", "இராமநாதபுரம்",
+    "ராமநாதபுரம்"
+  ],
+
+  "Ranipet": [
+    "Ranipet", "Ranipettai", "Ranipett", "ராணிப்பேட்டை"
+  ],
+
+  "Salem": [
+    "Salem", "சேலம்"
+  ],
+
+  "Sivaganga": [
+    "Sivaganga", "Sivagangai", "Sivagang",
+    "சிவகங்கை"
+  ],
+
+  "Tenkasi": [
+    "Tenkasi", "Then Kasi", "Ten Kashi",
+    "தென்காசி"
+  ],
+
+  "Thanjavur": [
+    "Thanjavur", "Tanjore", "Thanjore",
+    "Thanjavoor", "தஞ்சாவூர்"
+  ],
+
+  "Theni": [
+    "Theni", "தேனி"
+  ],
+
+  "The Nilgiris": [
+    "The Nilgiris", "Nilgiris", "Nilgiri",
+    "Nilgiri District", "Ooty", "Udhagamandalam",
+    "Udagamandalam", "நீலகிரி"
+  ],
+
+  "Thoothukudi": [
+    "Thoothukudi", "Tuticorin", "Tuticorin District",
+    "Thoothukkudi", "தூத்துக்குடி"
+  ],
+
+  "Tiruchirappalli": [
+    "Tiruchirappalli", "Tiruchirapalli", "Trichy",
+    "Trichinopoly", "Tiruchi", "Tiruchy",
+    "திருச்சிராப்பள்ளி", "திருச்சி"
+  ],
+
+  "Tirunelveli": [
+    "Tirunelveli", "Tirunelvelli", "Nellai",
+    "Tinnevelly", "திருநெல்வேலி", "நெல்லை"
+  ],
+
+  "Tirupathur": [
+    "Tirupathur", "Tiruppathur", "Tirupattur",
+    "Thirupathur", "திருப்பத்தூர்"
+  ],
+
+  "Tiruppur": [
+    "Tiruppur", "Tirupur", "Tirupoor",
+    "Thiruppur", "திருப்பூர்"
+  ],
+
+  "Tiruvallur": [
+    "Tiruvallur", "Thiruvallur", "Thiruvalloor",
+    "Tiruvalloor", "திருவள்ளூர்"
+  ],
+
+  "Tiruvannamalai": [
+    "Tiruvannamalai", "Thiruvannamalai",
+    "திருவண்ணாமலை"
+  ],
+
+  "Tiruvarur": [
+    "Tiruvarur", "Thiruvarur", "Thiruvaroor",
+    "திருவாரூர்"
+  ],
+
+  "Vellore": [
+    "Vellore", "Vellur", "வேலூர்"
+  ],
+
+  "Viluppuram": [
+    "Viluppuram", "Villupuram", "விழுப்புரம்"
+  ],
+
+  "Virudhunagar": [
+    "Virudhunagar", "Virudhunagur", "விருதுநகர்"
+  ]
+};
+
+/* =========================================================
+   2. BUILD ALIAS LOOKUP
+========================================================= */
+
+function normalizeDistrictText(value) {
+  return String(value || "")
+    .normalize("NFC")
+    .toLocaleLowerCase("en")
+    .replace(/district/gi, "")
+    .replace(/மாவட்டம்/gu, "")
+    .replace(/[^\p{L}\p{N}]/gu, "")
     .trim();
 }
 
-function getAllowedDistrict(value) {
-  const normalized = normalizeDistrict(value);
-  return allowedDistricts.find(d => normalizeDistrict(d) === normalized) || "";
+const DISTRICT_ALIAS_LOOKUP = new Map();
+
+Object.entries(TAMIL_NADU_DISTRICTS).forEach(
+  ([canonical, aliases]) => {
+    [canonical, ...aliases].forEach(alias => {
+      DISTRICT_ALIAS_LOOKUP.set(
+        normalizeDistrictText(alias),
+        canonical
+      );
+    });
+  }
+);
+
+/* Convert any known spelling into official canonical name */
+function normalizeDistrict(value) {
+  return DISTRICT_ALIAS_LOOKUP.get(
+    normalizeDistrictText(value)
+  ) || "";
 }
 
-/* DISPLAY ADMIN-ENABLED DISTRICTS */
+/* Find the matching admin-enabled district */
+function getAllowedDistrict(value) {
+  const canonical = normalizeDistrict(value);
+
+  if (!canonical) return "";
+
+  return allowedDistricts.find(
+    district => normalizeDistrict(district) === canonical
+  ) || "";
+}
+
+/* Compare two district names using canonical names */
+function districtsMatch(first, second) {
+  const a = normalizeDistrict(first);
+  const b = normalizeDistrict(second);
+
+  return Boolean(a && b && a === b);
+}
+
+/* Find a district mentioned in an address.
+   English aliases use word boundaries to avoid matching
+   unrelated parts of street names or other words. */
+function findDistrictInAddress(address) {
+  const text = String(address || "").normalize("NFC");
+
+  const aliases = [];
+
+  Object.entries(TAMIL_NADU_DISTRICTS).forEach(
+    ([canonical, names]) => {
+      [canonical, ...names].forEach(alias => {
+        aliases.push({
+          alias,
+          canonical,
+          normalized: normalizeDistrictText(alias)
+        });
+      });
+    }
+  );
+
+  aliases.sort(
+    (a, b) => b.normalized.length - a.normalized.length
+  );
+
+  for (const item of aliases) {
+    const alias = item.alias;
+
+    if (/^[\p{Script=Tamil}\p{N}\s]+$/u.test(alias)) {
+      if (text.includes(alias)) return item.canonical;
+    } else {
+      const escaped = alias.replace(
+        /[.*+?^${}()|[\]\\]/g,
+        "\\$&"
+      );
+
+      const pattern = new RegExp(
+        "(^|[^\\p{L}\\p{N}])" +
+        escaped.replace(/\s+/g, "\\s+") +
+        "($|[^\\p{L}\\p{N}])",
+        "iu"
+      );
+
+      if (pattern.test(text)) return item.canonical;
+    }
+  }
+
+  return "";
+}
+
+console.log(
+  "Tamil Nadu districts loaded:",
+  Object.keys(TAMIL_NADU_DISTRICTS).length
+);
+
+/* =========================================================
+   3. HTML SAFETY
+========================================================= */
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, c => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;"
+  }[c]));
+}
+
+/* =========================================================
+   4. ADMIN DISTRICT DISPLAY
+========================================================= */
+
 function renderDashboardDistrictNotice() {
-  const message = document.getElementById("dashboard-district-message");
-  const list = document.getElementById("dashboard-district-list");
-  const topList = document.getElementById("top-district-list");
+  const message = document.getElementById(
+    "dashboard-district-message"
+  );
+
+  const list = document.getElementById(
+    "dashboard-district-list"
+  );
+
+  const topList = document.getElementById(
+    "top-district-list"
+  );
 
   if (list) list.replaceChildren();
   if (topList) topList.replaceChildren();
 
   if (!allowedDistricts.length) {
     if (message) {
-      message.textContent = "No districts are currently enabled. Please check the Admin Dashboard.";
+      message.textContent =
+        "No districts are currently enabled. Please check the Admin Dashboard.";
+
       message.classList.add("dashboard-district-empty");
     }
 
@@ -868,12 +1168,14 @@ function renderDashboardDistrictNotice() {
       empty.textContent = "No delivery districts enabled";
       topList.appendChild(empty);
     }
+
     return;
   }
 
   if (message) {
     message.classList.remove("dashboard-district-empty");
-    message.textContent = "We currently accept orders only from these enabled districts:";
+    message.textContent =
+      "We currently accept orders only from these enabled districts:";
   }
 
   allowedDistricts.forEach(district => {
@@ -885,15 +1187,18 @@ function renderDashboardDistrictNotice() {
     }
 
     if (topList) {
-      const topChip = document.createElement("span");
-      topChip.className = "top-district-chip";
-      topChip.textContent = district;
-      topList.appendChild(topChip);
+      const chip = document.createElement("span");
+      chip.className = "top-district-chip";
+      chip.textContent = district;
+      topList.appendChild(chip);
     }
   });
 }
 
-/* LOAD DISTRICTS FROM SUPABASE */
+/* =========================================================
+   5. LOAD ADMIN SETTINGS
+========================================================= */
+
 async function loadStoreSettings() {
   const select = document.getElementById("customer-district");
   const status = document.getElementById("district-status");
@@ -903,17 +1208,19 @@ async function loadStoreSettings() {
       throw new Error("Supabase db client not found. Check supabase.js.");
     }
 
-    const {data,error} = await db
+    const { data, error } = await db
       .from("store_settings")
       .select("allowed_districts")
-      .order("id",{ascending:true})
+      .order("id", { ascending: true })
       .limit(1)
       .maybeSingle();
 
     if (error) throw error;
 
     allowedDistricts = Array.isArray(data?.allowed_districts)
-      ? data.allowed_districts.filter(x => typeof x === "string" && x.trim())
+      ? data.allowed_districts.filter(
+          x => typeof x === "string" && x.trim()
+        )
       : [];
 
     renderDashboardDistrictNotice();
@@ -925,29 +1232,49 @@ async function loadStoreSettings() {
       ).join("");
 
     if (!allowedDistricts.length) {
-      status.textContent = "No delivery districts are enabled in the Admin Dashboard.";
-      setOrderingState(false,"","No delivery districts are currently enabled.");
+      status.textContent =
+        "No delivery districts are enabled in the Admin Dashboard.";
+
+      setOrderingState(
+        false,
+        "",
+        "No delivery districts are currently enabled."
+      );
+
       return false;
     }
 
-    status.textContent = "Select your district and verify your GPS location. Tamil and English addresses are accepted.";
+    status.textContent =
+      "Select your district and verify your GPS location. Tamil and English addresses are accepted.";
+
     return true;
 
   } catch (error) {
-    console.error("Store settings loading error:",error);
+    console.error("Store settings loading error:", error);
 
     allowedDistricts = [];
     renderDashboardDistrictNotice();
 
-    select.innerHTML = '<option value="">Delivery settings unavailable</option>';
-    status.textContent = "Could not load delivery districts. Check Supabase permissions and store_settings.";
+    select.innerHTML =
+      '<option value="">Delivery settings unavailable</option>';
 
-    setOrderingState(false,"","⚠️ Delivery settings could not be loaded. Ordering is disabled.");
+    status.textContent =
+      "Could not load delivery districts. Check Supabase permissions and store_settings.";
+
+    setOrderingState(
+      false,
+      "",
+      "⚠️ Delivery settings could not be loaded. Ordering is disabled."
+    );
+
     return false;
   }
 }
 
-/* LOAD PRODUCTS */
+/* =========================================================
+   6. LOAD PRODUCTS
+========================================================= */
+
 async function loadShopProducts() {
   const container = document.getElementById("products-container");
 
@@ -956,52 +1283,64 @@ async function loadShopProducts() {
       throw new Error("Supabase db client not found. Check supabase.js.");
     }
 
-    const {data,error} = await db
+    const { data, error } = await db
       .from("products")
       .select("*")
-      .eq("is_active",true)
-      .order("created_at",{ascending:false});
+      .eq("is_active", true)
+      .order("created_at", { ascending: false });
 
     if (error) throw error;
 
     products = (data || []).map(row => ({
-      id:row.id,
-      name:row.name || "Unnamed Product",
-      description:row.description || "",
-      category:row.category || "",
-      image_url:row.image_url || "",
-      stock_quantity:Number(row.stock_quantity || 0),
-      sizes:[{
-        label:row.pack_size || "Standard pack",
-        price:Number(row.price || 0)
+      id: row.id,
+      name: row.name || "Unnamed Product",
+      description: row.description || "",
+      category: row.category || "",
+      image_url: row.image_url || "",
+      stock_quantity: Number(row.stock_quantity || 0),
+      sizes: [{
+        label: row.pack_size || "Standard pack",
+        price: Number(row.price || 0)
       }]
     }));
 
     selectedQuantities = {};
-    products.forEach((p,i) => selectedQuantities[i]=0);
+
+    products.forEach((p, i) => {
+      selectedQuantities[i] = 0;
+    });
 
     updateCatalogControls();
     renderShopProducts();
     renderCart();
 
     if (!products.length) {
-      container.innerHTML = '<p class="loading-message">No products are currently available.</p>';
+      container.innerHTML =
+        '<p class="loading-message">No products are currently available.</p>';
     }
 
-  } catch(error) {
-    console.error("Product loading error:",error);
+  } catch (error) {
+    console.error("Product loading error:", error);
+
     container.innerHTML =
       '<p class="error-message">Unable to load products. Check your Supabase connection and products table.</p>';
   }
 }
 
-/* SEARCH AND CATEGORY FILTER */
+/* =========================================================
+   7. PRODUCT SEARCH AND CATEGORY
+========================================================= */
+
 function updateCatalogControls() {
   const categorySelect = document.getElementById("product-category");
 
-  const categories = [...new Set(
-    products.map(p => String(p.category || "").trim()).filter(Boolean)
-  )].sort((a,b) => a.localeCompare(b));
+  const categories = [
+    ...new Set(
+      products
+        .map(p => String(p.category || "").trim())
+        .filter(Boolean)
+    )
+  ].sort((a, b) => a.localeCompare(b));
 
   categorySelect.innerHTML =
     '<option value="all">All Categories</option>' +
@@ -1021,18 +1360,18 @@ function updateCatalogControls() {
   if (!search.dataset.bound) {
     search.dataset.bound = "1";
 
-    search.addEventListener("input",() => {
+    search.addEventListener("input", () => {
       productSearchText = search.value.trim().toLocaleLowerCase();
       clear.hidden = !search.value;
       renderShopProducts();
     });
 
-    categorySelect.addEventListener("change",() => {
+    categorySelect.addEventListener("change", () => {
       activeProductCategory = categorySelect.value;
       renderShopProducts();
     });
 
-    clear.addEventListener("click",() => {
+    clear.addEventListener("click", () => {
       search.value = "";
       productSearchText = "";
       clear.hidden = true;
@@ -1043,26 +1382,31 @@ function updateCatalogControls() {
 }
 
 function getVisibleProductEntries() {
-  return products.map((product,index) => ({product,index}))
-    .filter(({product}) => {
+  return products
+    .map((product, index) => ({ product, index }))
+    .filter(({ product }) => {
       const categoryOK =
         activeProductCategory === "all" ||
         String(product.category || "").trim() === activeProductCategory;
 
       return categoryOK &&
-        [product.name,product.description,product.category]
+        [product.name, product.description, product.category]
           .join(" ")
           .toLocaleLowerCase()
           .includes(productSearchText);
     });
 }
 
-/* RENDER PRODUCT CARDS */
+/* =========================================================
+   8. PRODUCT DISPLAY
+========================================================= */
+
 function renderShopProducts() {
   const container = document.getElementById("products-container");
 
   if (!products.length) {
-    container.innerHTML = '<p class="loading-message">No products available.</p>';
+    container.innerHTML =
+      '<p class="loading-message">No products available.</p>';
     return;
   }
 
@@ -1077,7 +1421,7 @@ function renderShopProducts() {
     return;
   }
 
-  container.innerHTML = entries.map(({product,index}) => {
+  container.innerHTML = entries.map(({ product, index }) => {
     const size = product.sizes[0];
     const price = Number(size.price || 0);
     const stock = Number(product.stock_quantity || 0);
@@ -1093,12 +1437,12 @@ function renderShopProducts() {
     const controls = orderingAllowed
       ? `<div class="product-actions">
            <div class="quantity-selector">
-             <button type="button" onclick="changeSelectedQty(${index},-1)" ${stock<=0?"disabled":""}>−</button>
+             <button type="button" onclick="changeSelectedQty(${index},-1)" ${stock <= 0 ? "disabled" : ""}>−</button>
              <span id="qty-${index}">${quantity}</span>
-             <button type="button" onclick="changeSelectedQty(${index},1)" ${stock<=0?"disabled":""}>+</button>
+             <button type="button" onclick="changeSelectedQty(${index},1)" ${stock <= 0 ? "disabled" : ""}>+</button>
            </div>
            <button class="btn btn-gold" type="button"
-             onclick="orderSelectedNow(${index})" ${stock<=0?"disabled":""}>
+             onclick="orderSelectedNow(${index})" ${stock <= 0 ? "disabled" : ""}>
              Order Now
            </button>
          </div>`
@@ -1119,8 +1463,8 @@ function renderShopProducts() {
             ₹${price.toFixed(2)}
             <small>/ ${escapeHTML(size.label)}</small>
           </div>
-          <div class="stock-text ${stock<=0?"out":""}">
-            ${stock>0?`Available: ${stock} pack(s)`:"Currently out of stock"}
+          <div class="stock-text ${stock <= 0 ? "out" : ""}">
+            ${stock > 0 ? `Available: ${stock} pack(s)` : "Currently out of stock"}
           </div>
           ${controls}
         </div>
@@ -1131,21 +1475,26 @@ function renderShopProducts() {
   updateProductBadges();
 }
 
-/* PRODUCT QUANTITY */
-function changeSelectedQty(index,change) {
+/* =========================================================
+   9. PRODUCT QUANTITIES
+========================================================= */
+
+function changeSelectedQty(index, change) {
   const product = products[index];
+
   if (!product || !orderingAllowed) return;
 
   const key = String(product.id) + "|" + product.sizes[0].label;
   const existing = cart.get(key);
 
   if (change > 0) {
-    addProductToCart(index,1);
+    addProductToCart(index, 1);
   } else if (existing) {
-    changeCartQuantity(encodeURIComponent(key),-1);
+    changeCartQuantity(encodeURIComponent(key), -1);
   }
 
   const updated = cart.get(key);
+
   selectedQuantities[index] = updated ? updated.quantity : 0;
 
   const el = document.getElementById("qty-" + index);
@@ -1154,10 +1503,11 @@ function changeSelectedQty(index,change) {
   updateProductBadges();
 }
 
-function addProductToCart(index,quantity) {
+function addProductToCart(index, quantity) {
   if (!requireAllowedDistrict()) return false;
 
   const product = products[index];
+
   if (!product || quantity < 1) return false;
 
   const size = product.sizes[0];
@@ -1166,19 +1516,24 @@ function addProductToCart(index,quantity) {
   const next = (existing ? existing.quantity : 0) + quantity;
 
   if (next > product.stock_quantity) {
-    alert("Only " + product.stock_quantity + " pack(s) are available for " + product.name + ".");
+    alert(
+      "Only " + product.stock_quantity +
+      " pack(s) are available for " + product.name + "."
+    );
+
     return false;
   }
 
-  cart.set(key,{
-    productId:product.id,
-    name:product.name,
-    pack:size.label,
-    price:Number(size.price),
-    quantity:next
+  cart.set(key, {
+    productId: product.id,
+    name: product.name,
+    pack: size.label,
+    price: Number(size.price),
+    quantity: next
   });
 
   selectedQuantities[index] = next;
+
   renderCart();
 
   document.getElementById("order-status").textContent =
@@ -1196,16 +1551,21 @@ function orderSelectedNow(index) {
   const key = String(product.id) + "|" + product.sizes[0].label;
 
   if (!cart.has(key)) {
-    const added = addProductToCart(index,1);
+    const added = addProductToCart(index, 1);
     if (!added) return;
   }
 
-  document.getElementById("checkout").scrollIntoView({behavior:"smooth"});
+  document.getElementById("checkout").scrollIntoView({
+    behavior: "smooth"
+  });
 }
 
-/* CART BADGES */
+/* =========================================================
+   10. CART BADGES
+========================================================= */
+
 function updateProductBadges() {
-  products.forEach((p,i) => {
+  products.forEach((p, i) => {
     const badge = document.getElementById("badge-" + i);
     if (!badge) return;
 
@@ -1222,19 +1582,25 @@ function updateProductBadges() {
   });
 }
 
-/* CART DISPLAY */
+/* =========================================================
+   11. CART DISPLAY
+========================================================= */
+
 function renderCart() {
   const target = document.getElementById("cart-items");
+
   let subtotal = 0;
   let count = 0;
 
   if (!cart.size) {
-    target.innerHTML = '<p class="cart-empty">Your cart is empty.</p>';
+    target.innerHTML =
+      '<p class="cart-empty">Your cart is empty.</p>';
   } else {
     let html = "";
 
-    cart.forEach((item,key) => {
+    cart.forEach((item, key) => {
       const amount = item.price * item.quantity;
+
       subtotal += amount;
       count += item.quantity;
 
@@ -1259,23 +1625,33 @@ function renderCart() {
 
   const total = subtotal + deliveryCharge;
 
-  document.getElementById("cart-subtotal").textContent = "₹" + subtotal.toFixed(2);
-  document.getElementById("delivery-charge").textContent = "₹" + deliveryCharge.toFixed(2);
-  document.getElementById("cart-total").textContent = "₹" + total.toFixed(2);
+  document.getElementById("cart-subtotal").textContent =
+    "₹" + subtotal.toFixed(2);
+
+  document.getElementById("delivery-charge").textContent =
+    "₹" + deliveryCharge.toFixed(2);
+
+  document.getElementById("cart-total").textContent =
+    "₹" + total.toFixed(2);
+
   document.getElementById("cart-count").textContent = count;
+
   document.getElementById("floating-cart-count").textContent = count;
 
   renderFloatingCart(total);
   updateProductBadges();
 }
 
-function changeCartQuantity(encodedKey,change) {
+function changeCartQuantity(encodedKey, change) {
   const key = decodeURIComponent(encodedKey);
   const item = cart.get(key);
 
   if (!item) return;
 
-  const product = products.find(p => String(p.id) === String(item.productId));
+  const product = products.find(
+    p => String(p.id) === String(item.productId)
+  );
+
   if (!product) return;
 
   const next = item.quantity + change;
@@ -1289,7 +1665,7 @@ function changeCartQuantity(encodedKey,change) {
     }
 
     item.quantity = next;
-    cart.set(key,item);
+    cart.set(key, item);
   }
 
   syncProductCardQuantities();
@@ -1297,17 +1673,22 @@ function changeCartQuantity(encodedKey,change) {
 }
 
 function syncProductCardQuantities() {
-  products.forEach((p,i) => {
-    const item = cart.get(String(p.id) + "|" + p.sizes[0].label);
+  products.forEach((p, i) => {
+    const item = cart.get(
+      String(p.id) + "|" + p.sizes[0].label
+    );
+
     selectedQuantities[i] = item ? item.quantity : 0;
 
     const el = document.getElementById("qty-" + i);
+
     if (el) el.textContent = selectedQuantities[i];
   });
 }
 
 function removeCartItem(key) {
   cart.delete(decodeURIComponent(key));
+
   syncProductCardQuantities();
   renderCart();
 }
@@ -1315,6 +1696,7 @@ function removeCartItem(key) {
 function clearCart() {
   if (cart.size && confirm("Are you sure you want to clear your cart?")) {
     cart.clear();
+
     deliveryCharge = 0;
     deliveryDistance = null;
 
@@ -1326,16 +1708,20 @@ function clearCart() {
   }
 }
 
-/* FLOATING CART */
+/* =========================================================
+   12. FLOATING CART
+========================================================= */
+
 function renderFloatingCart(total) {
   const list = document.getElementById("floating-cart-items");
 
   if (!cart.size) {
-    list.innerHTML = '<p class="floating-cart-empty">Your cart is empty.</p>';
+    list.innerHTML =
+      '<p class="floating-cart-empty">Your cart is empty.</p>';
   } else {
     let html = "";
 
-    cart.forEach((item,key) => {
+    cart.forEach((item, key) => {
       html += `
         <div class="floating-cart-line">
           <div class="floating-cart-line-info">
@@ -1367,9 +1753,9 @@ function toggleFloatingCart(force) {
     ? force
     : !panel.classList.contains("open");
 
-  panel.classList.toggle("open",open);
-  panel.setAttribute("aria-hidden",String(!open));
-  button.setAttribute("aria-expanded",String(open));
+  panel.classList.toggle("open", open);
+  panel.setAttribute("aria-hidden", String(!open));
+  button.setAttribute("aria-expanded", String(open));
 }
 
 function closeFloatingCart() {
@@ -1378,79 +1764,99 @@ function closeFloatingCart() {
 
 function goToCart() {
   closeFloatingCart();
-  document.getElementById("cart").scrollIntoView({behavior:"smooth"});
+
+  document.getElementById("cart").scrollIntoView({
+    behavior: "smooth"
+  });
 }
 
 function initializeDraggableCart() {
   const widget = document.getElementById("floating-cart-widget");
   const button = document.getElementById("floating-cart-button");
 
-  let sx=0,sy=0,left=0,top=0,dragging=false,moved=false;
+  let sx = 0;
+  let sy = 0;
+  let left = 0;
+  let top = 0;
+  let dragging = false;
+  let moved = false;
 
-  button.addEventListener("pointerdown",e => {
+  button.addEventListener("pointerdown", e => {
     if (e.button !== undefined && e.button !== 0) return;
 
-    sx=e.clientX;
-    sy=e.clientY;
+    sx = e.clientX;
+    sy = e.clientY;
 
-    const r=widget.getBoundingClientRect();
-    left=r.left;
-    top=r.top;
+    const r = widget.getBoundingClientRect();
 
-    dragging=true;
-    moved=false;
+    left = r.left;
+    top = r.top;
+
+    dragging = true;
+    moved = false;
 
     button.setPointerCapture(e.pointerId);
   });
 
-  button.addEventListener("pointermove",e => {
+  button.addEventListener("pointermove", e => {
     if (!dragging) return;
 
-    const dx=e.clientX-sx;
-    const dy=e.clientY-sy;
+    const dx = e.clientX - sx;
+    const dy = e.clientY - sy;
 
-    if (Math.abs(dx)>4 || Math.abs(dy)>4) moved=true;
+    if (Math.abs(dx) > 4 || Math.abs(dy) > 4) moved = true;
+
     if (!moved) return;
 
-    widget.style.left=Math.max(0,Math.min(innerWidth-widget.offsetWidth,left+dx))+"px";
-    widget.style.top=Math.max(0,Math.min(innerHeight-widget.offsetHeight,top+dy))+"px";
-    widget.style.right="auto";
-    widget.style.bottom="auto";
+    widget.style.left =
+      Math.max(0, Math.min(innerWidth - widget.offsetWidth, left + dx)) + "px";
+
+    widget.style.top =
+      Math.max(0, Math.min(innerHeight - widget.offsetHeight, top + dy)) + "px";
+
+    widget.style.right = "auto";
+    widget.style.bottom = "auto";
   });
 
   const finish = () => {
     if (!dragging) return;
-    dragging=false;
+
+    dragging = false;
 
     if (moved) {
-      button.dataset.dragged="true";
-      setTimeout(() => delete button.dataset.dragged,0);
+      button.dataset.dragged = "true";
+      setTimeout(() => delete button.dataset.dragged, 0);
     }
   };
 
-  button.addEventListener("pointerup",finish);
-  button.addEventListener("pointercancel",finish);
+  button.addEventListener("pointerup", finish);
+  button.addEventListener("pointercancel", finish);
 
-  button.addEventListener("click",e => {
+  button.addEventListener("click", e => {
     if (button.dataset.dragged) {
       e.preventDefault();
       e.stopPropagation();
       return;
     }
+
     toggleFloatingCart();
   });
 }
 
-/* ORDERING SECURITY */
-function setOrderingState(allowed,district,message) {
+/* =========================================================
+   13. ORDERING CONTROL
+========================================================= */
+
+function setOrderingState(allowed, district, message) {
   detectedDistrict = district || "";
+
+  const adminMatch = getAllowedDistrict(detectedDistrict);
 
   orderingAllowed = Boolean(
     allowed &&
     locationVerified &&
     detectedDistrict &&
-    allowedDistricts.length &&
-    getAllowedDistrict(detectedDistrict)
+    adminMatch
   );
 
   const restriction = document.getElementById("district-restriction");
@@ -1458,8 +1864,11 @@ function setOrderingState(allowed,district,message) {
   const select = document.getElementById("customer-district");
   const status = document.getElementById("district-status");
 
-  restriction.className = "district-restriction " +
-    (orderingAllowed ? "allowed" : (locationVerified ? "blocked" : "pending"));
+  restriction.className =
+    "district-restriction " +
+    (orderingAllowed
+      ? "allowed"
+      : (locationVerified ? "blocked" : "pending"));
 
   restriction.textContent = message || (
     orderingAllowed
@@ -1467,20 +1876,21 @@ function setOrderingState(allowed,district,message) {
       : "📍 Verify your delivery location to check order availability."
   );
 
-  buttons.classList.toggle("order-disabled",!orderingAllowed);
+  buttons.classList.toggle("order-disabled", !orderingAllowed);
 
-  buttons.querySelectorAll("button").forEach(b => {
-    b.disabled = !orderingAllowed;
+  buttons.querySelectorAll("button").forEach(button => {
+    button.disabled = !orderingAllowed;
   });
 
   if (select) {
-    select.value = orderingAllowed ? getAllowedDistrict(detectedDistrict) : "";
+    select.value = orderingAllowed ? adminMatch : "";
   }
 
   if (status) {
     status.textContent = message || (
-      orderingAllowed ? "✓ District verified." :
-      "Select your district and verify your GPS location."
+      orderingAllowed
+        ? "✓ District verified."
+        : "Select your district and verify your GPS location."
     );
   }
 
@@ -1494,57 +1904,75 @@ function requireAllowedDistrict() {
     !detectedDistrict ||
     !getAllowedDistrict(detectedDistrict)
   ) {
-    alert("Please verify your actual delivery location in a district enabled by AKS Food Products.");
+    alert(
+      "Please verify your actual delivery location in a district enabled by AKS Food Products."
+    );
+
     return false;
   }
 
   return true;
 }
 
-/* DISTRICT SELECTION DOES NOT REPLACE GPS VERIFICATION */
-document.getElementById("customer-district").addEventListener("change",function() {
-  const selected = getAllowedDistrict(this.value);
+/* =========================================================
+   14. DISTRICT DROPDOWN VALIDATION
+========================================================= */
 
-  if (
-    locationVerified &&
-    detectedDistrict &&
-    selected &&
-    normalizeDistrict(selected) === normalizeDistrict(detectedDistrict)
-  ) {
-    setOrderingState(
-      true,
-      detectedDistrict,
-      "✓ Your GPS-verified district matches the selected delivery district."
-    );
-  } else {
-    setOrderingState(
-      false,
-      detectedDistrict,
-      "⚠️ Selecting a district alone does not confirm your location. Please use Detect My Location."
-    );
+document.getElementById("customer-district").addEventListener(
+  "change",
+  function () {
+    const selected = normalizeDistrict(this.value);
+
+    if (
+      locationVerified &&
+      detectedDistrict &&
+      selected &&
+      selected === normalizeDistrict(detectedDistrict) &&
+      getAllowedDistrict(detectedDistrict)
+    ) {
+      setOrderingState(
+        true,
+        detectedDistrict,
+        "✓ Your GPS-verified district matches the selected delivery district."
+      );
+    } else {
+      setOrderingState(
+        false,
+        detectedDistrict,
+        "⚠️ Selecting a district alone does not confirm your location. Please use Detect My Location."
+      );
+    }
   }
-});
+);
 
-/* DISTANCE CALCULATION */
-function calculateDistance(lat1,lon1,lat2,lon2) {
-  const R=6371;
-  const dLat=(lat2-lat1)*Math.PI/180;
-  const dLon=(lon2-lon1)*Math.PI/180;
+/* =========================================================
+   15. DISTANCE CALCULATION
+========================================================= */
 
-  const a=
-    Math.sin(dLat/2)**2+
-    Math.cos(lat1*Math.PI/180)*
-    Math.cos(lat2*Math.PI/180)*
-    Math.sin(dLon/2)**2;
+function calculateDistance(lat1, lon1, lat2, lon2) {
+  const R = 6371;
 
-  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(lat1 * Math.PI / 180) *
+    Math.cos(lat2 * Math.PI / 180) *
+    Math.sin(dLon / 2) ** 2;
+
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
-/* VERIFY GPS DISTRICT AGAINST ADMIN SETTINGS */
-async function verifyCustomerDistrict(latitude,longitude) {
-  locationVerified=false;
-  orderingAllowed=false;
-  detectedDistrict="";
+/* =========================================================
+   16. GPS DISTRICT VERIFICATION
+   Accepts aliases but checks admin-enabled canonical district.
+========================================================= */
+
+async function verifyCustomerDistrict(latitude, longitude) {
+  locationVerified = false;
+  orderingAllowed = false;
+  detectedDistrict = "";
 
   setOrderingState(
     false,
@@ -1556,61 +1984,97 @@ async function verifyCustomerDistrict(latitude,longitude) {
     const url =
       "https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=" +
       encodeURIComponent(latitude) +
-      "&lon=" + encodeURIComponent(longitude) +
+      "&lon=" +
+      encodeURIComponent(longitude) +
       "&zoom=10&addressdetails=1&accept-language=en";
 
-    const response = await fetch(url,{
-      headers:{"Accept":"application/json"}
+    const response = await fetch(url, {
+      headers: { "Accept": "application/json" }
     });
 
-    if (!response.ok) throw new Error("District lookup failed.");
+    if (!response.ok) {
+      throw new Error("District lookup failed.");
+    }
 
-    const data=await response.json();
-    const a=data.address || {};
+    const data = await response.json();
+    const a = data.address || {};
 
-    const actual=a.state_district || a.county || a.district || "";
-    const matched=getAllowedDistrict(actual);
+    const possibleNames = [
+      a.state_district,
+      a.district,
+      a.county
+    ].filter(Boolean);
 
-    if (matched) {
-      locationVerified=true;
-      detectedDistrict=matched;
+    let canonical = "";
+
+    for (const name of possibleNames) {
+      canonical = normalizeDistrict(name);
+      if (canonical) break;
+    }
+
+    if (!canonical) {
+      locationVerified = false;
+      detectedDistrict = "";
 
       setOrderingState(
-        true,
-        matched,
-        "✓ Your GPS location is verified in " + matched + ". Ordering is enabled."
+        false,
+        "",
+        "⚠️ Could not recognize the GPS district name. Please try again."
       );
 
       document.getElementById("location-status").textContent =
-        "✓ Verified district: " + matched;
+        "Could not recognize the GPS district. Please try again.";
 
       document.getElementById("top-location-status").textContent =
-        "✓ Delivery available in " + matched + ".";
+        "Unable to recognize your GPS district.";
 
-      return matched;
+      return "";
     }
 
-    locationVerified=true;
-    detectedDistrict=actual || "Unknown";
+    locationVerified = true;
+    detectedDistrict = canonical;
+
+    const adminMatch = getAllowedDistrict(canonical);
+
+    if (adminMatch) {
+      setOrderingState(
+        true,
+        canonical,
+        "✓ Your GPS location is verified in " +
+        canonical +
+        ". Ordering is enabled."
+      );
+
+      document.getElementById("location-status").textContent =
+        "✓ Verified district: " + canonical;
+
+      document.getElementById("top-location-status").textContent =
+        "✓ Delivery available in " + canonical + ".";
+
+      return canonical;
+    }
 
     setOrderingState(
       false,
-      detectedDistrict,
-      "🚫 Detected district (" + (actual || "Unknown") + ") is not enabled for delivery."
+      canonical,
+      "🚫 Your detected district is " +
+      canonical +
+      ". This district is not currently enabled for delivery."
     );
 
     document.getElementById("location-status").textContent =
-      "Detected district: " + (actual || "Unknown");
+      "Detected district: " + canonical;
 
     document.getElementById("top-location-status").textContent =
-      "Delivery is unavailable in your detected district.";
+      "Delivery is unavailable in " + canonical + ".";
 
-    return actual;
+    return canonical;
 
-  } catch(error) {
-    console.error("District verification error:",error);
+  } catch (error) {
+    console.error("District verification error:", error);
 
-    locationVerified=false;
+    locationVerified = false;
+    detectedDistrict = "";
 
     setOrderingState(
       false,
@@ -1628,47 +2092,53 @@ async function verifyCustomerDistrict(latitude,longitude) {
   }
 }
 
-/* GPS ADDRESS LANGUAGE: ENGLISH */
-async function fillCustomerAddressFromLocation(latitude,longitude) {
-  const field=document.getElementById("customer-address");
-  const status=document.getElementById("address-status");
+/* =========================================================
+   17. GPS ADDRESS LOOKUP
+========================================================= */
 
-  status.textContent="Finding your address in English...";
+async function fillCustomerAddressFromLocation(latitude, longitude) {
+  const field = document.getElementById("customer-address");
+  const status = document.getElementById("address-status");
+
+  status.textContent = "Finding your address in English...";
 
   try {
     const url =
       "https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=" +
       encodeURIComponent(latitude) +
-      "&lon=" + encodeURIComponent(longitude) +
+      "&lon=" +
+      encodeURIComponent(longitude) +
       "&zoom=18&addressdetails=1&accept-language=en";
 
-    const response=await fetch(url,{
-      headers:{"Accept":"application/json"}
+    const response = await fetch(url, {
+      headers: { "Accept": "application/json" }
     });
 
-    if (!response.ok) throw new Error("Address lookup failed.");
+    if (!response.ok) {
+      throw new Error("Address lookup failed.");
+    }
 
-    const data=await response.json();
-    const a=data.address || {};
+    const data = await response.json();
+    const a = data.address || {};
 
-    const parts=[
+    const parts = [
       a.house_number,
       a.road || a.street,
       a.neighbourhood || a.suburb || a.village,
       a.town || a.city || a.municipality,
-      a.state_district,
+      a.state_district || a.county,
       a.state,
       a.postcode,
       a.country
     ].filter(Boolean);
 
     if (parts.length) {
-      field.value=parts.join(", ");
+      field.value = parts.join(", ");
 
       status.textContent =
         "✓ GPS address detected in English. You can edit or replace it in Tamil or English.";
     } else if (data.display_name) {
-      field.value=data.display_name;
+      field.value = data.display_name;
 
       status.textContent =
         "✓ GPS address detected. You can edit it in Tamil or English.";
@@ -1677,20 +2147,23 @@ async function fillCustomerAddressFromLocation(latitude,longitude) {
         "Please enter your delivery address manually in Tamil or English.";
     }
 
-  } catch(error) {
-    console.warn("Address lookup error:",error);
+  } catch (error) {
+    console.warn("Address lookup error:", error);
 
     status.textContent =
       "GPS address could not be loaded. Please type your address in Tamil or English.";
   }
 }
 
-/* DETECT LOCATION AND CALCULATE DELIVERY CHARGE */
+/* =========================================================
+   18. DETECT LOCATION + DELIVERY CHARGE
+========================================================= */
+
 function calculateDeliveryCharge() {
-  const note=document.getElementById("delivery-note");
+  const note = document.getElementById("delivery-note");
 
   if (!navigator.geolocation) {
-    locationVerified=false;
+    locationVerified = false;
 
     setOrderingState(
       false,
@@ -1698,13 +2171,15 @@ function calculateDeliveryCharge() {
       "Your browser does not support GPS location verification."
     );
 
-    note.textContent="Location detection is not supported by this browser.";
+    note.textContent =
+      "Location detection is not supported by this browser.";
+
     return;
   }
 
-  locationVerified=false;
-  orderingAllowed=false;
-  detectedDistrict="";
+  locationVerified = false;
+  orderingAllowed = false;
+  detectedDistrict = "";
 
   setOrderingState(
     false,
@@ -1712,7 +2187,7 @@ function calculateDeliveryCharge() {
     "📍 Detecting your location. Please allow location access."
   );
 
-  note.textContent="Detecting your location...";
+  note.textContent = "Detecting your location...";
 
   document.getElementById("location-status").textContent =
     "Please allow GPS location access.";
@@ -1720,83 +2195,142 @@ function calculateDeliveryCharge() {
   document.getElementById("top-location-status").textContent =
     "Requesting location permission...";
 
-  navigator.geolocation.getCurrentPosition(async position => {
-    const lat=position.coords.latitude;
-    const lon=position.coords.longitude;
+  navigator.geolocation.getCurrentPosition(
+    async position => {
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
 
-    await verifyCustomerDistrict(lat,lon);
+      await verifyCustomerDistrict(lat, lon);
 
-    deliveryDistance=calculateDistance(
-      SHOP_LOCATION.latitude,
-      SHOP_LOCATION.longitude,
-      lat,
-      lon
-    );
+      deliveryDistance = calculateDistance(
+        SHOP_LOCATION.latitude,
+        SHOP_LOCATION.longitude,
+        lat,
+        lon
+      );
 
-    if (deliveryDistance <= FREE_DELIVERY_KM) {
-      deliveryCharge=0;
+      if (deliveryDistance <= FREE_DELIVERY_KM) {
+        deliveryCharge = 0;
 
-      note.textContent=
-        "You are approximately " + deliveryDistance.toFixed(1) +
-        " km from our shop. Free delivery applies within " +
-        FREE_DELIVERY_KM + " km.";
+        note.textContent =
+          "You are approximately " +
+          deliveryDistance.toFixed(1) +
+          " km from our shop. Free delivery applies within " +
+          FREE_DELIVERY_KM +
+          " km.";
 
-    } else {
-      const extra=Math.ceil(deliveryDistance-FREE_DELIVERY_KM);
-      deliveryCharge=extra*EXTRA_KM_CHARGE;
+      } else {
+        const extra = Math.ceil(
+          deliveryDistance - FREE_DELIVERY_KM
+        );
 
-      note.textContent=
-        "You are approximately " + deliveryDistance.toFixed(1) +
-        " km from our shop. Estimated delivery charge: ₹" +
-        deliveryCharge + " (₹" + EXTRA_KM_CHARGE +
-        " per additional km beyond " + FREE_DELIVERY_KM + " km).";
+        deliveryCharge = extra * EXTRA_KM_CHARGE;
+
+        note.textContent =
+          "You are approximately " +
+          deliveryDistance.toFixed(1) +
+          " km from our shop. Estimated delivery charge: ₹" +
+          deliveryCharge +
+          " (₹" +
+          EXTRA_KM_CHARGE +
+          " per additional km beyond " +
+          FREE_DELIVERY_KM +
+          " km).";
+      }
+
+      await fillCustomerAddressFromLocation(lat, lon);
+
+      renderCart();
+    },
+
+    error => {
+      deliveryCharge = 0;
+      deliveryDistance = null;
+      locationVerified = false;
+
+      setOrderingState(
+        false,
+        "",
+        "⚠️ GPS verification is required before ordering."
+      );
+
+      let msg =
+        "Location permission was not provided. Click Detect My Location and allow access.";
+
+      if (error.code === 1) {
+        msg =
+          "Location permission denied. Enable location permission in your browser and try again.";
+      }
+
+      if (error.code === 2) {
+        msg = "Your location is unavailable. Please try again.";
+      }
+
+      if (error.code === 3) {
+        msg = "Location detection timed out. Please try again.";
+      }
+
+      note.textContent = msg;
+
+      document.getElementById("location-status").textContent = msg;
+      document.getElementById("top-location-status").textContent = msg;
+
+      renderCart();
+    },
+
+    {
+      enableHighAccuracy: true,
+      timeout: 20000,
+      maximumAge: 0
     }
-
-    await fillCustomerAddressFromLocation(lat,lon);
-    renderCart();
-
-  },error => {
-    deliveryCharge=0;
-    deliveryDistance=null;
-    locationVerified=false;
-
-    setOrderingState(
-      false,
-      "",
-      "⚠️ GPS verification is required before ordering."
-    );
-
-    let msg="Location permission was not provided. Click Detect My Location and allow access.";
-
-    if (error.code===1) {
-      msg="Location permission denied. Enable location permission in your browser and try again.";
-    }
-
-    if (error.code===2) {
-      msg="Your location is unavailable. Please try again.";
-    }
-
-    if (error.code===3) {
-      msg="Location detection timed out. Please try again.";
-    }
-
-    note.textContent=msg;
-
-    document.getElementById("location-status").textContent=msg;
-    document.getElementById("top-location-status").textContent=msg;
-
-    renderCart();
-
-  },{
-    enableHighAccuracy:true,
-    timeout:20000,
-    maximumAge:0
-  });
+  );
 }
 
-/* GET ORDER DETAILS */
+/* =========================================================
+   19. CUSTOMER ADDRESS DISTRICT VALIDATION
+========================================================= */
+
+function validateCustomerAddressDistrict(customer) {
+  const addressDistrict = findDistrictInAddress(customer.address);
+
+  if (
+    addressDistrict &&
+    !districtsMatch(addressDistrict, customer.district)
+  ) {
+    alert(
+      "Your delivery address mentions " +
+      addressDistrict +
+      ", but your verified delivery district is " +
+      customer.district +
+      ". Please correct your address or contact us."
+    );
+
+    document.getElementById("order-status").textContent =
+      "⚠️ Address district does not match the GPS-verified district.";
+
+    return false;
+  }
+
+  if (!districtsMatch(customer.district, detectedDistrict)) {
+    alert(
+      "Your selected district does not match your GPS-verified district."
+    );
+
+    document.getElementById("order-status").textContent =
+      "⚠️ Selected district does not match GPS verification.";
+
+    return false;
+  }
+
+  return true;
+}
+
+/* =========================================================
+   20. GET ORDER DETAILS
+========================================================= */
+
 function getOrderDetails() {
-  const form=document.getElementById("checkout-form");
+  const form = document.getElementById("checkout-form");
 
   if (!form.reportValidity()) return null;
 
@@ -1807,23 +2341,42 @@ function getOrderDetails() {
 
   if (!requireAllowedDistrict()) return null;
 
-  const customer={
-    name:document.getElementById("customer-name").value.trim(),
-    phone:document.getElementById("customer-phone").value.trim(),
-    email:document.getElementById("customer-email").value.trim(),
-    district:document.getElementById("customer-district").value.trim(),
-    address:document.getElementById("customer-address").value.trim(),
-    notes:document.getElementById("customer-notes").value.trim()
+  const customer = {
+    name: document.getElementById("customer-name").value.trim(),
+    phone: document.getElementById("customer-phone").value.trim(),
+    email: document.getElementById("customer-email").value.trim(),
+    district: document.getElementById("customer-district").value.trim(),
+    address: document.getElementById("customer-address").value.trim(),
+    notes: document.getElementById("customer-notes").value.trim()
   };
 
-  if (!customer.name || !customer.phone || !customer.district || !customer.address) {
-    alert("Please complete all required fields. / தேவையான விவரங்களை நிரப்பவும்.");
+  if (
+    !customer.name ||
+    !customer.phone ||
+    !customer.district ||
+    !customer.address
+  ) {
+    alert(
+      "Please complete all required fields. / தேவையான விவரங்களை நிரப்பவும்."
+    );
+
     return null;
   }
 
-  const items=Array.from(cart.values()).map(item => ({
-    product_id:Number(item.productId),
-    quantity:Number(item.quantity)
+  /* Validate customer address and selected district */
+  if (!validateCustomerAddressDistrict(customer)) {
+    return null;
+  }
+
+  /* Validate district against Admin-enabled list */
+  if (!getAllowedDistrict(customer.district)) {
+    alert("This delivery district is not enabled by the administrator.");
+    return null;
+  }
+
+  const items = Array.from(cart.values()).map(item => ({
+    product_id: Number(item.productId),
+    quantity: Number(item.quantity)
   }));
 
   if (items.some(item =>
@@ -1832,19 +2385,26 @@ function getOrderDetails() {
     !Number.isInteger(item.quantity) ||
     item.quantity <= 0
   )) {
-    alert("Your cart contains an invalid item. Please refresh the page and try again.");
+    alert(
+      "Your cart contains an invalid item. Please refresh the page and try again."
+    );
+
     return null;
   }
 
   return {
     customer,
     items,
-    deliveryFee:Number(deliveryCharge || 0)
+    deliveryFee: Number(deliveryCharge || 0)
   };
 }
 
-function buildSavedOrderMessage(customer,savedOrder) {
-  const lines=(savedOrder.order_items || []).map(item =>
+/* =========================================================
+   21. ORDER MESSAGE
+========================================================= */
+
+function buildSavedOrderMessage(customer, savedOrder) {
+  const lines = (savedOrder.order_items || []).map(item =>
     `${item.name} (${item.pack}) × ${item.quantity} = ₹${Number(item.line_total).toFixed(2)}`
   );
 
@@ -1873,137 +2433,255 @@ function buildSavedOrderMessage(customer,savedOrder) {
   ].join("\n");
 }
 
-let orderSubmissionInProgress=false;
+/* =========================================================
+   22. SAVE ORDER + WHATSAPP / EMAIL
+========================================================= */
 
-/* SAVE ORDER + DEDUCT STOCK IN ONE SUPABASE TRANSACTION */
+let orderSubmissionInProgress = false;
+
 async function placeOrder(channel) {
   if (orderSubmissionInProgress) return;
 
-  const order=getOrderDetails();
+  const order = getOrderDetails();
+
   if (!order) return;
 
   if (typeof db === "undefined" || !db.rpc) {
-    alert("Supabase connection is unavailable. Please contact AKS Food Products.");
+    alert(
+      "Supabase connection is unavailable. Please contact AKS Food Products."
+    );
+
     return;
   }
 
-  orderSubmissionInProgress=true;
-  const buttons=document.querySelectorAll("#checkout-buttons button");
-  buttons.forEach(button => button.disabled=true);
+  orderSubmissionInProgress = true;
+
+  const buttons = document.querySelectorAll(
+    "#checkout-buttons button"
+  );
+
+  buttons.forEach(button => button.disabled = true);
+
   document.getElementById("order-status").textContent =
     "Saving your order and checking stock. Please wait...";
 
-  // Reserve a browser tab immediately during the customer's click.
-  // Browsers may block WhatsApp/mailto navigation if the tab is opened
-  // only after the asynchronous Supabase request has completed.
-  let checkoutWindow=null;
+  let checkoutWindow = null;
+
   try {
-    checkoutWindow=window.open("about:blank","_blank");
-  } catch(openError) {
-    console.warn("Checkout tab could not be opened:",openError);
+    checkoutWindow = window.open("about:blank", "_blank");
+  } catch (openError) {
+    console.warn("Checkout tab could not be opened:", openError);
   }
 
   try {
-    const {data:savedOrder,error}=await db.rpc("create_customer_order",{
-      p_customer_name:order.customer.name,
-      p_customer_phone:order.customer.phone,
-      p_customer_address:order.customer.address,
-      p_district:order.customer.district,
-      p_items:order.items,
-      p_delivery_fee:order.deliveryFee,
-      p_customer_email:order.customer.email || null,
-      p_customer_notes:order.customer.notes || null
-    });
+    const { data: savedOrder, error } = await db.rpc(
+      "create_customer_order",
+      {
+        p_customer_name: order.customer.name,
+        p_customer_phone: order.customer.phone,
+        p_customer_address: order.customer.address,
+        p_district: order.customer.district,
+        p_items: order.items,
+        p_delivery_fee: order.deliveryFee,
+        p_customer_email: order.customer.email || null,
+        p_customer_notes: order.customer.notes || null
+      }
+    );
 
     if (error) throw error;
+
     if (!savedOrder || !savedOrder.id) {
-      throw new Error("The database did not return a saved order ID.");
+      throw new Error(
+        "The database did not return a saved order ID."
+      );
     }
 
-    const message=buildSavedOrderMessage(order.customer,savedOrder);
+    const message = buildSavedOrderMessage(
+      order.customer,
+      savedOrder
+    );
+
     document.getElementById("order-status").textContent =
-      "✓ Order #" + String(savedOrder.id).slice(0,8) +
+      "✓ Order #" +
+      String(savedOrder.id).slice(0, 8) +
       " saved successfully. Stock has been updated.";
 
     cart.clear();
-    deliveryCharge=0;
-    deliveryDistance=null;
+    deliveryCharge = 0;
+    deliveryDistance = null;
+
     syncProductCardQuantities();
     renderCart();
+
     await loadShopProducts();
 
     let checkoutUrl;
+
     if (channel === "whatsapp") {
-      checkoutUrl="https://wa.me/"+WHATSAPP_NUMBER+"?text="+encodeURIComponent(message);
+      checkoutUrl =
+        "https://wa.me/" +
+        WHATSAPP_NUMBER +
+        "?text=" +
+        encodeURIComponent(message);
     } else {
-      checkoutUrl="mailto:"+BUSINESS_EMAIL+
-        "?subject="+encodeURIComponent("New Order - AKS Food Products ("+savedOrder.id+")")+
-        "&body="+encodeURIComponent(message);
+      checkoutUrl =
+        "mailto:" +
+        BUSINESS_EMAIL +
+        "?subject=" +
+        encodeURIComponent(
+          "New Order - AKS Food Products (" + savedOrder.id + ")"
+        ) +
+        "&body=" +
+        encodeURIComponent(message);
     }
 
-    // Navigate the tab that was opened synchronously before awaiting Supabase.
-    let fallbackLink=null;
+    let fallbackLink = null;
+
     if (checkoutWindow && !checkoutWindow.closed) {
-      checkoutWindow.location.href=checkoutUrl;
-      try { checkoutWindow.focus(); } catch(focusError) {}
+      checkoutWindow.location.href = checkoutUrl;
+
+      try {
+        checkoutWindow.focus();
+      } catch (focusError) {}
     } else {
-      // Popup fallback: show the exact destination as a clickable link.
-      fallbackLink=document.createElement("a");
-      fallbackLink.href=checkoutUrl;
-      fallbackLink.target="_blank";
-      fallbackLink.rel="noopener noreferrer";
-      fallbackLink.textContent=channel === "whatsapp" ? "Open WhatsApp" : "Open Email";
-      fallbackLink.style.cssText="display:inline-block;margin:8px;padding:8px 12px;background:#17452e;color:#fff;border-radius:8px;font-weight:700";
+      fallbackLink = document.createElement("a");
+
+      fallbackLink.href = checkoutUrl;
+      fallbackLink.target = "_blank";
+      fallbackLink.rel = "noopener noreferrer";
+
+      fallbackLink.textContent =
+        channel === "whatsapp"
+          ? "Open WhatsApp"
+          : "Open Email";
+
+      fallbackLink.style.cssText =
+        "display:inline-block;margin:8px;padding:8px 12px;background:#17452e;color:#fff;border-radius:8px;font-weight:700";
     }
 
-    const status=document.getElementById("order-status");
+    const status = document.getElementById("order-status");
+
     status.textContent += channel === "whatsapp"
       ? " WhatsApp is ready; please press Send to notify us."
       : " Your email app should open; please press Send to notify us.";
+
     if (fallbackLink) {
-      status.appendChild(document.createTextNode(" Pop-up was blocked. Use this link: "));
+      status.appendChild(
+        document.createTextNode(" Pop-up was blocked. Use this link: ")
+      );
+
       status.appendChild(fallbackLink);
     }
-  } catch(error) {
-    if (checkoutWindow && !checkoutWindow.closed) checkoutWindow.close();
-    console.error("Order submission failed:",error);
+
+  } catch (error) {
+    if (checkoutWindow && !checkoutWindow.closed) {
+      checkoutWindow.close();
+    }
+
+    console.error("Order submission failed:", error);
+
     document.getElementById("order-status").textContent =
-      "Order was not placed: " + (error.message || "Please try again.");
-    alert("Order was not placed. " + (error.message || "Please try again."));
+      "Order was not placed: " +
+      (error.message || "Please try again.");
+
+    alert(
+      "Order was not placed. " +
+      (error.message || "Please try again.")
+    );
+
   } finally {
-    orderSubmissionInProgress=false;
+    orderSubmissionInProgress = false;
+
     buttons.forEach(button => {
-      button.disabled=!orderingAllowed;
+      button.disabled = !orderingAllowed;
     });
   }
 }
 
-/* WHATSAPP CHECKOUT */
+/* =========================================================
+   23. CHECKOUT BUTTONS
+========================================================= */
+
 function sendWhatsApp() {
   placeOrder("whatsapp");
 }
 
-/* EMAIL CHECKOUT */
 function sendEmail() {
   placeOrder("email");
 }
 
-/* INITIALIZE */
+/* =========================================================
+   24. DISTRICT TESTS
+========================================================= */
+
+function testDistrictAliases() {
+  const tests = [
+    ["Sivagangai", "Sivaganga"],
+    ["Trichy", "Tiruchirappalli"],
+    ["Tiruchirapalli", "Tiruchirappalli"],
+    ["Kovai", "Coimbatore"],
+    ["Madras", "Chennai"],
+    ["Tanjore", "Thanjavur"],
+    ["Kancheepuram", "Kanchipuram"],
+    ["Pudukottai", "Pudukkottai"],
+    ["Tuticorin", "Thoothukudi"],
+    ["Nellai", "Tirunelveli"],
+    ["Villupuram", "Viluppuram"],
+    ["Ooty", "The Nilgiris"],
+    ["Mayavaram", "Mayiladuthurai"],
+    ["Ramnad", "Ramanathapuram"],
+    ["Nagercoil", "Kanniyakumari"],
+    ["Tirupur", "Tiruppur"]
+  ];
+
+  console.table(
+    tests.map(([input, expected]) => ({
+      Input: input,
+      Expected: expected,
+      Actual: normalizeDistrict(input),
+      Passed: normalizeDistrict(input) === expected
+    }))
+  );
+
+  console.log(
+    "Total Tamil Nadu districts:",
+    Object.keys(TAMIL_NADU_DISTRICTS).length
+  );
+}
+
+/* =========================================================
+   25. INITIALIZE WEBSITE
+========================================================= */
+
 function renderCartInitial() {
   renderCart();
 }
 
 async function initializeShop() {
   renderCartInitial();
+
   initializeDraggableCart();
 
   await loadStoreSettings();
   await loadShopProducts();
 
-  /* Location is requested only when customer clicks Detect My Location */
+  console.log(
+    "AKS Food Products initialized successfully."
+  );
+
+  console.log(
+    "District alias tests:",
+    Object.keys(TAMIL_NADU_DISTRICTS).length,
+    "districts loaded."
+  );
+
+  testDistrictAliases();
+
+  /* GPS is requested only when the customer clicks Detect My Location */
 }
 
 initializeShop();
+
 
 </script>
 </body>
