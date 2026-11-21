@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,140 +6,721 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Our Products | AKS Food Products</title>
 <meta name="description" content="Traditional homemade snacks from AKS Food Products.">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
 <style>
-:root{--green:#17452e;--green-light:#286b45;--gold:#d8a64d;--cream:#fffaf1;--text:#243329;--footer:#10291d;--white:#fff;--muted:#6b776e;--border:#e8e8df;--danger:#b83232}
-*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);line-height:1.6}button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoration:none;color:inherit}
-header{background:var(--green);color:white;padding:12px 5%;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
-.brand{display:flex;align-items:center;gap:12px}.brand img{width:65px;height:60px;object-fit:contain;background:white;border-radius:10px;padding:4px}.brand-name{font-size:19px;font-weight:700;letter-spacing:1px}.brand-tagline{font-size:12px;color:#e8d7ad}
-nav{display:flex;align-items:center;gap:22px;flex-wrap:wrap}nav a{font-size:14px;font-weight:600}nav a:hover{color:var(--gold)}.cart-nav{background:var(--gold);color:var(--green);padding:8px 14px;border-radius:20px}
-.location-quickbar{position:sticky;top:0;z-index:900;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:13px max(5%,calc((100% - 1200px)/2));background:#fffdf7;border-bottom:1px solid #e7e2d4;box-shadow:0 5px 18px #142d1d12}
-.location-quickbar-copy{display:flex;align-items:center;gap:12px}.location-pin{display:grid;place-items:center;width:42px;height:42px;flex:0 0 42px;border-radius:50%;background:#eaf3e9;font-size:20px}.location-quickbar-copy strong{display:block;color:var(--green);font-size:14px}.location-quickbar-copy p{color:var(--muted);font-size:12px;margin-top:2px}.top-districts{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}.top-district-chip{display:inline-flex;background:#eaf3e9;color:var(--green);border:1px solid #cfe3d2;border-radius:20px;padding:3px 9px;font-size:11px;font-weight:700}.top-districts-label{font-size:11px;color:var(--green);font-weight:700;margin-top:6px}
-.location-quickbar-btn{border:0;border-radius:9px;padding:11px 17px;background:var(--green);color:#fff;font-weight:700;font-size:13px;white-space:nowrap}
-.hero{padding:75px 20px 65px;text-align:center;background:linear-gradient(135deg,#17452e,#286b45);color:white}.hero-label{color:var(--gold);font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase}.hero h1{font-family:"Playfair Display",serif;font-size:clamp(32px,5vw,52px);line-height:1.2;margin:15px 0}.hero h1 span{color:var(--gold)}.hero p{max-width:650px;margin:auto;color:#e7eee8;font-size:15px}.hero-badges{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:25px}.hero-badges span{border:1px solid #ffffff55;padding:8px 14px;border-radius:25px;font-size:13px}
-.section{padding:65px 5%}.section-heading{text-align:center;margin-bottom:35px}.section-heading h2{font-family:"Playfair Display",serif;font-size:34px;color:var(--green)}.section-heading p{color:var(--muted);font-size:14px;margin-top:8px}
-.catalog-tools{max-width:1200px;margin:0 auto 26px;display:grid;grid-template-columns:minmax(220px,1fr) minmax(190px,260px) auto;align-items:end;gap:14px}.catalog-search{display:flex;align-items:center;gap:10px;min-height:48px;padding:0 14px;background:#fff;border:1px solid var(--border);border-radius:11px;color:var(--muted)}.catalog-search input{min-width:0;width:100%;border:0;outline:0;background:transparent;color:var(--text)}.catalog-search button{border:0;background:transparent;color:var(--muted);font-size:22px}.catalog-category{display:flex;flex-direction:column;gap:4px;color:var(--green);font-size:12px;font-weight:700}.catalog-category select{width:100%;min-height:48px;padding:0 12px;border:1px solid var(--border);border-radius:11px;background:#fff;color:var(--text)}.catalog-result-count{color:var(--muted);font-size:12px;white-space:nowrap;padding-bottom:13px}
-.products{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:25px;max-width:1200px;margin:auto}.product{background:white;border-radius:16px;overflow:hidden;box-shadow:0 5px 20px #183c2510;border:1px solid var(--border);transition:.25s;position:relative}.product:hover{transform:translateY(-5px);box-shadow:0 12px 25px #183c2520}.product-image{height:220px;background:#f0eee5;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}.product-image img{width:100%;height:100%;object-fit:cover}.image-fallback{color:var(--green);font-weight:700;text-align:center;padding:20px}.product-quantity-badge{position:absolute;top:12px;right:12px;background:var(--gold);color:var(--green);border-radius:20px;padding:5px 10px;font-size:12px;font-weight:700;display:none}.product-info{padding:20px}.product-info h3{color:var(--green);font-size:19px;margin-bottom:7px}.product-info p{font-size:13px;color:var(--muted);min-height:42px}.product-price{color:var(--green);font-size:22px;font-weight:700;margin:13px 0}.product-price small{font-size:12px;color:var(--muted);font-weight:400}.stock-text{font-size:12px;color:var(--green-light);margin-bottom:12px}.stock-text.out{color:var(--danger)}.product-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.quantity-selector{display:flex;align-items:center;border:1px solid var(--border);border-radius:8px;overflow:hidden}.quantity-selector button{border:0;background:#f4f5ef;color:var(--green);width:32px;height:36px;font-size:18px}.quantity-selector span{min-width:30px;text-align:center;font-weight:700}
-.btn{border:0;border-radius:8px;padding:10px 13px;font-size:12px;font-weight:700;transition:.2s}.btn-green{background:var(--green);color:white;flex:1}.btn-green:hover{background:var(--green-light)}.btn-gold{background:var(--gold);color:var(--green);flex:1}.btn:disabled{opacity:.5;cursor:not-allowed}
-.cart-section{background:#f2f4ec}.content-box{max-width:900px;margin:auto;background:white;padding:28px;border-radius:15px;box-shadow:0 5px 20px #183c2510}.cart-empty{text-align:center;color:var(--muted);padding:20px 0}.cart-item{display:flex;justify-content:space-between;align-items:center;gap:15px;padding:14px 0;border-bottom:1px solid var(--border)}.cart-item-info strong{display:block;color:var(--green)}.cart-item-info small{color:var(--muted)}.cart-item-actions{display:flex;align-items:center;gap:8px}.cart-item-actions button{border:0;border-radius:6px;padding:5px 9px;background:#edf1e9;color:var(--green)}.remove-item{color:var(--danger)!important;background:#fff0f0!important}.cart-summary{margin-top:20px;max-width:350px;margin-left:auto}.summary-row{display:flex;justify-content:space-between;padding:6px 0;font-size:14px}.summary-total{border-top:1px solid var(--border);margin-top:8px;padding-top:13px;font-size:19px;font-weight:700;color:var(--green)}.cart-buttons{display:flex;justify-content:flex-end;gap:10px;margin-top:20px;flex-wrap:wrap}.clear-btn{border:1px solid #e5baba;color:var(--danger);background:white;padding:9px 15px;border-radius:8px}.delivery-note{background:#f6f8f1;padding:12px;border-radius:8px;margin-top:15px;font-size:13px;color:var(--muted)}
-.checkout-section{background:var(--cream)}.checkout-form{display:grid;grid-template-columns:1fr 1fr;gap:16px}.form-group{display:flex;flex-direction:column;gap:6px}.form-group.full{grid-column:1/-1}.form-group label{font-size:13px;font-weight:700;color:var(--green)}.form-group input,.form-group textarea{width:100%;padding:12px;border:1px solid var(--border);border-radius:8px;outline:none;background:white}.form-group textarea{min-height:85px;resize:vertical}.form-group input:focus,.form-group textarea:focus{border-color:var(--green-light)}.order-info{background:#f5f7f1;padding:15px;border-radius:8px;margin:20px 0;font-size:13px;color:var(--muted)}
-.location-box{display:flex;align-items:center;justify-content:space-between;gap:15px;background:#eef7ef;border:1px solid #cfe3d2;padding:15px;border-radius:10px;margin:20px 0 12px}.location-box strong{color:var(--green);font-size:14px}.location-box p{color:var(--muted);font-size:12px;margin-top:3px}.location-btn{flex:0 0 auto;min-width:145px}
-.checkout-buttons{display:flex;gap:12px;flex-wrap:wrap}.checkout-buttons button{flex:1;min-width:180px;padding:13px;font-size:14px}.district-restriction{margin:15px 0 0;padding:13px 15px;border-radius:10px;font-size:13px;font-weight:600;display:block}.district-restriction.allowed{background:#eef8ef;border:1px solid #cfe3d2;color:var(--green)}.district-restriction.blocked{background:#fff1f1;border:1px solid #efcaca;color:var(--danger)}.district-restriction.pending{background:#fff8e8;border:1px solid #ead9a8;color:#8a6418}.district-select{width:100%;padding:12px;border:1px solid var(--border);border-radius:8px;outline:0;background:white}
-.dashboard-district-notice{grid-column:1/-1;background:#f2f7ed;border:1px solid #cbdcc5;border-left:4px solid var(--green-light);border-radius:10px;padding:14px 16px;color:var(--green);font-size:13px}
-.dashboard-district-notice strong{display:block;font-size:14px;margin-bottom:5px}
+:root{
+  --green:#17452e;
+  --green-light:#286b45;
+  --gold:#d8a64d;
+  --cream:#fffaf1;
+  --text:#243329;
+  --footer:#10291d;
+  --white:#fff;
+  --muted:#6b776e;
+  --border:#e8e8df;
+  --danger:#b83232;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:"DM Sans",sans-serif;
+  background:var(--cream);
+  color:var(--text);
+  line-height:1.6
+}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+a{text-decoration:none;color:inherit}
+
+header{
+  background:var(--green);
+  color:white;
+  padding:12px 5%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  flex-wrap:wrap
+}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{
+  width:65px;height:60px;object-fit:contain;
+  background:white;border-radius:10px;padding:4px
+}
+.brand-name{font-size:19px;font-weight:700;letter-spacing:1px}
+.brand-tagline{font-size:12px;color:#e8d7ad}
+nav{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+nav a{font-size:14px;font-weight:600}
+nav a:hover{color:var(--gold)}
+.cart-nav{
+  background:var(--gold);color:var(--green);
+  padding:8px 14px;border-radius:20px
+}
+
+/* DELIVERY QUICK BAR */
+.location-quickbar{
+  position:sticky;top:0;z-index:900;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:18px;padding:13px max(5%,calc((100% - 1200px)/2));
+  background:#fffdf7;border-bottom:1px solid #e7e2d4;
+  box-shadow:0 5px 18px #142d1d12
+}
+.location-quickbar-copy{display:flex;align-items:center;gap:12px}
+.location-pin{
+  display:grid;place-items:center;width:42px;height:42px;
+  flex:0 0 42px;border-radius:50%;background:#eaf3e9;font-size:20px
+}
+.location-quickbar-copy strong{
+  display:block;color:var(--green);font-size:14px
+}
+.location-quickbar-copy p{color:var(--muted);font-size:12px;margin-top:2px}
+.top-districts{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}
+.top-district-chip{
+  display:inline-flex;background:#eaf3e9;color:var(--green);
+  border:1px solid #cfe3d2;border-radius:20px;
+  padding:3px 9px;font-size:11px;font-weight:700
+}
+.top-districts-label{
+  font-size:11px;color:var(--green);font-weight:700;margin-top:6px
+}
+.location-quickbar-btn{
+  border:0;border-radius:9px;padding:11px 17px;
+  background:var(--green);color:#fff;font-weight:700;
+  font-size:13px;white-space:nowrap
+}
+
+/* HERO */
+.hero{
+  padding:75px 20px 65px;text-align:center;
+  background:linear-gradient(135deg,#17452e,#286b45);color:white
+}
+.hero-label{
+  color:var(--gold);font-size:13px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase
+}
+.hero h1{
+  font-family:"Playfair Display",serif;
+  font-size:clamp(32px,5vw,52px);
+  line-height:1.2;margin:15px 0
+}
+.hero h1 span{color:var(--gold)}
+.hero p{max-width:650px;margin:auto;color:#e7eee8;font-size:15px}
+.hero-badges{
+  display:flex;justify-content:center;gap:12px;
+  flex-wrap:wrap;margin-top:25px
+}
+.hero-badges span{
+  border:1px solid #ffffff55;padding:8px 14px;
+  border-radius:25px;font-size:13px
+}
+
+/* GENERAL SECTIONS */
+.section{padding:65px 5%}
+.section-heading{text-align:center;margin-bottom:35px}
+.section-heading h2{
+  font-family:"Playfair Display",serif;font-size:34px;color:var(--green)
+}
+.section-heading p{color:var(--muted);font-size:14px;margin-top:8px}
+
+/* PRODUCT SEARCH */
+.catalog-tools{
+  max-width:1200px;margin:0 auto 26px;
+  display:grid;grid-template-columns:minmax(220px,1fr) minmax(190px,260px) auto;
+  align-items:end;gap:14px
+}
+.catalog-search{
+  display:flex;align-items:center;gap:10px;min-height:48px;
+  padding:0 14px;background:#fff;border:1px solid var(--border);
+  border-radius:11px;color:var(--muted)
+}
+.catalog-search input{
+  min-width:0;width:100%;border:0;outline:0;
+  background:transparent;color:var(--text)
+}
+.catalog-search button{border:0;background:transparent;color:var(--muted);font-size:22px}
+.catalog-category{
+  display:flex;flex-direction:column;gap:4px;
+  color:var(--green);font-size:12px;font-weight:700
+}
+.catalog-category select{
+  width:100%;min-height:48px;padding:0 12px;
+  border:1px solid var(--border);border-radius:11px;
+  background:#fff;color:var(--text)
+}
+.catalog-result-count{
+  color:var(--muted);font-size:12px;
+  white-space:nowrap;padding-bottom:13px
+}
+
+/* PRODUCT GRID */
+.products{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:25px;max-width:1200px;margin:auto
+}
+.product{
+  background:white;border-radius:16px;overflow:hidden;
+  box-shadow:0 5px 20px #183c2510;border:1px solid var(--border);
+  transition:.25s;position:relative;min-width:0
+}
+.product:hover{
+  transform:translateY(-5px);
+  box-shadow:0 12px 25px #183c2520
+}
+.product-image{
+  height:220px;background:#f0eee5;position:relative;
+  overflow:hidden;display:flex;align-items:center;justify-content:center
+}
+.product-image img{width:100%;height:100%;object-fit:cover}
+.image-fallback{
+  color:var(--green);font-weight:700;
+  text-align:center;padding:20px
+}
+.product-quantity-badge{
+  position:absolute;top:12px;right:12px;
+  background:var(--gold);color:var(--green);
+  border-radius:20px;padding:5px 10px;
+  font-size:12px;font-weight:700;display:none
+}
+.product-info{padding:20px}
+.product-info h3{color:var(--green);font-size:19px;margin-bottom:7px}
+.product-info p{font-size:13px;color:var(--muted);min-height:42px}
+.product-price{
+  color:var(--green);font-size:22px;
+  font-weight:700;margin:13px 0
+}
+.product-price small{font-size:12px;color:var(--muted);font-weight:400}
+.stock-text{font-size:12px;color:var(--green-light);margin-bottom:12px}
+.stock-text.out{color:var(--danger)}
+.product-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.quantity-selector{
+  display:flex;align-items:center;
+  border:1px solid var(--border);border-radius:8px;overflow:hidden
+}
+.quantity-selector button{
+  border:0;background:#f4f5ef;color:var(--green);
+  width:32px;height:36px;font-size:18px
+}
+.quantity-selector span{min-width:30px;text-align:center;font-weight:700}
+
+.btn{
+  border:0;border-radius:8px;padding:10px 13px;
+  font-size:12px;font-weight:700;transition:.2s
+}
+.btn-green{background:var(--green);color:white;flex:1}
+.btn-green:hover{background:var(--green-light)}
+.btn-gold{background:var(--gold);color:var(--green);flex:1}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+
+/* CART */
+.cart-section{background:#f2f4ec}
+.content-box{
+  max-width:900px;margin:auto;background:white;padding:28px;
+  border-radius:15px;box-shadow:0 5px 20px #183c2510
+}
+.cart-empty{text-align:center;color:var(--muted);padding:20px 0}
+.cart-item{
+  display:flex;justify-content:space-between;align-items:center;
+  gap:15px;padding:14px 0;border-bottom:1px solid var(--border)
+}
+.cart-item-info strong{display:block;color:var(--green)}
+.cart-item-info small{color:var(--muted)}
+.cart-item-actions{display:flex;align-items:center;gap:8px}
+.cart-item-actions button{
+  border:0;border-radius:6px;padding:5px 9px;
+  background:#edf1e9;color:var(--green)
+}
+.remove-item{color:var(--danger)!important;background:#fff0f0!important}
+.cart-summary{margin-top:20px;max-width:350px;margin-left:auto}
+.summary-row{
+  display:flex;justify-content:space-between;padding:6px 0;font-size:14px
+}
+.summary-total{
+  border-top:1px solid var(--border);margin-top:8px;
+  padding-top:13px;font-size:19px;font-weight:700;color:var(--green)
+}
+.cart-buttons{
+  display:flex;justify-content:flex-end;gap:10px;
+  margin-top:20px;flex-wrap:wrap
+}
+.clear-btn{
+  border:1px solid #e5baba;color:var(--danger);
+  background:white;padding:9px 15px;border-radius:8px
+}
+.delivery-note{
+  background:#f6f8f1;padding:12px;border-radius:8px;
+  margin-top:15px;font-size:13px;color:var(--muted)
+}
+
+/* CHECKOUT */
+.checkout-section{background:var(--cream)}
+.checkout-form{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group.full{grid-column:1/-1}
+.form-group label{font-size:13px;font-weight:700;color:var(--green)}
+.form-group input,.form-group textarea{
+  width:100%;padding:12px;border:1px solid var(--border);
+  border-radius:8px;outline:none;background:white
+}
+.form-group textarea{min-height:85px;resize:vertical}
+.form-group input:focus,.form-group textarea:focus{border-color:var(--green-light)}
+.order-info{
+  background:#f5f7f1;padding:15px;border-radius:8px;
+  margin:20px 0;font-size:13px;color:var(--muted)
+}
+.location-box{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:15px;background:#eef7ef;border:1px solid #cfe3d2;
+  padding:15px;border-radius:10px;margin:20px 0 12px
+}
+.location-box strong{color:var(--green);font-size:14px}
+.location-box p{color:var(--muted);font-size:12px;margin-top:3px}
+.location-btn{flex:0 0 auto;min-width:145px}
+.checkout-buttons{display:flex;gap:12px;flex-wrap:wrap}
+.checkout-buttons button{flex:1;min-width:180px;padding:13px;font-size:14px}
+.district-restriction{
+  margin:15px 0 0;padding:13px 15px;border-radius:10px;
+  font-size:13px;font-weight:600;display:block
+}
+.district-restriction.allowed{
+  background:#eef8ef;border:1px solid #cfe3d2;color:var(--green)
+}
+.district-restriction.blocked{
+  background:#fff1f1;border:1px solid #efcaca;color:var(--danger)
+}
+.district-restriction.pending{
+  background:#fff8e8;border:1px solid #ead9a8;color:#8a6418
+}
+.district-select{
+  width:100%;padding:12px;border:1px solid var(--border);
+  border-radius:8px;outline:0;background:white
+}
+.dashboard-district-notice{
+  grid-column:1/-1;background:#f2f7ed;border:1px solid #cbdcc5;
+  border-left:4px solid var(--green-light);border-radius:10px;
+  padding:14px 16px;color:var(--green);font-size:13px
+}
+.dashboard-district-notice strong{
+  display:block;font-size:14px;margin-bottom:5px
+}
 .dashboard-district-notice p{color:var(--muted);margin:3px 0 9px}
 .dashboard-district-list{display:flex;flex-wrap:wrap;gap:7px}
-.dashboard-district-chip{display:inline-flex;align-items:center;background:#fff;border:1px solid #d7e4d2;border-radius:20px;padding:5px 10px;font-size:12px;font-weight:700;color:var(--green)}
+.dashboard-district-chip{
+  display:inline-flex;align-items:center;background:#fff;
+  border:1px solid #d7e4d2;border-radius:20px;
+  padding:5px 10px;font-size:12px;font-weight:700;color:var(--green)
+}
 .dashboard-district-empty{color:var(--danger);font-weight:600}
-@media(max-width:600px){.dashboard-district-notice{grid-column:auto}}
 #order-status{margin-top:15px;font-size:13px;color:var(--green);font-weight:600}
-footer{background:var(--footer);color:white;text-align:center;padding:30px 15px;font-size:13px}footer strong{color:var(--gold)}
-.floating-cart-widget{position:fixed;right:20px;bottom:20px;z-index:1000;width:max-content;touch-action:none}.floating-cart{position:relative;display:block;background:var(--gold);color:var(--green);border:0;border-radius:30px;padding:13px 18px;font-weight:700;box-shadow:0 5px 20px #0003;cursor:grab;user-select:none;white-space:nowrap}.floating-cart-panel{position:absolute;right:0;bottom:calc(100% + 12px);width:min(360px,calc(100vw - 32px));max-height:min(65vh,520px);overflow-y:auto;background:#fff;color:var(--text);border:1px solid var(--border);border-radius:14px;box-shadow:0 10px 35px #0003;padding:16px;display:none;touch-action:pan-y}.floating-cart-panel.open{display:block}.floating-cart-panel h3{color:var(--green);font-size:17px;margin-bottom:10px}.floating-cart-line{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px}.floating-cart-line-info{min-width:0}.floating-cart-line-info strong,.floating-cart-line-info small{display:block;overflow-wrap:anywhere}.floating-cart-line-info strong{color:var(--green)}.floating-cart-line-info small{color:var(--muted)}.floating-cart-line-actions{display:flex;align-items:center;gap:5px;flex-shrink:0}.floating-cart-line-actions button{border:0;border-radius:6px;padding:5px 8px;background:#edf1e9;color:var(--green)}.floating-cart-total{display:flex;justify-content:space-between;gap:12px;margin-top:12px;padding-top:10px;border-top:1px solid var(--border);color:var(--green);font-weight:700}.floating-cart-panel-buttons{display:flex;gap:8px;margin-top:13px}.floating-cart-panel-buttons a,.floating-cart-panel-buttons button{flex:1;text-align:center;border:0;border-radius:7px;padding:9px 10px;font-size:12px;font-weight:700}.floating-cart-checkout{background:var(--green);color:white}.floating-cart-view{background:#edf1e9;color:var(--green)}.floating-cart-empty{color:var(--muted);font-size:13px;padding:12px 0}.loading-message,.error-message{text-align:center;padding:35px 15px;background:white;border-radius:12px}.error-message{color:var(--danger)}
-@media(max-width:950px){.products{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:700px){.location-quickbar{padding:11px 4%;align-items:stretch;flex-direction:column;gap:10px}.location-quickbar-btn{width:100%}.catalog-tools{grid-template-columns:1fr;gap:10px}.catalog-result-count{padding:0}}@media(max-width:600px){header{justify-content:center}nav{justify-content:center;gap:13px}.hero{padding:55px 18px}.section{padding:45px 4%}.products{grid-template-columns:1fr;max-width:420px}.product-image{height:240px}.checkout-form{grid-template-columns:1fr}.form-group.full{grid-column:auto}.content-box{padding:18px}.cart-item{align-items:flex-start;flex-direction:column}.cart-item-actions{width:100%}.location-box{flex-direction:column;align-items:stretch}.location-btn{width:100%}}
+
+/* FOOTER */
+footer{
+  background:var(--footer);color:white;text-align:center;
+  padding:30px 15px;font-size:13px
+}
+footer strong{color:var(--gold)}
+
+/* FLOATING CART */
+.floating-cart-widget{
+  position:fixed;right:20px;bottom:20px;
+  z-index:1000;width:max-content;touch-action:none
+}
+.floating-cart{
+  position:relative;display:block;background:var(--gold);
+  color:var(--green);border:0;border-radius:30px;
+  padding:13px 18px;font-weight:700;
+  box-shadow:0 5px 20px #0003;cursor:grab;
+  user-select:none;white-space:nowrap
+}
+.floating-cart-panel{
+  position:absolute;right:0;bottom:calc(100% + 12px);
+  width:min(360px,calc(100vw - 32px));
+  max-height:min(65vh,520px);overflow-y:auto;
+  background:#fff;color:var(--text);border:1px solid var(--border);
+  border-radius:14px;box-shadow:0 10px 35px #0003;
+  padding:16px;display:none;touch-action:pan-y
+}
+.floating-cart-panel.open{display:block}
+.floating-cart-panel h3{color:var(--green);font-size:17px;margin-bottom:10px}
+.floating-cart-line{
+  display:flex;justify-content:space-between;align-items:center;
+  gap:10px;padding:10px 0;border-bottom:1px solid var(--border);
+  font-size:13px
+}
+.floating-cart-line-info{min-width:0}
+.floating-cart-line-info strong,.floating-cart-line-info small{
+  display:block;overflow-wrap:anywhere
+}
+.floating-cart-line-info strong{color:var(--green)}
+.floating-cart-line-info small{color:var(--muted)}
+.floating-cart-line-actions{
+  display:flex;align-items:center;gap:5px;flex-shrink:0
+}
+.floating-cart-line-actions button{
+  border:0;border-radius:6px;padding:5px 8px;
+  background:#edf1e9;color:var(--green)
+}
+.floating-cart-total{
+  display:flex;justify-content:space-between;gap:12px;
+  margin-top:12px;padding-top:10px;border-top:1px solid var(--border);
+  color:var(--green);font-weight:700
+}
+.floating-cart-panel-buttons{display:flex;gap:8px;margin-top:13px}
+.floating-cart-panel-buttons a,.floating-cart-panel-buttons button{
+  flex:1;text-align:center;border:0;border-radius:7px;
+  padding:9px 10px;font-size:12px;font-weight:700
+}
+.floating-cart-checkout{background:var(--green);color:white}
+.floating-cart-view{background:#edf1e9;color:var(--green)}
+.floating-cart-empty{color:var(--muted);font-size:13px;padding:12px 0}
+.loading-message,.error-message{
+  text-align:center;padding:35px 15px;background:white;border-radius:12px
+}
+.error-message{color:var(--danger)}
+
+/* TABLET */
+@media(max-width:950px){
+  .products{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
+/* SMALL SCREENS */
+@media(max-width:700px){
+  .location-quickbar{
+    padding:11px 4%;align-items:stretch;flex-direction:column;gap:10px
+  }
+  .location-quickbar-btn{width:100%}
+  .catalog-tools{grid-template-columns:1fr;gap:10px}
+  .catalog-result-count{padding:0}
+}
+
+/* MOBILE: TWO PRODUCT COLUMNS */
+@media(max-width:600px){
+  header{justify-content:center;padding:12px 3%}
+  .brand img{width:55px;height:52px}
+  .brand-name{font-size:16px}
+  nav{justify-content:center;gap:12px}
+  nav a{font-size:12px}
+
+  .hero{padding:45px 15px}
+  .hero p{font-size:13px}
+  .hero-badges{gap:7px}
+  .hero-badges span{font-size:11px;padding:7px 10px}
+
+  .section{padding:38px 3%}
+  .section-heading{margin-bottom:24px}
+  .section-heading h2{font-size:28px}
+
+  /* Two columns on mobile */
+  .products{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:12px;
+    max-width:100%
+  }
+
+  .product{border-radius:12px}
+  .product-image{height:145px}
+  .product-info{padding:11px}
+  .product-info h3{font-size:15px;line-height:1.3}
+  .product-info p{font-size:11px;min-height:48px;line-height:1.4}
+  .product-price{font-size:17px;margin:8px 0}
+  .product-price small{font-size:10px}
+  .stock-text{font-size:10px;margin-bottom:9px}
+  .product-actions{gap:5px}
+  .quantity-selector{width:100%;justify-content:space-between}
+  .quantity-selector button{width:30px;height:32px}
+  .quantity-selector span{flex:1}
+  .product-actions .btn{
+    width:100%;flex:1 1 100%;
+    padding:9px 5px;font-size:11px
+  }
+  .product-quantity-badge{font-size:10px;padding:4px 7px;top:7px;right:7px}
+
+  .checkout-form{grid-template-columns:1fr}
+  .form-group.full{grid-column:auto}
+  .content-box{padding:16px}
+  .cart-item{align-items:flex-start;flex-direction:column}
+  .cart-item-actions{width:100%}
+  .location-box{flex-direction:column;align-items:stretch}
+  .location-btn{width:100%}
+  .dashboard-district-notice{grid-column:auto}
+  .checkout-buttons{flex-direction:column}
+  .checkout-buttons button{width:100%}
+  .floating-cart-widget{right:12px;bottom:12px}
+  .floating-cart{padding:11px 15px;font-size:13px}
+}
+
+/* VERY SMALL MOBILE */
+@media(max-width:360px){
+  .products{gap:8px}
+  .product-image{height:125px}
+  .product-info{padding:9px}
+  .product-info h3{font-size:13px}
+  .product-info p{font-size:10px;min-height:45px}
+  .product-price{font-size:15px}
+  nav{gap:9px}
+  nav a{font-size:11px}
+}
 </style>
 </head>
+
 <body>
+
 <header>
   <a href="index.html" class="brand">
     <img src="assets/AKS Homemade Food Products Logo 1.png" alt="AKS Food Products Logo">
-    <div><div class="brand-name">AKS FOOD PRODUCTS</div><div class="brand-tagline">Homemade with Love</div></div>
+    <div>
+      <div class="brand-name">AKS FOOD PRODUCTS</div>
+      <div class="brand-tagline">Homemade with Love</div>
+    </div>
   </a>
+
   <nav>
-    <a href="index.html">Home</a><a href="#products">Our Products</a>
+    <a href="index.html">Home</a>
+    <a href="#products">Our Products</a>
     <a href="#cart" class="cart-nav">My Cart (<span id="cart-count">0</span>)</a>
     <a href="#checkout">Place Order</a>
   </nav>
 </header>
 
 <section class="location-quickbar">
-  <div class="location-quickbar-copy"><span class="location-pin">📍</span><div>
-    <strong>Check delivery availability in your area</strong>
-    <p id="top-location-status">Detect your location to confirm delivery availability.</p>
-    <div class="top-districts-label">Admin-enabled delivery districts:</div>
-    <div class="top-districts" id="top-district-list" aria-live="polite"><span class="top-district-chip">Loading districts...</span></div>
-  </div></div>
-  <button type="button" class="location-quickbar-btn" onclick="calculateDeliveryCharge(true)">Detect My Location →</button>
+  <div class="location-quickbar-copy">
+    <span class="location-pin">📍</span>
+    <div>
+      <strong>Check delivery availability in your area</strong>
+      <p id="top-location-status">Detect your location to confirm delivery availability.</p>
+      <div class="top-districts-label">Admin-enabled delivery districts:</div>
+      <div class="top-districts" id="top-district-list" aria-live="polite">
+        <span class="top-district-chip">Loading districts...</span>
+      </div>
+    </div>
+  </div>
+
+  <button type="button" class="location-quickbar-btn" onclick="calculateDeliveryCharge(true)">
+    Detect My Location →
+  </button>
 </section>
 
 <section class="hero">
   <div class="hero-label">Traditional Taste • Homemade Goodness</div>
   <h1>Our Products Are <span>Made with Love</span></h1>
-  <p>Enjoy delicious homemade snacks prepared with care. Choose your products, select the pack size and place your order through WhatsApp or Email.</p>
-  <div class="hero-badges"><span>🌿 Homemade Snacks</span><span>❤️ Made with Care</span><span>🍲 Traditional Taste</span></div>
+  <p>
+    Enjoy delicious homemade snacks prepared with care.
+    Choose your products, select the pack size and place your order through WhatsApp or Email.
+  </p>
+  <div class="hero-badges">
+    <span>🌿 Homemade Snacks</span>
+    <span>❤️ Made with Care</span>
+    <span>🍲 Traditional Taste</span>
+  </div>
 </section>
 
 <main>
+
 <section class="section" id="products">
-  <div class="section-heading"><h2>Our Products</h2><p>Fresh homemade snacks prepared with traditional goodness.</p></div>
+  <div class="section-heading">
+    <h2>Our Products</h2>
+    <p>Fresh homemade snacks prepared with traditional goodness.</p>
+  </div>
+
   <div class="catalog-tools">
-    <label class="catalog-search"><span>⌕</span><input type="search" id="product-search" placeholder="Search snacks..." autocomplete="off"><button type="button" id="clear-product-search" hidden>×</button></label>
-    <label class="catalog-category"><span>Category</span><select id="product-category"><option value="all">All Categories</option></select></label>
+    <label class="catalog-search">
+      <span>⌕</span>
+      <input type="search" id="product-search" placeholder="Search snacks..." autocomplete="off">
+      <button type="button" id="clear-product-search" hidden>×</button>
+    </label>
+
+    <label class="catalog-category">
+      <span>Category</span>
+      <select id="product-category">
+        <option value="all">All Categories</option>
+      </select>
+    </label>
+
     <p class="catalog-result-count" id="catalog-result-count"></p>
   </div>
-  <div class="products" id="products-container"><p class="loading-message">Loading products...</p></div>
+
+  <div class="products" id="products-container">
+    <p class="loading-message">Loading products...</p>
+  </div>
 </section>
 
 <section class="section cart-section" id="cart">
-  <div class="section-heading"><h2>My Shopping Cart</h2><p>Review your selected products before placing your order.</p></div>
+  <div class="section-heading">
+    <h2>My Shopping Cart</h2>
+    <p>Review your selected products before placing your order.</p>
+  </div>
+
   <div class="content-box">
-    <div id="cart-items"><p class="cart-empty">Your cart is empty.</p></div>
-    <div class="cart-summary">
-      <div class="summary-row"><span>Subtotal</span><strong id="cart-subtotal">₹0.00</strong></div>
-      <div class="summary-row"><span>Delivery Charge</span><strong id="delivery-charge">₹0.00</strong></div>
-      <div class="summary-row summary-total"><span>Total</span><strong id="cart-total">₹0.00</strong></div>
+    <div id="cart-items">
+      <p class="cart-empty">Your cart is empty.</p>
     </div>
-    <div class="delivery-note" id="delivery-note">Delivery charge will be calculated after location detection.</div>
-    <div class="cart-buttons"><button class="clear-btn" onclick="clearCart()">Clear Cart</button><a href="#checkout" class="btn btn-green">Proceed to Checkout</a></div>
+
+    <div class="cart-summary">
+      <div class="summary-row">
+        <span>Subtotal</span>
+        <strong id="cart-subtotal">₹0.00</strong>
+      </div>
+      <div class="summary-row">
+        <span>Delivery Charge</span>
+        <strong id="delivery-charge">₹0.00</strong>
+      </div>
+      <div class="summary-row summary-total">
+        <span>Total</span>
+        <strong id="cart-total">₹0.00</strong>
+      </div>
+    </div>
+
+    <div class="delivery-note" id="delivery-note">
+      Delivery charge will be calculated after location detection.
+    </div>
+
+    <div class="cart-buttons">
+      <button class="clear-btn" onclick="clearCart()">Clear Cart</button>
+      <a href="#checkout" class="btn btn-green">Proceed to Checkout</a>
+    </div>
   </div>
 </section>
 
 <section class="section checkout-section" id="checkout">
-  <div class="section-heading"><h2>Place Your Order</h2><p>Enter your details to send your order to AKS Food Products.</p></div>
+  <div class="section-heading">
+    <h2>Place Your Order</h2>
+    <p>Enter your details to send your order to AKS Food Products.</p>
+  </div>
+
   <div class="content-box">
     <form id="checkout-form" class="checkout-form">
-      <div class="form-group"><label for="customer-name">Full Name *</label><input type="text" id="customer-name" placeholder="Enter your full name" required></div>
-      <div class="form-group"><label for="customer-phone">Phone Number *</label><input type="tel" id="customer-phone" placeholder="Enter your phone number" pattern="[0-9+\\-\\s]{10,15}" required></div>
-      <div class="form-group full"><label for="customer-email">Email Address</label><input type="email" id="customer-email" placeholder="Enter your email address"></div>
-      <div class="form-group full"><label for="customer-district">Delivery District *</label><select id="customer-district" class="district-select" required><option value="">Loading delivery districts...</option></select><small id="district-status" style="color:var(--muted);font-size:12px">Delivery districts are controlled by the Admin Dashboard.</small></div>
+
+      <div class="form-group">
+        <label for="customer-name">Full Name *</label>
+        <input type="text" id="customer-name" placeholder="Enter your full name" required>
+      </div>
+
+      <div class="form-group">
+        <label for="customer-phone">Phone Number *</label>
+        <input type="tel" id="customer-phone" placeholder="Enter your phone number" pattern="[0-9+\-\s]{10,15}" required>
+      </div>
+
+      <div class="form-group full">
+        <label for="customer-email">Email Address</label>
+        <input type="email" id="customer-email" placeholder="Enter your email address">
+      </div>
+
+      <div class="form-group full">
+        <label for="customer-district">Delivery District *</label>
+        <select id="customer-district" class="district-select" required>
+          <option value="">Loading delivery districts...</option>
+        </select>
+        <small id="district-status" style="color:var(--muted);font-size:12px">
+          Delivery districts are controlled by the Admin Dashboard.
+        </small>
+      </div>
+
       <div class="dashboard-district-notice" id="dashboard-district-notice" aria-live="polite">
         <strong>📍 Delivery available only in the districts selected in the Admin Dashboard</strong>
         <p id="dashboard-district-message">Loading the enabled delivery districts...</p>
         <div class="dashboard-district-list" id="dashboard-district-list"></div>
       </div>
-      <div class="form-group full"><label for="customer-address">Delivery Address * / விநியோக முகவரி *</label><textarea id="customer-address" lang="ta" dir="auto" inputmode="text" autocomplete="street-address" spellcheck="true" placeholder="உங்கள் முழு முகவரியை தமிழில் அல்லது ஆங்கிலத்தில் உள்ளிடவும் / Enter your complete delivery address in Tamil or English" required></textarea><small id="address-status" style="color:var(--muted);font-size:12px">தமிழ் அல்லது English — எந்த மொழியிலும் முகவரியை உள்ளிடலாம். You may enter your address in Tamil or English.</small></div>
-      <div class="form-group full"><label for="customer-notes">Additional Instructions / கூடுதல் குறிப்புகள்</label><textarea id="customer-notes" placeholder="Any special instructions? / கூடுதல் தகவல்கள் இருந்தால் எழுதவும்"></textarea></div>
+
+      <div class="form-group full">
+        <label for="customer-address">Delivery Address * / விநியோக முகவரி *</label>
+        <textarea
+          id="customer-address"
+          lang="ta"
+          dir="auto"
+          inputmode="text"
+          autocomplete="street-address"
+          spellcheck="true"
+          placeholder="உங்கள் முழு முகவரியை தமிழில் அல்லது ஆங்கிலத்தில் உள்ளிடவும் / Enter your complete delivery address in Tamil or English"
+          required
+        ></textarea>
+        <small id="address-status" style="color:var(--muted);font-size:12px">
+          GPS address is provided in English. You can edit it in Tamil or English.
+        </small>
+      </div>
+
+      <div class="form-group full">
+        <label for="customer-notes">Additional Instructions / கூடுதல் குறிப்புகள்</label>
+        <textarea id="customer-notes" placeholder="Any special instructions? / கூடுதல் தகவல்கள் இருந்தால் எழுதவும்"></textarea>
+      </div>
+
     </form>
-    <div class="location-box"><div><strong>📍 Delivery Location</strong><p id="location-status">Detect your GPS location to verify the delivery district.</p></div><button type="button" class="btn btn-gold location-btn" onclick="calculateDeliveryCharge(true)">Detect My Location</button></div>
-    <div class="order-info"><strong>Order Process:</strong><br>Your order details will be sent through WhatsApp or Email. AKS Food Products will contact you to confirm the order, payment and delivery details.</div>
-    <div id="district-restriction" class="district-restriction pending">📍 Please verify your delivery location. Orders are available only in districts enabled by the administrator.</div>
-    <div class="checkout-buttons" id="checkout-buttons">
-      <button type="button" class="btn btn-green" onclick="sendWhatsApp()" disabled>Order Through WhatsApp</button>
-      <button type="button" class="btn btn-gold" onclick="sendEmail()" disabled>Order Through Email</button>
+
+    <div class="location-box">
+      <div>
+        <strong>📍 Delivery Location</strong>
+        <p id="location-status">Detect your GPS location to verify the delivery district.</p>
+      </div>
+      <button type="button" class="btn btn-gold location-btn" onclick="calculateDeliveryCharge(true)">
+        Detect My Location
+      </button>
     </div>
+
+    <div class="order-info">
+      <strong>Order Process:</strong><br>
+      Your order details will be sent through WhatsApp or Email.
+      AKS Food Products will contact you to confirm the order, payment and delivery details.
+    </div>
+
+    <div id="district-restriction" class="district-restriction pending">
+      📍 Please verify your delivery location. Orders are available only in districts enabled by the administrator.
+    </div>
+
+    <div class="checkout-buttons" id="checkout-buttons">
+      <button type="button" class="btn btn-green" onclick="sendWhatsApp()" disabled>
+        Order Through WhatsApp
+      </button>
+      <button type="button" class="btn btn-gold" onclick="sendEmail()" disabled>
+        Order Through Email
+      </button>
+    </div>
+
     <p id="order-status"></p>
   </div>
 </section>
+
 </main>
 
-<footer><p><strong>AKS FOOD PRODUCTS</strong></p><p>Homemade with Love • Traditional Taste • Made with Care</p><p>© 2026 AKS Food Products. All Rights Reserved.</p></footer>
+<footer>
+  <p><strong>AKS FOOD PRODUCTS</strong></p>
+  <p>Homemade with Love • Traditional Taste • Made with Care</p>
+  <p>© 2026 AKS Food Products. All Rights Reserved.</p>
+</footer>
 
 <div class="floating-cart-widget" id="floating-cart-widget">
   <div class="floating-cart-panel" id="floating-cart-panel" aria-hidden="true">
-    <h3>🛒 Your Cart</h3><div id="floating-cart-items"><p class="floating-cart-empty">Your cart is empty.</p></div>
-    <div class="floating-cart-total"><span>Total</span><span id="floating-cart-total">₹0.00</span></div>
-    <div class="floating-cart-panel-buttons"><button type="button" class="floating-cart-view" onclick="goToCart()">Full Cart</button><a href="#checkout" class="floating-cart-checkout" onclick="closeFloatingCart()">Checkout</a></div>
+    <h3>🛒 Your Cart</h3>
+    <div id="floating-cart-items">
+      <p class="floating-cart-empty">Your cart is empty.</p>
+    </div>
+    <div class="floating-cart-total">
+      <span>Total</span>
+      <span id="floating-cart-total">₹0.00</span>
+    </div>
+    <div class="floating-cart-panel-buttons">
+      <button type="button" class="floating-cart-view" onclick="goToCart()">Full Cart</button>
+      <a href="#checkout" class="floating-cart-checkout" onclick="closeFloatingCart()">Checkout</a>
+    </div>
   </div>
-  <button type="button" class="floating-cart" id="floating-cart-button" aria-expanded="false" aria-controls="floating-cart-panel" title="Click to view cart. Drag to move.">🛒 Cart (<span id="floating-cart-count">0</span>)</button>
+
+  <button type="button" class="floating-cart" id="floating-cart-button"
+    aria-expanded="false" aria-controls="floating-cart-panel"
+    title="Click to view cart. Drag to move.">
+    🛒 Cart (<span id="floating-cart-count">0</span>)
+  </button>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase.js"></script>
+
 <script>
 "use strict";
 
-/* supabase.js must create: const db = supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY) */
+/* supabase.js must create the Supabase client named db */
+
 let products = [];
 const cart = new Map();
 let selectedQuantities = {};
@@ -151,36 +733,53 @@ let deliveryDistance = null;
 let activeProductCategory = "all";
 let productSearchText = "";
 
-const SHOP_LOCATION = {latitude:10.2841098, longitude:78.7630395};
+const SHOP_LOCATION = {
+  latitude:10.2841098,
+  longitude:78.7630395
+};
+
 const FREE_DELIVERY_KM = 10;
 const EXTRA_KM_CHARGE = 5;
 const WHATSAPP_NUMBER = "919787256249";
 const BUSINESS_EMAIL = "aksfoodproducts1607@gmail.com";
 
 function escapeHTML(value) {
-  return String(value ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
+  return String(value ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#039;"
+  }[c]));
 }
+
 function normalizeDistrict(value) {
   return String(value || "").normalize("NFC").toLocaleLowerCase()
-    .replace(/district|மாவட்டம்/giu,"").replace(/[^\p{L}]/gu,"").trim();
+    .replace(/district|மாவட்டம்/giu,"")
+    .replace(/[^\p{L}]/gu,"")
+    .trim();
 }
+
 function getAllowedDistrict(value) {
   const normalized = normalizeDistrict(value);
   return allowedDistricts.find(d => normalizeDistrict(d) === normalized) || "";
 }
 
-/* Show the exact district names enabled in the Admin Dashboard. */
+/* DISPLAY ADMIN-ENABLED DISTRICTS */
 function renderDashboardDistrictNotice() {
   const message = document.getElementById("dashboard-district-message");
   const list = document.getElementById("dashboard-district-list");
   const topList = document.getElementById("top-district-list");
+
   if (list) list.replaceChildren();
   if (topList) topList.replaceChildren();
+
   if (!allowedDistricts.length) {
     if (message) {
       message.textContent = "No districts are currently enabled. Please check the Admin Dashboard.";
       message.classList.add("dashboard-district-empty");
     }
+
     if (topList) {
       const empty = document.createElement("span");
       empty.className = "top-district-chip";
@@ -189,10 +788,12 @@ function renderDashboardDistrictNotice() {
     }
     return;
   }
+
   if (message) {
     message.classList.remove("dashboard-district-empty");
     message.textContent = "We currently accept orders only from these enabled districts:";
   }
+
   allowedDistricts.forEach(district => {
     if (list) {
       const chip = document.createElement("span");
@@ -200,6 +801,7 @@ function renderDashboardDistrictNotice() {
       chip.textContent = district;
       list.appendChild(chip);
     }
+
     if (topList) {
       const topChip = document.createElement("span");
       topChip.className = "top-district-chip";
@@ -209,312 +811,926 @@ function renderDashboardDistrictNotice() {
   });
 }
 
-/* Dashboard setting: public store_settings.allowed_districts array */
+/* LOAD DISTRICTS FROM SUPABASE */
 async function loadStoreSettings() {
   const select = document.getElementById("customer-district");
   const status = document.getElementById("district-status");
+
   try {
-    if (typeof db === "undefined") throw new Error("Supabase db client not found. Check supabase.js.");
-    const {data,error} = await db.from("store_settings").select("allowed_districts").order("id",{ascending:true}).limit(1).maybeSingle();
+    if (typeof db === "undefined") {
+      throw new Error("Supabase db client not found. Check supabase.js.");
+    }
+
+    const {data,error} = await db
+      .from("store_settings")
+      .select("allowed_districts")
+      .order("id",{ascending:true})
+      .limit(1)
+      .maybeSingle();
+
     if (error) throw error;
-    allowedDistricts = Array.isArray(data?.allowed_districts) ? data.allowed_districts.filter(x => typeof x === "string" && x.trim()) : [];
+
+    allowedDistricts = Array.isArray(data?.allowed_districts)
+      ? data.allowed_districts.filter(x => typeof x === "string" && x.trim())
+      : [];
+
     renderDashboardDistrictNotice();
-    select.innerHTML = '<option value="">Select your district</option>' +
-      allowedDistricts.map(d => `<option value="${escapeHTML(d)}">${escapeHTML(d)}</option>`).join("");
+
+    select.innerHTML =
+      '<option value="">Select your district</option>' +
+      allowedDistricts.map(d =>
+        `<option value="${escapeHTML(d)}">${escapeHTML(d)}</option>`
+      ).join("");
+
     if (!allowedDistricts.length) {
       status.textContent = "No delivery districts are enabled in the Admin Dashboard.";
       setOrderingState(false,"","No delivery districts are currently enabled.");
       return false;
     }
+
     status.textContent = "Select your district and verify your GPS location. Tamil and English addresses are accepted.";
     return true;
+
   } catch (error) {
     console.error("Store settings loading error:",error);
+
     allowedDistricts = [];
     renderDashboardDistrictNotice();
+
     select.innerHTML = '<option value="">Delivery settings unavailable</option>';
     status.textContent = "Could not load delivery districts. Check Supabase permissions and store_settings.";
+
     setOrderingState(false,"","⚠️ Delivery settings could not be loaded. Ordering is disabled.");
     return false;
   }
 }
 
+/* LOAD PRODUCTS */
 async function loadShopProducts() {
   const container = document.getElementById("products-container");
+
   try {
-    if (typeof db === "undefined") throw new Error("Supabase db client not found. Check supabase.js.");
-    const {data,error} = await db.from("products").select("*").eq("is_active",true).order("created_at",{ascending:false});
+    if (typeof db === "undefined") {
+      throw new Error("Supabase db client not found. Check supabase.js.");
+    }
+
+    const {data,error} = await db
+      .from("products")
+      .select("*")
+      .eq("is_active",true)
+      .order("created_at",{ascending:false});
+
     if (error) throw error;
+
     products = (data || []).map(row => ({
-      id:row.id,name:row.name || "Unnamed Product",description:row.description || "",category:row.category || "",
-      image_url:row.image_url || "",stock_quantity:Number(row.stock_quantity || 0),
-      sizes:[{label:row.pack_size || "Standard pack",price:Number(row.price || 0)}]
+      id:row.id,
+      name:row.name || "Unnamed Product",
+      description:row.description || "",
+      category:row.category || "",
+      image_url:row.image_url || "",
+      stock_quantity:Number(row.stock_quantity || 0),
+      sizes:[{
+        label:row.pack_size || "Standard pack",
+        price:Number(row.price || 0)
+      }]
     }));
+
     selectedQuantities = {};
     products.forEach((p,i) => selectedQuantities[i]=0);
-    updateCatalogControls(); renderShopProducts(); renderCart();
-    if (!products.length) container.innerHTML='<p class="loading-message">No products are currently available.</p>';
+
+    updateCatalogControls();
+    renderShopProducts();
+    renderCart();
+
+    if (!products.length) {
+      container.innerHTML = '<p class="loading-message">No products are currently available.</p>';
+    }
+
   } catch(error) {
     console.error("Product loading error:",error);
-    container.innerHTML='<p class="error-message">Unable to load products. Check your Supabase connection and products table.</p>';
+    container.innerHTML =
+      '<p class="error-message">Unable to load products. Check your Supabase connection and products table.</p>';
   }
 }
 
+/* SEARCH AND CATEGORY FILTER */
 function updateCatalogControls() {
   const categorySelect = document.getElementById("product-category");
-  const categories = [...new Set(products.map(p=>String(p.category||"").trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
-  categorySelect.innerHTML='<option value="all">All Categories</option>'+categories.map(c=>`<option value="${escapeHTML(c)}">${escapeHTML(c)}</option>`).join("");
-  categorySelect.value = categories.includes(activeProductCategory) ? activeProductCategory : "all";
+
+  const categories = [...new Set(
+    products.map(p => String(p.category || "").trim()).filter(Boolean)
+  )].sort((a,b) => a.localeCompare(b));
+
+  categorySelect.innerHTML =
+    '<option value="all">All Categories</option>' +
+    categories.map(c =>
+      `<option value="${escapeHTML(c)}">${escapeHTML(c)}</option>`
+    ).join("");
+
+  categorySelect.value = categories.includes(activeProductCategory)
+    ? activeProductCategory
+    : "all";
+
   activeProductCategory = categorySelect.value;
-  const search = document.getElementById("product-search"), clear = document.getElementById("clear-product-search");
+
+  const search = document.getElementById("product-search");
+  const clear = document.getElementById("clear-product-search");
+
   if (!search.dataset.bound) {
-    search.dataset.bound="1";
-    search.addEventListener("input",()=>{productSearchText=search.value.trim().toLocaleLowerCase();clear.hidden=!search.value;renderShopProducts();});
-    categorySelect.addEventListener("change",()=>{activeProductCategory=categorySelect.value;renderShopProducts();});
-    clear.addEventListener("click",()=>{search.value="";productSearchText="";clear.hidden=true;renderShopProducts();search.focus();});
+    search.dataset.bound = "1";
+
+    search.addEventListener("input",() => {
+      productSearchText = search.value.trim().toLocaleLowerCase();
+      clear.hidden = !search.value;
+      renderShopProducts();
+    });
+
+    categorySelect.addEventListener("change",() => {
+      activeProductCategory = categorySelect.value;
+      renderShopProducts();
+    });
+
+    clear.addEventListener("click",() => {
+      search.value = "";
+      productSearchText = "";
+      clear.hidden = true;
+      renderShopProducts();
+      search.focus();
+    });
   }
 }
+
 function getVisibleProductEntries() {
-  return products.map((product,index)=>({product,index})).filter(({product})=>{
-    const categoryOK=activeProductCategory==="all" || String(product.category||"").trim()===activeProductCategory;
-    return categoryOK && [product.name,product.description,product.category].join(" ").toLocaleLowerCase().includes(productSearchText);
-  });
+  return products.map((product,index) => ({product,index}))
+    .filter(({product}) => {
+      const categoryOK =
+        activeProductCategory === "all" ||
+        String(product.category || "").trim() === activeProductCategory;
+
+      return categoryOK &&
+        [product.name,product.description,product.category]
+          .join(" ")
+          .toLocaleLowerCase()
+          .includes(productSearchText);
+    });
 }
 
+/* RENDER PRODUCT CARDS */
 function renderShopProducts() {
-  const container=document.getElementById("products-container");
-  if (!products.length) {container.innerHTML='<p class="loading-message">No products available.</p>';return;}
-  const entries=getVisibleProductEntries();
-  document.getElementById("catalog-result-count").textContent=`Showing ${entries.length} of ${products.length} products`;
-  if (!entries.length) {container.innerHTML='<div class="loading-message">No matching snacks found. Try another search.</div>';return;}
-  container.innerHTML=entries.map(({product,index})=>{
-    const size=product.sizes[0],price=Number(size.price||0),stock=Number(product.stock_quantity||0),quantity=selectedQuantities[index]||0;
-    const image=product.image_url
-      ? `<img src="${escapeHTML(product.image_url)}" alt="${escapeHTML(product.name)}" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><div class="image-fallback" style="display:none">${escapeHTML(product.name)}</div>`
+  const container = document.getElementById("products-container");
+
+  if (!products.length) {
+    container.innerHTML = '<p class="loading-message">No products available.</p>';
+    return;
+  }
+
+  const entries = getVisibleProductEntries();
+
+  document.getElementById("catalog-result-count").textContent =
+    `Showing ${entries.length} of ${products.length} products`;
+
+  if (!entries.length) {
+    container.innerHTML =
+      '<div class="loading-message">No matching snacks found. Try another search.</div>';
+    return;
+  }
+
+  container.innerHTML = entries.map(({product,index}) => {
+    const size = product.sizes[0];
+    const price = Number(size.price || 0);
+    const stock = Number(product.stock_quantity || 0);
+    const quantity = selectedQuantities[index] || 0;
+
+    const image = product.image_url
+      ? `<img src="${escapeHTML(product.image_url)}"
+          alt="${escapeHTML(product.name)}"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+         <div class="image-fallback" style="display:none">${escapeHTML(product.name)}</div>`
       : `<div class="image-fallback">${escapeHTML(product.name)}</div>`;
-    const controls=orderingAllowed
-      ? `<div class="product-actions"><div class="quantity-selector"><button type="button" onclick="changeSelectedQty(${index},-1)" ${stock<=0?"disabled":""}>−</button><span id="qty-${index}">${quantity}</span><button type="button" onclick="changeSelectedQty(${index},1)" ${stock<=0?"disabled":""}>+</button></div><button class="btn btn-gold" type="button" onclick="orderSelectedNow(${index})" ${stock<=0?"disabled":""}>Order Now</button></div>`
-      : `<div class="district-restriction pending">📍 Verify a delivery location in an Admin-approved district to enable Order Now.</div>`;
-    return `<article class="product"><div class="product-image">${image}<span class="product-quantity-badge" id="badge-${index}"></span></div><div class="product-info"><h3>${escapeHTML(product.name)}</h3><p>${escapeHTML(product.description)}</p><div class="product-price">₹${price.toFixed(2)} <small>/ ${escapeHTML(size.label)}</small></div><div class="stock-text ${stock<=0?"out":""}">${stock>0?`Available: ${stock} pack(s)`:"Currently out of stock"}</div>${controls}</div></article>`;
+
+    const controls = orderingAllowed
+      ? `<div class="product-actions">
+           <div class="quantity-selector">
+             <button type="button" onclick="changeSelectedQty(${index},-1)" ${stock<=0?"disabled":""}>−</button>
+             <span id="qty-${index}">${quantity}</span>
+             <button type="button" onclick="changeSelectedQty(${index},1)" ${stock<=0?"disabled":""}>+</button>
+           </div>
+           <button class="btn btn-gold" type="button"
+             onclick="orderSelectedNow(${index})" ${stock<=0?"disabled":""}>
+             Order Now
+           </button>
+         </div>`
+      : `<div class="district-restriction pending">
+           📍 Verify a delivery location in an Admin-approved district to enable Order Now.
+         </div>`;
+
+    return `
+      <article class="product">
+        <div class="product-image">
+          ${image}
+          <span class="product-quantity-badge" id="badge-${index}"></span>
+        </div>
+        <div class="product-info">
+          <h3>${escapeHTML(product.name)}</h3>
+          <p>${escapeHTML(product.description)}</p>
+          <div class="product-price">
+            ₹${price.toFixed(2)}
+            <small>/ ${escapeHTML(size.label)}</small>
+          </div>
+          <div class="stock-text ${stock<=0?"out":""}">
+            ${stock>0?`Available: ${stock} pack(s)`:"Currently out of stock"}
+          </div>
+          ${controls}
+        </div>
+      </article>
+    `;
   }).join("");
+
   updateProductBadges();
 }
 
+/* PRODUCT QUANTITY */
 function changeSelectedQty(index,change) {
-  const product=products[index]; if(!product || !orderingAllowed)return;
-  const key=String(product.id)+"|"+product.sizes[0].label;
-  const existing=cart.get(key);
-  if(change>0) addProductToCart(index,1);
-  else if(existing) changeCartQuantity(encodeURIComponent(key),-1);
-  const updated=cart.get(key);selectedQuantities[index]=updated?updated.quantity:0;
-  const el=document.getElementById("qty-"+index);if(el)el.textContent=selectedQuantities[index];
+  const product = products[index];
+  if (!product || !orderingAllowed) return;
+
+  const key = String(product.id) + "|" + product.sizes[0].label;
+  const existing = cart.get(key);
+
+  if (change > 0) {
+    addProductToCart(index,1);
+  } else if (existing) {
+    changeCartQuantity(encodeURIComponent(key),-1);
+  }
+
+  const updated = cart.get(key);
+  selectedQuantities[index] = updated ? updated.quantity : 0;
+
+  const el = document.getElementById("qty-" + index);
+  if (el) el.textContent = selectedQuantities[index];
+
   updateProductBadges();
 }
+
 function addProductToCart(index,quantity) {
-  if(!requireAllowedDistrict())return false;
-  const product=products[index];if(!product||quantity<1)return false;
-  const size=product.sizes[0],key=String(product.id)+"|"+size.label,existing=cart.get(key);
-  const next=(existing?existing.quantity:0)+quantity;
-  if(next>product.stock_quantity){alert("Only "+product.stock_quantity+" pack(s) are available for "+product.name+".");return false;}
-  cart.set(key,{productId:product.id,name:product.name,pack:size.label,price:Number(size.price),quantity:next});
-  selectedQuantities[index]=next;renderCart();
-  document.getElementById("order-status").textContent=product.name+" added to your cart.";
+  if (!requireAllowedDistrict()) return false;
+
+  const product = products[index];
+  if (!product || quantity < 1) return false;
+
+  const size = product.sizes[0];
+  const key = String(product.id) + "|" + size.label;
+  const existing = cart.get(key);
+  const next = (existing ? existing.quantity : 0) + quantity;
+
+  if (next > product.stock_quantity) {
+    alert("Only " + product.stock_quantity + " pack(s) are available for " + product.name + ".");
+    return false;
+  }
+
+  cart.set(key,{
+    productId:product.id,
+    name:product.name,
+    pack:size.label,
+    price:Number(size.price),
+    quantity:next
+  });
+
+  selectedQuantities[index] = next;
+  renderCart();
+
+  document.getElementById("order-status").textContent =
+    product.name + " added to your cart.";
+
   return true;
 }
+
 function orderSelectedNow(index) {
-  if(!requireAllowedDistrict())return;
-  const product=products[index];if(!product)return;
-  const key=String(product.id)+"|"+product.sizes[0].label;
-  if(!cart.has(key))addProductToCart(index,1);
+  if (!requireAllowedDistrict()) return;
+
+  const product = products[index];
+  if (!product) return;
+
+  const key = String(product.id) + "|" + product.sizes[0].label;
+
+  if (!cart.has(key)) {
+    const added = addProductToCart(index,1);
+    if (!added) return;
+  }
+
   document.getElementById("checkout").scrollIntoView({behavior:"smooth"});
 }
+
+/* CART BADGES */
 function updateProductBadges() {
-  products.forEach((p,i)=>{
-    const badge=document.getElementById("badge-"+i);if(!badge)return;
-    let count=0;cart.forEach(item=>{if(String(item.productId)===String(p.id))count+=item.quantity;});
-    badge.textContent=count?count+" in cart":"";badge.style.display=count?"block":"none";
+  products.forEach((p,i) => {
+    const badge = document.getElementById("badge-" + i);
+    if (!badge) return;
+
+    let count = 0;
+
+    cart.forEach(item => {
+      if (String(item.productId) === String(p.id)) {
+        count += item.quantity;
+      }
+    });
+
+    badge.textContent = count ? count + " in cart" : "";
+    badge.style.display = count ? "block" : "none";
   });
 }
+
+/* CART DISPLAY */
 function renderCart() {
-  const target=document.getElementById("cart-items");let subtotal=0,count=0;
-  if(!cart.size)target.innerHTML='<p class="cart-empty">Your cart is empty.</p>';
-  else {
-    let html="";
-    cart.forEach((item,key)=>{
-      const amount=item.price*item.quantity;subtotal+=amount;count+=item.quantity;
-      html+=`<div class="cart-item"><div class="cart-item-info"><strong>${escapeHTML(item.name)}</strong><small>${escapeHTML(item.pack)} × ${item.quantity} — ₹${amount.toFixed(2)}</small></div><div class="cart-item-actions"><button onclick="changeCartQuantity('${encodeURIComponent(key)}',-1)">−</button><strong>${item.quantity}</strong><button onclick="changeCartQuantity('${encodeURIComponent(key)}',1)">+</button><button class="remove-item" onclick="removeCartItem('${encodeURIComponent(key)}')">Remove</button></div></div>`;
-    });target.innerHTML=html;
+  const target = document.getElementById("cart-items");
+  let subtotal = 0;
+  let count = 0;
+
+  if (!cart.size) {
+    target.innerHTML = '<p class="cart-empty">Your cart is empty.</p>';
+  } else {
+    let html = "";
+
+    cart.forEach((item,key) => {
+      const amount = item.price * item.quantity;
+      subtotal += amount;
+      count += item.quantity;
+
+      html += `
+        <div class="cart-item">
+          <div class="cart-item-info">
+            <strong>${escapeHTML(item.name)}</strong>
+            <small>${escapeHTML(item.pack)} × ${item.quantity} — ₹${amount.toFixed(2)}</small>
+          </div>
+          <div class="cart-item-actions">
+            <button onclick="changeCartQuantity('${encodeURIComponent(key)}',-1)">−</button>
+            <strong>${item.quantity}</strong>
+            <button onclick="changeCartQuantity('${encodeURIComponent(key)}',1)">+</button>
+            <button class="remove-item" onclick="removeCartItem('${encodeURIComponent(key)}')">Remove</button>
+          </div>
+        </div>
+      `;
+    });
+
+    target.innerHTML = html;
   }
-  const total=subtotal+deliveryCharge;
-  document.getElementById("cart-subtotal").textContent="₹"+subtotal.toFixed(2);
-  document.getElementById("delivery-charge").textContent="₹"+deliveryCharge.toFixed(2);
-  document.getElementById("cart-total").textContent="₹"+total.toFixed(2);
-  document.getElementById("cart-count").textContent=count;
-  document.getElementById("floating-cart-count").textContent=count;
-  renderFloatingCart(total);updateProductBadges();
-}
-function changeCartQuantity(encodedKey,change) {
-  const key=decodeURIComponent(encodedKey),item=cart.get(key);if(!item)return;
-  const product=products.find(p=>String(p.id)===String(item.productId));if(!product)return;
-  const next=item.quantity+change;
-  if(next<=0)cart.delete(key);
-  else {if(next>product.stock_quantity){alert("Only "+product.stock_quantity+" pack(s) are available.");return;}item.quantity=next;cart.set(key,item);}
-  syncProductCardQuantities();renderCart();
-}
-function syncProductCardQuantities() {
-  products.forEach((p,i)=>{const item=cart.get(String(p.id)+"|"+p.sizes[0].label);selectedQuantities[i]=item?item.quantity:0;const el=document.getElementById("qty-"+i);if(el)el.textContent=selectedQuantities[i];});
-}
-function removeCartItem(key){cart.delete(decodeURIComponent(key));syncProductCardQuantities();renderCart();}
-function clearCart(){if(cart.size&&confirm("Are you sure you want to clear your cart?")){cart.clear();deliveryCharge=0;deliveryDistance=null;syncProductCardQuantities();renderCart();document.getElementById("delivery-note").textContent="Delivery charge will be calculated after location detection.";}}
-function renderFloatingCart(total) {
-  const list=document.getElementById("floating-cart-items");
-  if(!cart.size)list.innerHTML='<p class="floating-cart-empty">Your cart is empty.</p>';
-  else {let html="";cart.forEach((item,key)=>{html+=`<div class="floating-cart-line"><div class="floating-cart-line-info"><strong>${escapeHTML(item.name)}</strong><small>${escapeHTML(item.pack)} · ₹${item.price.toFixed(2)} each</small><small>Amount: ₹${(item.price*item.quantity).toFixed(2)}</small></div><div class="floating-cart-line-actions"><button onclick="changeCartQuantity('${encodeURIComponent(key)}',-1)">−</button><strong>${item.quantity}</strong><button onclick="changeCartQuantity('${encodeURIComponent(key)}',1)">+</button></div></div>`;});list.innerHTML=html;}
-  document.getElementById("floating-cart-total").textContent="₹"+Number(total||0).toFixed(2);
-}
-function toggleFloatingCart(force) {
-  const panel=document.getElementById("floating-cart-panel"),button=document.getElementById("floating-cart-button");
-  const open=typeof force==="boolean"?force:!panel.classList.contains("open");
-  panel.classList.toggle("open",open);panel.setAttribute("aria-hidden",String(!open));button.setAttribute("aria-expanded",String(open));
-}
-function closeFloatingCart(){toggleFloatingCart(false);}
-function goToCart(){closeFloatingCart();document.getElementById("cart").scrollIntoView({behavior:"smooth"});}
-function initializeDraggableCart() {
-  const widget=document.getElementById("floating-cart-widget"),button=document.getElementById("floating-cart-button");
-  let sx=0,sy=0,left=0,top=0,dragging=false,moved=false;
-  button.addEventListener("pointerdown",e=>{if(e.button!==undefined&&e.button!==0)return;sx=e.clientX;sy=e.clientY;const r=widget.getBoundingClientRect();left=r.left;top=r.top;dragging=true;moved=false;button.setPointerCapture(e.pointerId);});
-  button.addEventListener("pointermove",e=>{if(!dragging)return;const dx=e.clientX-sx,dy=e.clientY-sy;if(Math.abs(dx)>4||Math.abs(dy)>4)moved=true;if(!moved)return;widget.style.left=Math.max(0,Math.min(innerWidth-widget.offsetWidth,left+dx))+"px";widget.style.top=Math.max(0,Math.min(innerHeight-widget.offsetHeight,top+dy))+"px";widget.style.right="auto";widget.style.bottom="auto";});
-  const finish=()=>{if(!dragging)return;dragging=false;if(moved){button.dataset.dragged="true";setTimeout(()=>delete button.dataset.dragged,0);}};
-  button.addEventListener("pointerup",finish);button.addEventListener("pointercancel",finish);
-  button.addEventListener("click",e=>{if(button.dataset.dragged){e.preventDefault();e.stopPropagation();return;}toggleFloatingCart();});
+
+  const total = subtotal + deliveryCharge;
+
+  document.getElementById("cart-subtotal").textContent = "₹" + subtotal.toFixed(2);
+  document.getElementById("delivery-charge").textContent = "₹" + deliveryCharge.toFixed(2);
+  document.getElementById("cart-total").textContent = "₹" + total.toFixed(2);
+  document.getElementById("cart-count").textContent = count;
+  document.getElementById("floating-cart-count").textContent = count;
+
+  renderFloatingCart(total);
+  updateProductBadges();
 }
 
-/* Only actual location verification can enable ordering. */
+function changeCartQuantity(encodedKey,change) {
+  const key = decodeURIComponent(encodedKey);
+  const item = cart.get(key);
+
+  if (!item) return;
+
+  const product = products.find(p => String(p.id) === String(item.productId));
+  if (!product) return;
+
+  const next = item.quantity + change;
+
+  if (next <= 0) {
+    cart.delete(key);
+  } else {
+    if (next > product.stock_quantity) {
+      alert("Only " + product.stock_quantity + " pack(s) are available.");
+      return;
+    }
+
+    item.quantity = next;
+    cart.set(key,item);
+  }
+
+  syncProductCardQuantities();
+  renderCart();
+}
+
+function syncProductCardQuantities() {
+  products.forEach((p,i) => {
+    const item = cart.get(String(p.id) + "|" + p.sizes[0].label);
+    selectedQuantities[i] = item ? item.quantity : 0;
+
+    const el = document.getElementById("qty-" + i);
+    if (el) el.textContent = selectedQuantities[i];
+  });
+}
+
+function removeCartItem(key) {
+  cart.delete(decodeURIComponent(key));
+  syncProductCardQuantities();
+  renderCart();
+}
+
+function clearCart() {
+  if (cart.size && confirm("Are you sure you want to clear your cart?")) {
+    cart.clear();
+    deliveryCharge = 0;
+    deliveryDistance = null;
+
+    syncProductCardQuantities();
+    renderCart();
+
+    document.getElementById("delivery-note").textContent =
+      "Delivery charge will be calculated after location detection.";
+  }
+}
+
+/* FLOATING CART */
+function renderFloatingCart(total) {
+  const list = document.getElementById("floating-cart-items");
+
+  if (!cart.size) {
+    list.innerHTML = '<p class="floating-cart-empty">Your cart is empty.</p>';
+  } else {
+    let html = "";
+
+    cart.forEach((item,key) => {
+      html += `
+        <div class="floating-cart-line">
+          <div class="floating-cart-line-info">
+            <strong>${escapeHTML(item.name)}</strong>
+            <small>${escapeHTML(item.pack)} · ₹${item.price.toFixed(2)} each</small>
+            <small>Amount: ₹${(item.price * item.quantity).toFixed(2)}</small>
+          </div>
+          <div class="floating-cart-line-actions">
+            <button onclick="changeCartQuantity('${encodeURIComponent(key)}',-1)">−</button>
+            <strong>${item.quantity}</strong>
+            <button onclick="changeCartQuantity('${encodeURIComponent(key)}',1)">+</button>
+          </div>
+        </div>
+      `;
+    });
+
+    list.innerHTML = html;
+  }
+
+  document.getElementById("floating-cart-total").textContent =
+    "₹" + Number(total || 0).toFixed(2);
+}
+
+function toggleFloatingCart(force) {
+  const panel = document.getElementById("floating-cart-panel");
+  const button = document.getElementById("floating-cart-button");
+
+  const open = typeof force === "boolean"
+    ? force
+    : !panel.classList.contains("open");
+
+  panel.classList.toggle("open",open);
+  panel.setAttribute("aria-hidden",String(!open));
+  button.setAttribute("aria-expanded",String(open));
+}
+
+function closeFloatingCart() {
+  toggleFloatingCart(false);
+}
+
+function goToCart() {
+  closeFloatingCart();
+  document.getElementById("cart").scrollIntoView({behavior:"smooth"});
+}
+
+function initializeDraggableCart() {
+  const widget = document.getElementById("floating-cart-widget");
+  const button = document.getElementById("floating-cart-button");
+
+  let sx=0,sy=0,left=0,top=0,dragging=false,moved=false;
+
+  button.addEventListener("pointerdown",e => {
+    if (e.button !== undefined && e.button !== 0) return;
+
+    sx=e.clientX;
+    sy=e.clientY;
+
+    const r=widget.getBoundingClientRect();
+    left=r.left;
+    top=r.top;
+
+    dragging=true;
+    moved=false;
+
+    button.setPointerCapture(e.pointerId);
+  });
+
+  button.addEventListener("pointermove",e => {
+    if (!dragging) return;
+
+    const dx=e.clientX-sx;
+    const dy=e.clientY-sy;
+
+    if (Math.abs(dx)>4 || Math.abs(dy)>4) moved=true;
+    if (!moved) return;
+
+    widget.style.left=Math.max(0,Math.min(innerWidth-widget.offsetWidth,left+dx))+"px";
+    widget.style.top=Math.max(0,Math.min(innerHeight-widget.offsetHeight,top+dy))+"px";
+    widget.style.right="auto";
+    widget.style.bottom="auto";
+  });
+
+  const finish = () => {
+    if (!dragging) return;
+    dragging=false;
+
+    if (moved) {
+      button.dataset.dragged="true";
+      setTimeout(() => delete button.dataset.dragged,0);
+    }
+  };
+
+  button.addEventListener("pointerup",finish);
+  button.addEventListener("pointercancel",finish);
+
+  button.addEventListener("click",e => {
+    if (button.dataset.dragged) {
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
+    toggleFloatingCart();
+  });
+}
+
+/* ORDERING SECURITY */
 function setOrderingState(allowed,district,message) {
-  detectedDistrict=district||"";
-  orderingAllowed=Boolean(allowed&&locationVerified&&detectedDistrict&&allowedDistricts.length&&getAllowedDistrict(detectedDistrict));
-  const restriction=document.getElementById("district-restriction");
-  const buttons=document.getElementById("checkout-buttons");
-  const select=document.getElementById("customer-district");
-  const status=document.getElementById("district-status");
-  restriction.className="district-restriction "+(orderingAllowed?"allowed":(locationVerified?"blocked":"pending"));
-  restriction.textContent=message||(orderingAllowed?"✓ Delivery location verified. You can place your order.":"📍 Verify your delivery location to check order availability.");
+  detectedDistrict = district || "";
+
+  orderingAllowed = Boolean(
+    allowed &&
+    locationVerified &&
+    detectedDistrict &&
+    allowedDistricts.length &&
+    getAllowedDistrict(detectedDistrict)
+  );
+
+  const restriction = document.getElementById("district-restriction");
+  const buttons = document.getElementById("checkout-buttons");
+  const select = document.getElementById("customer-district");
+  const status = document.getElementById("district-status");
+
+  restriction.className = "district-restriction " +
+    (orderingAllowed ? "allowed" : (locationVerified ? "blocked" : "pending"));
+
+  restriction.textContent = message || (
+    orderingAllowed
+      ? "✓ Delivery location verified. You can place your order."
+      : "📍 Verify your delivery location to check order availability."
+  );
+
   buttons.classList.toggle("order-disabled",!orderingAllowed);
-  buttons.querySelectorAll("button").forEach(b=>b.disabled=!orderingAllowed);
-  if(select)select.value=orderingAllowed?getAllowedDistrict(detectedDistrict):"";
-  if(status)status.textContent=message||(orderingAllowed?"✓ District verified.":"Select your district and verify your GPS location.");
+
+  buttons.querySelectorAll("button").forEach(b => {
+    b.disabled = !orderingAllowed;
+  });
+
+  if (select) {
+    select.value = orderingAllowed ? getAllowedDistrict(detectedDistrict) : "";
+  }
+
+  if (status) {
+    status.textContent = message || (
+      orderingAllowed ? "✓ District verified." :
+      "Select your district and verify your GPS location."
+    );
+  }
+
   renderShopProducts();
 }
+
 function requireAllowedDistrict() {
-  if(!orderingAllowed||!locationVerified||!detectedDistrict||!getAllowedDistrict(detectedDistrict)){
+  if (
+    !orderingAllowed ||
+    !locationVerified ||
+    !detectedDistrict ||
+    !getAllowedDistrict(detectedDistrict)
+  ) {
     alert("Please verify your actual delivery location in a district enabled by AKS Food Products.");
     return false;
   }
+
   return true;
 }
-document.getElementById("customer-district").addEventListener("change",function(){
-  const selected=getAllowedDistrict(this.value);
-  if(locationVerified&&detectedDistrict&&selected&&normalizeDistrict(selected)===normalizeDistrict(detectedDistrict)){
-    setOrderingState(true,detectedDistrict,"✓ Your GPS-verified district matches the selected delivery district.");
+
+/* DISTRICT SELECTION DOES NOT REPLACE GPS VERIFICATION */
+document.getElementById("customer-district").addEventListener("change",function() {
+  const selected = getAllowedDistrict(this.value);
+
+  if (
+    locationVerified &&
+    detectedDistrict &&
+    selected &&
+    normalizeDistrict(selected) === normalizeDistrict(detectedDistrict)
+  ) {
+    setOrderingState(
+      true,
+      detectedDistrict,
+      "✓ Your GPS-verified district matches the selected delivery district."
+    );
   } else {
-    setOrderingState(false,detectedDistrict,"⚠️ Selecting a district alone does not confirm your location. Please use Detect My Location.");
+    setOrderingState(
+      false,
+      detectedDistrict,
+      "⚠️ Selecting a district alone does not confirm your location. Please use Detect My Location."
+    );
   }
 });
 
+/* DISTANCE CALCULATION */
 function calculateDistance(lat1,lon1,lat2,lon2) {
-  const R=6371,dLat=(lat2-lat1)*Math.PI/180,dLon=(lon2-lon1)*Math.PI/180;
-  const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
+  const R=6371;
+  const dLat=(lat2-lat1)*Math.PI/180;
+  const dLon=(lon2-lon1)*Math.PI/180;
+
+  const a=
+    Math.sin(dLat/2)**2+
+    Math.cos(lat1*Math.PI/180)*
+    Math.cos(lat2*Math.PI/180)*
+    Math.sin(dLon/2)**2;
+
   return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
 }
+
+/* VERIFY GPS DISTRICT AGAINST ADMIN SETTINGS */
 async function verifyCustomerDistrict(latitude,longitude) {
-  locationVerified=false;orderingAllowed=false;detectedDistrict="";
-  setOrderingState(false,"","📍 Checking your GPS location against the Admin Dashboard delivery districts...");
+  locationVerified=false;
+  orderingAllowed=false;
+  detectedDistrict="";
+
+  setOrderingState(
+    false,
+    "",
+    "📍 Checking your GPS location against the Admin Dashboard delivery districts..."
+  );
+
   try {
-    const url="https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat="+encodeURIComponent(latitude)+"&lon="+encodeURIComponent(longitude)+"&zoom=10&addressdetails=1&accept-language=en";
-    const response=await fetch(url,{headers:{"Accept":"application/json"}});
-    if(!response.ok)throw new Error("District lookup failed.");
-    const data=await response.json(),a=data.address||{};
-    const actual=a.state_district||a.county||a.district||"";
+    const url =
+      "https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=" +
+      encodeURIComponent(latitude) +
+      "&lon=" + encodeURIComponent(longitude) +
+      "&zoom=10&addressdetails=1&accept-language=en";
+
+    const response = await fetch(url,{
+      headers:{"Accept":"application/json"}
+    });
+
+    if (!response.ok) throw new Error("District lookup failed.");
+
+    const data=await response.json();
+    const a=data.address || {};
+
+    const actual=a.state_district || a.county || a.district || "";
     const matched=getAllowedDistrict(actual);
-    if(matched){
-      locationVerified=true;detectedDistrict=matched;
-      setOrderingState(true,matched,"✓ Your GPS location is verified in "+matched+". Ordering is enabled.");
-      document.getElementById("location-status").textContent="✓ Verified district: "+matched;
-      document.getElementById("top-location-status").textContent="✓ Delivery available in "+matched+".";
+
+    if (matched) {
+      locationVerified=true;
+      detectedDistrict=matched;
+
+      setOrderingState(
+        true,
+        matched,
+        "✓ Your GPS location is verified in " + matched + ". Ordering is enabled."
+      );
+
+      document.getElementById("location-status").textContent =
+        "✓ Verified district: " + matched;
+
+      document.getElementById("top-location-status").textContent =
+        "✓ Delivery available in " + matched + ".";
+
       return matched;
     }
-    locationVerified=true;detectedDistrict=actual||"Unknown";
-    setOrderingState(false,detectedDistrict,"🚫 Detected district ("+(actual||"Unknown")+") is not enabled for delivery.");
-    document.getElementById("location-status").textContent="Detected district: "+(actual||"Unknown");
-    document.getElementById("top-location-status").textContent="Delivery is unavailable in your detected district.";
+
+    locationVerified=true;
+    detectedDistrict=actual || "Unknown";
+
+    setOrderingState(
+      false,
+      detectedDistrict,
+      "🚫 Detected district (" + (actual || "Unknown") + ") is not enabled for delivery."
+    );
+
+    document.getElementById("location-status").textContent =
+      "Detected district: " + (actual || "Unknown");
+
+    document.getElementById("top-location-status").textContent =
+      "Delivery is unavailable in your detected district.";
+
     return actual;
+
   } catch(error) {
-    console.error("District verification error:",error);locationVerified=false;
-    setOrderingState(false,"","⚠️ Could not verify your district. Please try again.");
-    document.getElementById("location-status").textContent="District verification failed. Please try again.";
-    document.getElementById("top-location-status").textContent="Unable to verify your delivery location.";
+    console.error("District verification error:",error);
+
+    locationVerified=false;
+
+    setOrderingState(
+      false,
+      "",
+      "⚠️ Could not verify your district. Please try again."
+    );
+
+    document.getElementById("location-status").textContent =
+      "District verification failed. Please try again.";
+
+    document.getElementById("top-location-status").textContent =
+      "Unable to verify your delivery location.";
+
     return "";
   }
 }
 
-/* Request Tamil-friendly reverse-geocoded address. Customer may edit it in Tamil or English. */
+/*
+  GPS ADDRESS LANGUAGE: ENGLISH
+
+  The detected address is filled in English.
+  Customer can edit the address in Tamil or English.
+  There is no English-only input restriction.
+*/
 async function fillCustomerAddressFromLocation(latitude,longitude) {
-  const field=document.getElementById("customer-address"),status=document.getElementById("address-status");
-  status.textContent="உங்கள் முகவரி கண்டறியப்படுகிறது... Finding your address...";
+  const field=document.getElementById("customer-address");
+  const status=document.getElementById("address-status");
+
+  status.textContent="Finding your address in English...";
+
   try {
-    const url="https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat="+encodeURIComponent(latitude)+"&lon="+encodeURIComponent(longitude)+"&zoom=18&addressdetails=1&accept-language=ta";
-    const response=await fetch(url,{headers:{"Accept":"application/json"}});
-    if(!response.ok)throw new Error("Address lookup failed.");
-    const data=await response.json(),a=data.address||{};
-    const parts=[a.house_number,a.road||a.street,a.neighbourhood||a.suburb||a.village,a.town||a.city||a.municipality,a.state_district,a.state,a.postcode,a.country].filter(Boolean);
-    if(parts.length){field.value=parts.join(", ");status.textContent="✓ முகவரி கண்டறியப்பட்டது. You can edit or replace it in Tamil or English. / Address detected; edit it in either language.";}
-    else if(data.display_name){field.value=data.display_name;status.textContent="✓ முகவரி கண்டறியப்பட்டது. You can edit or replace it in Tamil or English.";}
-    else status.textContent="முகவரியை தட்டச்சு செய்யவும். Please enter your address manually.";
+    const url =
+      "https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=" +
+      encodeURIComponent(latitude) +
+      "&lon=" + encodeURIComponent(longitude) +
+      "&zoom=18&addressdetails=1&accept-language=en";
+
+    const response=await fetch(url,{
+      headers:{"Accept":"application/json"}
+    });
+
+    if (!response.ok) throw new Error("Address lookup failed.");
+
+    const data=await response.json();
+    const a=data.address || {};
+
+    const parts=[
+      a.house_number,
+      a.road || a.street,
+      a.neighbourhood || a.suburb || a.village,
+      a.town || a.city || a.municipality,
+      a.state_district,
+      a.state,
+      a.postcode,
+      a.country
+    ].filter(Boolean);
+
+    if (parts.length) {
+      field.value=parts.join(", ");
+
+      status.textContent =
+        "✓ GPS address detected in English. You can edit or replace it in Tamil or English.";
+    } else if (data.display_name) {
+      field.value=data.display_name;
+
+      status.textContent =
+        "✓ GPS address detected. You can edit it in Tamil or English.";
+    } else {
+      status.textContent =
+        "Please enter your delivery address manually in Tamil or English.";
+    }
+
   } catch(error) {
     console.warn("Address lookup error:",error);
-    status.textContent="முகவரியை தமிழிலோ ஆங்கிலத்திலோ உள்ளிடவும். Please type your address in Tamil or English.";
+
+    status.textContent =
+      "GPS address could not be loaded. Please type your address in Tamil or English.";
   }
 }
 
+/* DETECT LOCATION AND CALCULATE DELIVERY CHARGE */
 function calculateDeliveryCharge() {
   const note=document.getElementById("delivery-note");
-  if(!navigator.geolocation){
-    locationVerified=false;setOrderingState(false,"","Your browser does not support GPS location verification.");
-    note.textContent="Location detection is not supported by this browser.";return;
+
+  if (!navigator.geolocation) {
+    locationVerified=false;
+
+    setOrderingState(
+      false,
+      "",
+      "Your browser does not support GPS location verification."
+    );
+
+    note.textContent="Location detection is not supported by this browser.";
+    return;
   }
-  locationVerified=false;orderingAllowed=false;detectedDistrict="";
-  setOrderingState(false,"","📍 Detecting your location. Please allow location access.");
+
+  locationVerified=false;
+  orderingAllowed=false;
+  detectedDistrict="";
+
+  setOrderingState(
+    false,
+    "",
+    "📍 Detecting your location. Please allow location access."
+  );
+
   note.textContent="Detecting your location...";
-  document.getElementById("location-status").textContent="Please allow GPS location access.";
-  document.getElementById("top-location-status").textContent="Requesting location permission...";
-  navigator.geolocation.getCurrentPosition(async position=>{
-    const lat=position.coords.latitude,lon=position.coords.longitude;
+
+  document.getElementById("location-status").textContent =
+    "Please allow GPS location access.";
+
+  document.getElementById("top-location-status").textContent =
+    "Requesting location permission...";
+
+  navigator.geolocation.getCurrentPosition(async position => {
+    const lat=position.coords.latitude;
+    const lon=position.coords.longitude;
+
     await verifyCustomerDistrict(lat,lon);
-    deliveryDistance=calculateDistance(SHOP_LOCATION.latitude,SHOP_LOCATION.longitude,lat,lon);
-    if(deliveryDistance<=FREE_DELIVERY_KM){
+
+    deliveryDistance=calculateDistance(
+      SHOP_LOCATION.latitude,
+      SHOP_LOCATION.longitude,
+      lat,
+      lon
+    );
+
+    if (deliveryDistance <= FREE_DELIVERY_KM) {
       deliveryCharge=0;
-      note.textContent="You are approximately "+deliveryDistance.toFixed(1)+" km from our shop. Free delivery applies within "+FREE_DELIVERY_KM+" km.";
+
+      note.textContent=
+        "You are approximately " + deliveryDistance.toFixed(1) +
+        " km from our shop. Free delivery applies within " +
+        FREE_DELIVERY_KM + " km.";
+
     } else {
-      const extra=Math.ceil(deliveryDistance-FREE_DELIVERY_KM);deliveryCharge=extra*EXTRA_KM_CHARGE;
-      note.textContent="You are approximately "+deliveryDistance.toFixed(1)+" km from our shop. Estimated delivery charge: ₹"+deliveryCharge+" (₹"+EXTRA_KM_CHARGE+" per additional km beyond "+FREE_DELIVERY_KM+" km).";
+      const extra=Math.ceil(deliveryDistance-FREE_DELIVERY_KM);
+      deliveryCharge=extra*EXTRA_KM_CHARGE;
+
+      note.textContent=
+        "You are approximately " + deliveryDistance.toFixed(1) +
+        " km from our shop. Estimated delivery charge: ₹" +
+        deliveryCharge + " (₹" + EXTRA_KM_CHARGE +
+        " per additional km beyond " + FREE_DELIVERY_KM + " km).";
     }
+
     await fillCustomerAddressFromLocation(lat,lon);
     renderCart();
-  },error=>{
-    deliveryCharge=0;deliveryDistance=null;locationVerified=false;setOrderingState(false,"","⚠️ GPS verification is required before ordering.");
+
+  },error => {
+    deliveryCharge=0;
+    deliveryDistance=null;
+    locationVerified=false;
+
+    setOrderingState(
+      false,
+      "",
+      "⚠️ GPS verification is required before ordering."
+    );
+
     let msg="Location permission was not provided. Click Detect My Location and allow access.";
-    if(error.code===1)msg="Location permission denied. Enable location permission in your browser and try again.";
-    if(error.code===2)msg="Your location is unavailable. Please try again.";
-    if(error.code===3)msg="Location detection timed out. Please try again.";
-    note.textContent=msg;document.getElementById("location-status").textContent=msg;document.getElementById("top-location-status").textContent=msg;renderCart();
-  },{enableHighAccuracy:true,timeout:20000,maximumAge:0});
+
+    if (error.code===1) {
+      msg="Location permission denied. Enable location permission in your browser and try again.";
+    }
+
+    if (error.code===2) {
+      msg="Your location is unavailable. Please try again.";
+    }
+
+    if (error.code===3) {
+      msg="Location detection timed out. Please try again.";
+    }
+
+    note.textContent=msg;
+
+    document.getElementById("location-status").textContent=msg;
+    document.getElementById("top-location-status").textContent=msg;
+
+    renderCart();
+
+  },{
+    enableHighAccuracy:true,
+    timeout:20000,
+    maximumAge:0
+  });
 }
 
+/* GET ORDER DETAILS */
 function getOrderDetails() {
   const form=document.getElementById("checkout-form");
-  if(!form.reportValidity())return null;
-  if(!cart.size){alert("Your cart is empty. Please add products first.");return null;}
-  if(!requireAllowedDistrict())return null;
+
+  if (!form.reportValidity()) return null;
+
+  if (!cart.size) {
+    alert("Your cart is empty. Please add products first.");
+    return null;
+  }
+
+  if (!requireAllowedDistrict()) return null;
+
   const customer={
     name:document.getElementById("customer-name").value.trim(),
     phone:document.getElementById("customer-phone").value.trim(),
@@ -523,46 +1739,112 @@ function getOrderDetails() {
     address:document.getElementById("customer-address").value.trim(),
     notes:document.getElementById("customer-notes").value.trim()
   };
-  /* No English-only pattern or character restriction on address: Tamil is accepted. */
-  if(!customer.name||!customer.phone||!customer.district||!customer.address){alert("Please complete all required fields. / தேவையான விவரங்களை நிரப்பவும்.");return null;}
-  let subtotal=0,lines=[];
-  cart.forEach(item=>{const amount=item.price*item.quantity;subtotal+=amount;lines.push(item.name+" ("+item.pack+") × "+item.quantity+" = ₹"+amount.toFixed(2));});
+
+  /* Tamil and English addresses are both accepted */
+  if (
+    !customer.name ||
+    !customer.phone ||
+    !customer.district ||
+    !customer.address
+  ) {
+    alert("Please complete all required fields. / தேவையான விவரங்களை நிரப்பவும்.");
+    return null;
+  }
+
+  let subtotal=0;
+  let lines=[];
+
+  cart.forEach(item => {
+    const amount=item.price*item.quantity;
+    subtotal+=amount;
+
+    lines.push(
+      item.name + " (" + item.pack + ") × " +
+      item.quantity + " = ₹" + amount.toFixed(2)
+    );
+  });
+
   const total=subtotal+deliveryCharge;
+
   const message=[
-    "AKS FOOD PRODUCTS - NEW ORDER","",
-    "Customer Name: "+customer.name,"Phone Number: "+customer.phone,
-    "Email: "+(customer.email||"Not provided"),"",
-    "DELIVERY DISTRICT: "+customer.district,"DELIVERY ADDRESS:",customer.address,"",
-    "ORDER DETAILS:",...lines,"",
-    "Subtotal: ₹"+subtotal.toFixed(2),"Delivery Charge: ₹"+deliveryCharge.toFixed(2),
-    "TOTAL: ₹"+total.toFixed(2),"",
-    "Additional Instructions: "+(customer.notes||"None"),"",
+    "AKS FOOD PRODUCTS - NEW ORDER",
+    "",
+    "Customer Name: " + customer.name,
+    "Phone Number: " + customer.phone,
+    "Email: " + (customer.email || "Not provided"),
+    "",
+    "DELIVERY DISTRICT: " + customer.district,
+    "DELIVERY ADDRESS:",
+    customer.address,
+    "",
+    "ORDER DETAILS:",
+    ...lines,
+    "",
+    "Subtotal: ₹" + subtotal.toFixed(2),
+    "Delivery Charge: ₹" + deliveryCharge.toFixed(2),
+    "TOTAL: ₹" + total.toFixed(2),
+    "",
+    "Additional Instructions: " + (customer.notes || "None"),
+    "",
     "Please confirm my order. Thank you!"
   ].join("\n");
+
   return {message};
 }
+
+/* WHATSAPP CHECKOUT */
 function sendWhatsApp() {
-  const order=getOrderDetails();if(!order)return;
-  const url="https://wa.me/"+WHATSAPP_NUMBER+"?text="+encodeURIComponent(order.message);
+  const order=getOrderDetails();
+  if (!order) return;
+
+  const url=
+    "https://wa.me/" +
+    WHATSAPP_NUMBER +
+    "?text=" +
+    encodeURIComponent(order.message);
+
   window.open(url,"_blank","noopener");
-  document.getElementById("order-status").textContent="WhatsApp order message is ready. Please send it to complete your order.";
-}
-function sendEmail() {
-  const order=getOrderDetails();if(!order)return;
-  const url="mailto:"+BUSINESS_EMAIL+"?subject="+encodeURIComponent("New Order - AKS Food Products")+"&body="+encodeURIComponent(order.message);
-  window.location.href=url;
-  document.getElementById("order-status").textContent="Email order message is ready. Please send it to complete your order.";
+
+  document.getElementById("order-status").textContent =
+    "WhatsApp order message is ready. Please send it to complete your order.";
 }
 
-/* Initialize after loading Dashboard delivery districts */
-function renderCartInitial(){renderCart();}
+/* EMAIL CHECKOUT */
+function sendEmail() {
+  const order=getOrderDetails();
+  if (!order) return;
+
+  const url=
+    "mailto:" +
+    BUSINESS_EMAIL +
+    "?subject=" +
+    encodeURIComponent("New Order - AKS Food Products") +
+    "&body=" +
+    encodeURIComponent(order.message);
+
+  window.location.href=url;
+
+  document.getElementById("order-status").textContent =
+    "Email order message is ready. Please send it to complete your order.";
+}
+
+/* INITIALIZE */
+function renderCartInitial() {
+  renderCart();
+}
+
 async function initializeShop() {
-  renderCartInitial();initializeDraggableCart();
+  renderCartInitial();
+  initializeDraggableCart();
+
   await loadStoreSettings();
   await loadShopProducts();
-  // Do not request location automatically. Customer clicks Detect My Location.
+
+  /* Location is requested only when customer clicks Detect My Location */
 }
+
 initializeShop();
+
 </script>
 </body>
 </html>
