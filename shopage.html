@@ -1816,34 +1816,42 @@ function getOrderDetails() {
     notes:document.getElementById("customer-notes").value.trim()
   };
 
-  if (
-    !customer.name ||
-    !customer.phone ||
-    !customer.district ||
-    !customer.address
-  ) {
+  if (!customer.name || !customer.phone || !customer.district || !customer.address) {
     alert("Please complete all required fields. / தேவையான விவரங்களை நிரப்பவும்.");
     return null;
   }
 
-  let subtotal=0;
-  let lines=[];
+  const items=Array.from(cart.values()).map(item => ({
+    product_id:Number(item.productId),
+    quantity:Number(item.quantity)
+  }));
 
-  cart.forEach(item => {
-    const amount=item.price*item.quantity;
-    subtotal+=amount;
+  if (items.some(item =>
+    !Number.isSafeInteger(item.product_id) ||
+    item.product_id <= 0 ||
+    !Number.isInteger(item.quantity) ||
+    item.quantity <= 0
+  )) {
+    alert("Your cart contains an invalid item. Please refresh the page and try again.");
+    return null;
+  }
 
-    lines.push(
-      item.name + " (" + item.pack + ") × " +
-      item.quantity + " = ₹" + amount.toFixed(2)
-    );
-  });
+  return {
+    customer,
+    items,
+    deliveryFee:Number(deliveryCharge || 0)
+  };
+}
 
-  const total=subtotal+deliveryCharge;
+function buildSavedOrderMessage(customer,savedOrder) {
+  const lines=(savedOrder.order_items || []).map(item =>
+    `${item.name} (${item.pack}) × ${item.quantity} = ₹${Number(item.line_total).toFixed(2)}`
+  );
 
-  const message=[
+  return [
     "AKS FOOD PRODUCTS - NEW ORDER",
     "",
+    "Order ID: " + savedOrder.id,
     "Customer Name: " + customer.name,
     "Phone Number: " + customer.phone,
     "Email: " + (customer.email || "Not provided"),
@@ -1855,52 +1863,129 @@ function getOrderDetails() {
     "ORDER DETAILS:",
     ...lines,
     "",
-    "Subtotal: ₹" + subtotal.toFixed(2),
-    "Delivery Charge: ₹" + deliveryCharge.toFixed(2),
-    "TOTAL: ₹" + total.toFixed(2),
+    "Subtotal: ₹" + Number(savedOrder.subtotal).toFixed(2),
+    "Delivery Charge: ₹" + Number(savedOrder.delivery_fee).toFixed(2),
+    "TOTAL: ₹" + Number(savedOrder.total_amount).toFixed(2),
     "",
     "Additional Instructions: " + (customer.notes || "None"),
     "",
     "Please confirm my order. Thank you!"
   ].join("\n");
+}
 
-  return {message};
+let orderSubmissionInProgress=false;
+
+/* SAVE ORDER + DEDUCT STOCK IN ONE SUPABASE TRANSACTION */
+async function placeOrder(channel) {
+  if (orderSubmissionInProgress) return;
+
+  const order=getOrderDetails();
+  if (!order) return;
+
+  if (typeof db === "undefined" || !db.rpc) {
+    alert("Supabase connection is unavailable. Please contact AKS Food Products.");
+    return;
+  }
+
+  orderSubmissionInProgress=true;
+  const buttons=document.querySelectorAll("#checkout-buttons button");
+  buttons.forEach(button => button.disabled=true);
+  document.getElementById("order-status").textContent =
+    "Saving your order and checking stock. Please wait...";
+
+  // Reserve a browser tab immediately during the customer's click.
+  // Browsers may block WhatsApp/mailto navigation if the tab is opened
+  // only after the asynchronous Supabase request has completed.
+  let checkoutWindow=null;
+  try {
+    checkoutWindow=window.open("about:blank","_blank");
+  } catch(openError) {
+    console.warn("Checkout tab could not be opened:",openError);
+  }
+
+  try {
+    const {data:savedOrder,error}=await db.rpc("create_customer_order",{
+      p_customer_name:order.customer.name,
+      p_customer_phone:order.customer.phone,
+      p_customer_address:order.customer.address,
+      p_district:order.customer.district,
+      p_items:order.items,
+      p_delivery_fee:order.deliveryFee,
+      p_customer_email:order.customer.email || null,
+      p_customer_notes:order.customer.notes || null
+    });
+
+    if (error) throw error;
+    if (!savedOrder || !savedOrder.id) {
+      throw new Error("The database did not return a saved order ID.");
+    }
+
+    const message=buildSavedOrderMessage(order.customer,savedOrder);
+    document.getElementById("order-status").textContent =
+      "✓ Order #" + String(savedOrder.id).slice(0,8) +
+      " saved successfully. Stock has been updated.";
+
+    cart.clear();
+    deliveryCharge=0;
+    deliveryDistance=null;
+    syncProductCardQuantities();
+    renderCart();
+    await loadShopProducts();
+
+    let checkoutUrl;
+    if (channel === "whatsapp") {
+      checkoutUrl="https://wa.me/"+WHATSAPP_NUMBER+"?text="+encodeURIComponent(message);
+    } else {
+      checkoutUrl="mailto:"+BUSINESS_EMAIL+
+        "?subject="+encodeURIComponent("New Order - AKS Food Products ("+savedOrder.id+")")+
+        "&body="+encodeURIComponent(message);
+    }
+
+    // Navigate the tab that was opened synchronously before awaiting Supabase.
+    let fallbackLink=null;
+    if (checkoutWindow && !checkoutWindow.closed) {
+      checkoutWindow.location.href=checkoutUrl;
+      try { checkoutWindow.focus(); } catch(focusError) {}
+    } else {
+      // Popup fallback: show the exact destination as a clickable link.
+      fallbackLink=document.createElement("a");
+      fallbackLink.href=checkoutUrl;
+      fallbackLink.target="_blank";
+      fallbackLink.rel="noopener noreferrer";
+      fallbackLink.textContent=channel === "whatsapp" ? "Open WhatsApp" : "Open Email";
+      fallbackLink.style.cssText="display:inline-block;margin:8px;padding:8px 12px;background:#17452e;color:#fff;border-radius:8px;font-weight:700";
+    }
+
+    const status=document.getElementById("order-status");
+    status.textContent += channel === "whatsapp"
+      ? " WhatsApp is ready; please press Send to notify us."
+      : " Your email app should open; please press Send to notify us.";
+    if (fallbackLink) {
+      status.appendChild(document.createTextNode(" Pop-up was blocked. Use this link: "));
+      status.appendChild(fallbackLink);
+    }
+  } catch(error) {
+    if (checkoutWindow && !checkoutWindow.closed) checkoutWindow.close();
+    console.error("Order submission failed:",error);
+    document.getElementById("order-status").textContent =
+      "Order was not placed: " + (error.message || "Please try again.");
+    alert("Order was not placed. " + (error.message || "Please try again."));
+  } finally {
+    orderSubmissionInProgress=false;
+    buttons.forEach(button => {
+      button.disabled=!orderingAllowed;
+    });
+  }
 }
 
 /* WHATSAPP CHECKOUT */
 function sendWhatsApp() {
-  const order=getOrderDetails();
-  if (!order) return;
-
-  const url=
-    "https://wa.me/" +
-    WHATSAPP_NUMBER +
-    "?text=" +
-    encodeURIComponent(order.message);
-
-  window.open(url,"_blank","noopener");
-
-  document.getElementById("order-status").textContent =
-    "WhatsApp order message is ready. Please send it to complete your order.";
+  placeOrder("whatsapp");
 }
 
 /* EMAIL CHECKOUT */
 function sendEmail() {
-  const order=getOrderDetails();
-  if (!order) return;
-
-  const url=
-    "mailto:" +
-    BUSINESS_EMAIL +
-    "?subject=" +
-    encodeURIComponent("New Order - AKS Food Products") +
-    "&body=" +
-    encodeURIComponent(order.message);
-
-  window.location.href=url;
-
-  document.getElementById("order-status").textContent =
-    "Email order message is ready. Please send it to complete your order.";
+  placeOrder("email");
 }
 
 /* INITIALIZE */
