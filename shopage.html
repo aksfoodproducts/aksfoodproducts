@@ -1808,18 +1808,35 @@ function goToCart() {
    DISTRICT ORDER RESTRICTION
 ========================================= */
 
+
+/* =========================================
+   MULTILINGUAL DISTRICT VERIFICATION
+   Supports English and Tamil
+========================================= */
+
 function normalizeDistrict(value) {
     return String(value || "")
-        .toLowerCase()
-        .replace(/district/g, "")
-        .replace(/[^a-z]/g, "")
+        .normalize("NFC")
+        .toLocaleLowerCase("ta-IN")
+        .replace(/district|மாவட்டம்/giu, "")
+        .replace(/[^\p{L}]/gu, "")
         .trim();
 }
 
 function isAllowedDistrict(value) {
+
     const normalized = normalizeDistrict(value);
-    return normalized === normalizeDistrict(ALLOWED_DISTRICT);
+
+    const allowedNames = [
+        "pudukkottai",
+        "புதுக்கோட்டை"
+    ];
+
+    return allowedNames.some(function(name) {
+        return normalized === normalizeDistrict(name);
+    });
 }
+
 
 function setOrderingState(allowed, district, message) {
     orderingAllowed = Boolean(allowed);
