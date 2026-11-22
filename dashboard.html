@@ -315,7 +315,7 @@ tbody tr:hover td{background:#fbfcf8}
           </select>
         </div>
         <div class="table-wrap"><table>
-          <thead><tr><th>Order</th><th>Customer</th><th>District</th><th>Items</th><th>Total</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+          <thead><tr><th>Order</th><th>Customer</th><th>District</th><th>Items</th><th>Total</th><th>Date</th><th>Status</th><th>Update</th></tr></thead>
           <tbody id="ordersList"><tr><td colspan="8">Loading orders...</td></tr></tbody>
         </table></div>
         <p id="ordersStatus" role="status"></p>
@@ -436,7 +436,6 @@ document.getElementById("saveDistrictsBtn").addEventListener("click",async()=>{
   finally{btn.disabled=false;btn.textContent="Save Allowed Districts";}
 });
 
-
 function receiptEscape(value){
   return String(value ?? "").replace(/[&<>"']/g, ch => ({
     "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
@@ -527,7 +526,7 @@ td small{display:block;color:#778278;margin-top:3px}
 </header>
 <div class="receipt-title"><h2>ORDER RECEIPT</h2><span class="status">${status}</span></div>
 <div class="meta">
-<div><strong>Receipt / Order ID</strong>#${orderId}</div>
+<div><strong>Receipt / Order ID</strong>${orderId}</div>
 <div><strong>Order Date</strong>${receiptEscape(orderDate)}</div>
 </div>
 <section class="customer">
@@ -560,6 +559,7 @@ window.addEventListener("load",()=>{
   receiptWindow.document.close();
 }
 
+
 function orderItemsText(items){
   if(!Array.isArray(items))return typeof items==="string"?items:"—";
   return items.map(item=>`${item.name||item.product_name||"Item"} × ${item.quantity||1}`).join("\n")||"—";
@@ -589,12 +589,36 @@ function renderOrders(){
     const actionTd=document.createElement("td"),select=document.createElement("select");
     ["Pending","Confirmed","Processing","Shipped","Delivered","Cancelled"].forEach(v=>select.add(new Option(v,v)));
     select.value=o.status||"Pending";select.setAttribute("aria-label","Update order status");
-    const update=document.createElement("button");update.className="primary";update.textContent="Save";
-    update.addEventListener("click",()=>updateOrderStatus(o.id,select.value,update));
-    const print=document.createElement("button");print.className="secondary";print.textContent="Print Receipt";
-    print.type="button";print.style.marginTop="7px";
+    const isCancelled=String(o.status||"").toLowerCase()==="cancelled";
+    const isCustomerCancelled=isCancelled&&String(o.cancellation_source||"").toLowerCase()==="customer";
+    const update=document.createElement("button");update.className=isCustomerCancelled?"secondary":"primary";
+    update.textContent=isCustomerCancelled?"Locked":"Save";
+    if(isCustomerCancelled){
+      select.disabled=true;
+      update.disabled=true;
+      select.title="Customer-cancelled orders cannot be reopened.";
+      update.title="This order was cancelled by the customer and is permanently locked.";
+    }else{
+      update.addEventListener("click",()=>updateOrderStatus(o.id,select.value,update));
+    }
+    actionTd.append(select,update);
+    const print=document.createElement("button");
+    print.className="secondary";
+    print.textContent="Print Receipt";
+    print.type="button";
+    print.style.marginTop="7px";
     print.addEventListener("click",()=>printOrderReceipt(o));
-    actionTd.append(select,update,print);tr.append(actionTd);body.append(tr);
+    actionTd.append(print);
+    if(isCustomerCancelled){
+      const note=document.createElement("small");note.textContent="Customer cancelled · permanently locked";
+      note.style.cssText="display:block;color:#a12d2d;font-size:10px;margin-top:6px;";
+      actionTd.append(note);
+    }else if(isCancelled){
+      const note=document.createElement("small");note.textContent="Admin cancelled · can be reopened";
+      note.style.cssText="display:block;color:#286b45;font-size:10px;margin-top:6px;";
+      actionTd.append(note);
+    }
+    tr.append(actionTd);body.append(tr);
   });
   document.getElementById("totalOrders").textContent=orders.length;
   document.getElementById("pendingOrders").textContent=orders.filter(o=>String(o.status||"pending").toLowerCase()==="pending").length;
@@ -610,6 +634,12 @@ async function loadOrders(){
   document.getElementById("ordersStatus").textContent=orders.length+" order(s) loaded.";
 }
 async function updateOrderStatus(id,status,button){
+  const existingOrder=orders.find(order=>String(order.id)===String(id));
+  if(existingOrder&&String(existingOrder.status||"").toLowerCase()==="cancelled"&&String(existingOrder.cancellation_source||"").toLowerCase()==="customer"){
+    document.getElementById("ordersStatus").textContent="This order was cancelled by the customer and cannot be reopened.";
+    await loadOrders();
+    return;
+  }
   button.disabled=true;button.textContent="Saving...";
   try{
     const {error}=await db.from("orders").update({status}).eq("id",id);
