@@ -389,6 +389,61 @@ nav a:hover{color:var(--gold)}
 }
 .dashboard-district-empty{color:var(--danger);font-weight:600}
 #order-status{margin-top:15px;font-size:13px;color:var(--green);font-weight:600}
+.order-confirmation{
+  display:none;
+  margin-top:18px;
+  padding:20px;
+  border:1px solid #cfe3d2;
+  border-radius:12px;
+  background:#f2f8f0;
+}
+.order-confirmation h3{
+  color:var(--green);
+  font-size:19px;
+  margin-bottom:7px;
+}
+.order-confirmation p{
+  color:var(--muted);
+  font-size:13px;
+  margin:6px 0;
+}
+.confirmed-order-id{
+  display:block;
+  margin:12px 0;
+  padding:12px;
+  background:#fff;
+  border:1px dashed #9ab69e;
+  border-radius:8px;
+  color:var(--green);
+  font-size:13px;
+  font-weight:700;
+  overflow-wrap:anywhere;
+  user-select:all;
+}
+.confirmation-actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:12px;
+}
+.confirmation-actions button,
+.confirmation-actions a{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:42px;
+  padding:10px 15px;
+  border:0;
+  border-radius:8px;
+  font-size:13px;
+  font-weight:700;
+  text-decoration:none;
+  cursor:pointer;
+}
+.copy-order-id{background:var(--green);color:#fff}
+.track-order-link{background:var(--gold);color:var(--green)}
+#copy-order-feedback{font-size:12px;color:var(--green);font-weight:700;margin-top:8px}
+
 
 /* FOOTER */
 footer{
@@ -598,6 +653,7 @@ footer strong{color:var(--gold)}
     <a href="#products">Our Products</a>
     <a href="#cart" class="cart-nav">My Cart (<span id="cart-count">0</span>)</a>
     <a href="#checkout">Place Order</a>
+    <a href="track-order.html">Track Order</a>
   </nav>
 </header>
 
@@ -794,6 +850,21 @@ footer strong{color:var(--gold)}
     </div>
 
     <p id="order-status"></p>
+
+    <div id="order-confirmation" class="order-confirmation" aria-live="polite">
+      <h3>🎉 Your Order Has Been Saved!</h3>
+      <p>Please save your Order ID. You will need it with your registered phone number to track your order.</p>
+      <span id="confirmed-order-id" class="confirmed-order-id"></span>
+      <div class="confirmation-actions">
+        <button type="button" class="copy-order-id" onclick="copyConfirmedOrderId()">
+          📋 Copy Order ID
+        </button>
+        <a class="track-order-link" href="track-order.html">
+          Track My Order →
+        </a>
+      </div>
+      <p id="copy-order-feedback" role="status"></p>
+    </div>
   </div>
 </section>
 
@@ -2523,6 +2594,47 @@ function buildSavedOrderMessage(customer, savedOrder) {
 ========================================================= */
 
 let orderSubmissionInProgress = false;
+let confirmedOrderId = "";
+
+function showOrderConfirmation(orderId) {
+  confirmedOrderId = String(orderId || "");
+  document.getElementById("confirmed-order-id").textContent = confirmedOrderId;
+  document.getElementById("copy-order-feedback").textContent = "";
+  document.getElementById("order-confirmation").style.display = "block";
+  document.getElementById("order-confirmation").scrollIntoView({
+    behavior: "smooth",
+    block: "nearest"
+  });
+}
+
+async function copyConfirmedOrderId() {
+  if (!confirmedOrderId) return;
+
+  const feedback = document.getElementById("copy-order-feedback");
+
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(confirmedOrderId);
+    } else {
+      const temporaryInput = document.createElement("textarea");
+      temporaryInput.value = confirmedOrderId;
+      temporaryInput.setAttribute("readonly", "");
+      temporaryInput.style.position = "fixed";
+      temporaryInput.style.opacity = "0";
+      document.body.appendChild(temporaryInput);
+      temporaryInput.select();
+      const copied = document.execCommand("copy");
+      temporaryInput.remove();
+
+      if (!copied) throw new Error("Copy command was not successful.");
+    }
+
+    feedback.textContent = "✓ Order ID copied successfully.";
+  } catch (error) {
+    console.error("Copy Order ID failed:", error);
+    feedback.textContent = "Please select and copy the Order ID shown above.";
+  }
+}
 
 async function placeOrder(channel) {
   if (orderSubmissionInProgress) return;
@@ -2547,6 +2659,8 @@ async function placeOrder(channel) {
 
   buttons.forEach(button => button.disabled = true);
 
+  document.getElementById("order-confirmation").style.display = "none";
+  confirmedOrderId = "";
   document.getElementById("order-status").textContent =
     "Saving your order and checking stock. Please wait...";
 
@@ -2590,6 +2704,8 @@ async function placeOrder(channel) {
       "✓ Order #" +
       String(savedOrder.id).slice(0, 8) +
       " saved successfully. Stock has been updated.";
+
+    showOrderConfirmation(savedOrder.id);
 
     cart.clear();
     deliveryCharge = 0;
