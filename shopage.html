@@ -767,7 +767,7 @@ footer strong{color:var(--gold)}
     <div class="location-box">
       <div>
         <strong>📍 Delivery Location</strong>
-        <p id="location-status">Detect your GPS location to verify the delivery district.</p>
+        <p id="location-status">Allow GPS access to verify delivery and include your location link in the order message.</p>
       </div>
       <button type="button" class="btn btn-gold location-btn" onclick="calculateDeliveryCharge(true)">
         Detect My Location
@@ -776,7 +776,7 @@ footer strong{color:var(--gold)}
 
     <div class="order-info">
       <strong>Order Process:</strong><br>
-      Your order details will be sent through WhatsApp or Email.
+      Your order details and GPS location link will be prepared in WhatsApp or Email after you allow location access.
       AKS Food Products will contact you to confirm the order, payment and delivery details.
     </div>
 
@@ -849,6 +849,7 @@ let locationVerified = false;
 let orderingAllowed = false;
 let deliveryCharge = 0;
 let deliveryDistance = null;
+let customerGPSLocation = null;
 let activeProductCategory = "all";
 let productSearchText = "";
 
@@ -2217,6 +2218,7 @@ function calculateDeliveryCharge() {
   const note = document.getElementById("delivery-note");
 
   if (!navigator.geolocation) {
+    customerGPSLocation = null;
     locationVerified = false;
 
     setOrderingState(
@@ -2231,6 +2233,8 @@ function calculateDeliveryCharge() {
     return;
   }
 
+  // Clear any previous location while a fresh GPS reading is requested.
+  customerGPSLocation = null;
   locationVerified = false;
   orderingAllowed = false;
   detectedDistrict = "";
@@ -2253,6 +2257,16 @@ function calculateDeliveryCharge() {
     async position => {
       const lat = position.coords.latitude;
       const lon = position.coords.longitude;
+
+      // Keep the coordinates only in this page session.
+      customerGPSLocation = {
+        latitude: lat,
+        longitude: lon,
+        accuracy: Number.isFinite(position.coords.accuracy)
+          ? Math.round(position.coords.accuracy)
+          : null,
+        mapsLink: `https://www.google.com/maps?q=${lat},${lon}`
+      };
 
       await verifyCustomerDistrict(lat, lon);
 
@@ -2293,11 +2307,11 @@ function calculateDeliveryCharge() {
       }
 
       await fillCustomerAddressFromLocation(lat, lon);
-
       renderCart();
     },
 
     error => {
+      customerGPSLocation = null;
       deliveryCharge = 0;
       deliveryDistance = null;
       locationVerified = false;
@@ -2395,6 +2409,11 @@ function getOrderDetails() {
 
   if (!requireAllowedDistrict()) return null;
 
+  if (!customerGPSLocation) {
+    alert("Please detect your GPS location before placing your order.");
+    return null;
+  }
+
   const customer = {
     name: document.getElementById("customer-name").value.trim(),
     phone: document.getElementById("customer-phone").value.trim(),
@@ -2473,6 +2492,18 @@ function buildSavedOrderMessage(customer, savedOrder) {
     "DELIVERY DISTRICT: " + customer.district,
     "DELIVERY ADDRESS:",
     customer.address,
+    "",
+    "CUSTOMER GPS LOCATION:",
+    customerGPSLocation
+      ? [
+          "Latitude: " + customerGPSLocation.latitude,
+          "Longitude: " + customerGPSLocation.longitude,
+          "Google Maps: " + customerGPSLocation.mapsLink,
+          customerGPSLocation.accuracy !== null
+            ? "GPS Accuracy: approximately " + customerGPSLocation.accuracy + " metres"
+            : ""
+        ].filter(Boolean).join("\\n")
+      : "Not available",
     "",
     "ORDER DETAILS:",
     ...lines,
@@ -2563,6 +2594,16 @@ async function placeOrder(channel) {
     cart.clear();
     deliveryCharge = 0;
     deliveryDistance = null;
+    customerGPSLocation = null;
+    locationVerified = false;
+    orderingAllowed = false;
+    detectedDistrict = "";
+
+    setOrderingState(
+      false,
+      "",
+      "Order completed. Detect your location again before your next order."
+    );
 
     syncProductCardQuantities();
     renderCart();
