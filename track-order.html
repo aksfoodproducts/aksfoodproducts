@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Track Your Order | AKS Food Products</title>
+<meta name="description" content="Track and manage your AKS Food Products order securely.">
+<meta name="theme-color" content="#17452e">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --green:#17452e;--green2:#286b45;--gold:#d8a64d;--cream:#fffaf1;
+  --paper:#f4eddd;--ink:#283128;--muted:#748076;--red:#b83232;
+  --line:#e9e3d7;--white:#fff;--shadow:0 18px 55px rgba(29,54,37,.09);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:linear-gradient(180deg,#f7f2e8 0,#fffaf1 390px);color:var(--ink);min-height:100vh}
+a{color:inherit}
+.site-header{background:var(--green);color:white;box-shadow:0 4px 20px rgba(0,0,0,.12)}
+.header-inner{width:min(1120px,92%);margin:auto;min-height:86px;display:flex;align-items:center;justify-content:space-between;gap:22px}
+.brand{display:flex;align-items:center;gap:13px;text-decoration:none;min-width:0}
+.brand-logo{width:58px;height:58px;object-fit:contain;background:#fff;border-radius:13px;padding:4px;box-shadow:0 4px 15px rgba(0,0,0,.13)}
+.brand-copy{min-width:0}
+.brand-name{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;line-height:1.15}
+.brand-tag{font-size:10px;letter-spacing:1.8px;text-transform:uppercase;color:#e9d7b5;margin-top:5px}
+nav{display:flex;align-items:center;gap:25px;flex-wrap:wrap}
+nav a{text-decoration:none;color:#fff;font-size:13px;font-weight:700;opacity:.92;transition:.2s}
+nav a:hover,nav a[aria-current="page"]{color:var(--gold);opacity:1}
+.hero{text-align:center;padding:54px 18px 32px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;color:var(--green2);font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px}
+.eyebrow:before,.eyebrow:after{content:"";width:23px;height:1px;background:var(--gold)}
+.hero h1{font-family:'Playfair Display',serif;color:var(--green);font-size:clamp(34px,5vw,48px);line-height:1.12;margin-bottom:12px}
+.hero p{max-width:540px;margin:auto;color:var(--muted);font-size:14px;line-height:1.7}
+.container{width:min(720px,92%);margin:0 auto 70px}
+.card{background:var(--white);border:1px solid rgba(222,213,195,.8);border-radius:22px;padding:clamp(22px,5vw,38px);box-shadow:var(--shadow)}
+.card-heading{display:flex;align-items:flex-start;gap:14px;margin-bottom:25px}
+.heading-icon{width:46px;height:46px;flex:0 0 46px;border-radius:14px;background:#edf4ed;color:var(--green);display:grid;place-items:center;font-size:22px}
+.card h2{font-family:'Playfair Display',serif;color:var(--green);font-size:24px;margin:1px 0 5px}
+.sub{color:var(--muted);font-size:13px;line-height:1.6}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+.field label{display:block;font-size:12px;font-weight:800;color:#465348;margin:16px 0 8px}
+.field input{width:100%;height:49px;padding:0 14px;border:1px solid #ded9ce;border-radius:11px;background:#fffefa;color:var(--ink);font:500 14px 'DM Sans',sans-serif;outline:none;transition:.2s}
+.field input:focus{border-color:var(--green2);box-shadow:0 0 0 4px rgba(40,107,69,.09)}
+button{font-family:inherit;cursor:pointer;transition:transform .18s,background .18s,box-shadow .18s}
+button:active{transform:translateY(1px)}
+button:disabled{opacity:.58;cursor:not-allowed;transform:none}
+.primary-btn{width:100%;min-height:51px;margin-top:23px;border:0;border-radius:11px;background:var(--green);color:#fff;font-size:14px;font-weight:800;box-shadow:0 7px 16px rgba(23,69,46,.15)}
+.primary-btn:hover:not(:disabled){background:var(--green2);box-shadow:0 9px 20px rgba(23,69,46,.2)}
+.message{display:none;margin-top:17px;padding:13px 15px;border-radius:11px;font-size:13px;line-height:1.55}
+.message.error{display:block;background:#fff0f0;color:var(--red);border:1px solid #f3d4d4}
+.message.success{display:block;background:#eef7ef;color:var(--green);border:1px solid #d7ead9}
+.result{display:none;margin-top:25px;padding:24px;border:1px solid var(--line);background:#fffefa;border-radius:16px;animation:rise .3s ease}
+@keyframes rise{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+.result-top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+.result h3{font-family:'Playfair Display',serif;color:var(--green);font-size:21px}
+.status-pill{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border-radius:30px;background:#edf4ed;color:var(--green);font-size:11px;font-weight:800;white-space:nowrap}
+.status-pill:before{content:"";width:7px;height:7px;border-radius:50%;background:var(--green2)}
+.order-info{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:19px 0 5px}
+.info-item{min-width:0}
+.info-label{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:#899187;font-weight:800;margin-bottom:5px}
+.info-value{font-size:13px;font-weight:700;color:#344238;overflow-wrap:anywhere;line-height:1.5}
+.status-heading{margin:25px 0 19px;color:var(--green);font-size:13px;font-weight:800;letter-spacing:.3px}
+.timeline{position:relative;padding-left:32px}
+.timeline:before{content:"";position:absolute;left:10px;top:8px;bottom:12px;width:2px;background:#e4e0d6;border-radius:5px}
+.step{position:relative;margin-bottom:23px;color:#a0a59e;font-size:13px;font-weight:600}
+.step:last-child{margin-bottom:0}
+.step:before{content:"";position:absolute;left:-28px;top:1px;width:12px;height:12px;background:#ddd;border:3px solid #fff;outline:1px solid #ddd;border-radius:50%;z-index:1}
+.step.active{color:var(--green)}
+.step.active:before{background:var(--green2);outline-color:var(--green2)}
+.step.current{font-weight:800}
+.step.current:before{background:var(--gold);outline-color:var(--gold);width:14px;height:14px;left:-29px;top:0}
+.step small{display:block;font-size:11px;font-weight:400;color:#8c938b;margin-top:4px}
+.cancelled-box{padding:15px 16px;border-radius:12px;background:#fff0f0;color:var(--red);font-weight:700;font-size:13px;margin-top:20px;border:1px solid #f2d6d6}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:23px}
+.secondary-btn,.cancel-btn{min-height:46px;border-radius:10px;font-size:12px;font-weight:800;padding:10px 14px}
+.secondary-btn{border:1px solid #d8e2d8;background:#f2f7f1;color:var(--green)}
+.secondary-btn:hover:not(:disabled){background:#e7f0e6}
+.cancel-btn{border:1px solid #efcaca;background:#fff7f7;color:var(--red)}
+.cancel-btn:hover:not(:disabled){background:#ffeded}
+.cancel-note{margin-top:11px;font-size:11px;color:#858b83;line-height:1.5}
+.updated{font-size:11px;color:#8a9188;margin-top:19px}
+footer{text-align:center;padding:25px 15px;color:#7c8279;font-size:11px;border-top:1px solid #eee6d7}
+.footer-brand{font-family:'Playfair Display',serif;color:var(--green);font-size:14px;margin-bottom:5px}
+@media(max-width:600px){
+ .header-inner{padding:13px 0;flex-direction:column;gap:13px}
+ .brand-logo{width:49px;height:49px}
+ .brand-name{font-size:19px}
+ nav{justify-content:center;gap:19px}
+ .hero{padding-top:42px}
+ .form-grid{grid-template-columns:1fr}
+ .order-info{grid-template-columns:1fr 1fr}
+ .result{padding:19px 16px}
+}
+@media(max-width:390px){.result-top{flex-direction:column}.actions{grid-template-columns:1fr}.order-info{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="index.html" aria-label="AKS Food Products home">
+      <img class="brand-logo" src="assets\AKS Homemade Food Products Logo 1.png" alt="AKS Food Products logo"
+           onerror="this.style.display='none'">
+      <span class="brand-copy">
+        <span class="brand-name">AKS Food Products</span>
+        <span class="brand-tag">Homemade with Love</span>
+      </span>
+    </a>
+    <nav aria-label="Main navigation">
+      <a href="index.html">Home</a>
+      <a href="products.html">Products</a>
+      <a href="track-order.html" aria-current="page">Track Order</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="eyebrow">Customer order care</div>
+  <h1>Track Your Order</h1>
+  <p>Stay updated on your homemade favourites. Enter your order details below to view the latest progress.</p>
+</section>
+
+<main class="container">
+  <section class="card">
+    <div class="card-heading">
+      <div class="heading-icon" aria-hidden="true">📦</div>
+      <div>
+        <h2>Order Status</h2>
+        <p class="sub">For your privacy, your Order ID and registered phone number are both required.</p>
+      </div>
+    </div>
+
+    <form id="trackingForm">
+      <div class="form-grid">
+        <div class="field">
+          <label for="orderId">ORDER ID</label>
+          <input type="text" id="orderId" placeholder="Enter your Order ID" autocomplete="off" required>
+        </div>
+        <div class="field">
+          <label for="phone">REGISTERED PHONE NUMBER</label>
+          <input type="tel" id="phone" placeholder="Enter phone number" inputmode="tel" autocomplete="tel" required>
+        </div>
+      </div>
+      <button type="submit" class="primary-btn" id="trackButton">Track My Order</button>
+    </form>
+
+    <div id="message" class="message" role="status" aria-live="polite"></div>
+
+    <section id="result" class="result" aria-live="polite">
+      <div class="result-top">
+        <h3>Order Details</h3>
+        <span class="status-pill" id="statusPill">Pending</span>
+      </div>
+
+      <div class="order-info">
+        <div class="info-item">
+          <div class="info-label">Order ID</div>
+          <div class="info-value" id="showOrderId"></div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Order Date</div>
+          <div class="info-value" id="showDate"></div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Current Status</div>
+          <div class="info-value" id="showStatus"></div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Last Updated</div>
+          <div class="info-value" id="showUpdated"></div>
+        </div>
+      </div>
+
+      <div id="normalTracking">
+        <div class="status-heading">YOUR ORDER JOURNEY</div>
+        <div class="timeline">
+          <div class="step" data-status="Pending">Order Received<small>Your order has been received.</small></div>
+          <div class="step" data-status="Confirmed">Confirmed<small>Your order has been confirmed.</small></div>
+          <div class="step" data-status="Processing">Preparing Your Order<small>Your order is being prepared.</small></div>
+          <div class="step" data-status="Shipped">Shipped<small>Your order has been dispatched.</small></div>
+          <div class="step" data-status="Delivered">Delivered<small>Your order has been delivered.</small></div>
+        </div>
+      </div>
+
+      <div id="cancelledBox" class="cancelled-box" style="display:none">
+        This order has been cancelled. If you need help, please contact AKS Food Products.
+      </div>
+
+      <div class="actions">
+        <button type="button" id="refreshButton" class="secondary-btn">↻ Refresh Status</button>
+        <button type="button" id="cancelButton" class="cancel-btn" style="display:none">Cancel Order</button>
+      </div>
+      <p id="cancelNote" class="cancel-note" style="display:none">Cancellation is available only while your order is Pending or Confirmed.</p>
+    </section>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-brand">AKS Food Products</div>
+  Traditional homemade goodness · Homemade with Love ❤️<br>
+  © <span id="year"></span> AKS Food Products. All rights reserved.
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script>
+const form = document.getElementById("trackingForm");
+const trackButton = document.getElementById("trackButton");
+const refreshButton = document.getElementById("refreshButton");
+const cancelButton = document.getElementById("cancelButton");
+const messageBox = document.getElementById("message");
+const resultBox = document.getElementById("result");
+
+document.getElementById("year").textContent = new Date().getFullYear();
+
+let lastOrderId = "";
+let lastPhone = "";
+let currentStatus = "";
+
+function showMessage(message, type) {
+  messageBox.textContent = message;
+  messageBox.className = "message " + type;
+}
+function hideMessage() {
+  messageBox.textContent = "";
+  messageBox.className = "message";
+}
+function formatDate(value) {
+  if (!value) return "Not available";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "Not available";
+  return date.toLocaleString("en-IN", {dateStyle:"medium", timeStyle:"short"});
+}
+function updateCancelControls(status) {
+  const canCancel = status === "Pending" || status === "Confirmed";
+  cancelButton.style.display = canCancel ? "block" : "none";
+  document.getElementById("cancelNote").style.display = canCancel ? "block" : "none";
+  cancelButton.disabled = false;
+  cancelButton.textContent = "Cancel Order";
+}
+function showTrackingStatus(status) {
+  const steps = document.querySelectorAll(".step");
+  const cancelledBox = document.getElementById("cancelledBox");
+  const normalTracking = document.getElementById("normalTracking");
+  steps.forEach(step => step.classList.remove("active", "current"));
+
+  if (status === "Cancelled") {
+    normalTracking.style.display = "none";
+    cancelledBox.style.display = "block";
+    return;
+  }
+  normalTracking.style.display = "block";
+  cancelledBox.style.display = "none";
+
+  const statuses = ["Pending","Confirmed","Processing","Shipped","Delivered"];
+  const currentIndex = statuses.indexOf(status);
+  if (currentIndex === -1) {
+    showMessage("Unknown order status. Please contact the shop.", "error");
+    return;
+  }
+  steps.forEach((step,index) => {
+    if (index < currentIndex) step.classList.add("active");
+    else if (index === currentIndex) step.classList.add("active","current");
+  });
+}
+async function checkOrder(orderId, phone) {
+  hideMessage();
+  resultBox.style.display = "none";
+
+  if (!orderId || !phone) {
+    showMessage("Please enter both Order ID and phone number.", "error");
+    return;
+  }
+  const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  if (!uuidPattern.test(orderId)) {
+    showMessage("Please enter a valid Order ID.", "error");
+    return;
+  }
+  const digits = phone.replace(/\D/g, "");
+  if (digits.length < 10) {
+    showMessage("Please enter a valid phone number.", "error");
+    return;
+  }
+  if (typeof db === "undefined" || !db || !db.rpc) {
+    showMessage("Supabase connection not found. Please check your supabase.js file.", "error");
+    return;
+  }
+
+  trackButton.disabled = true;
+  refreshButton.disabled = true;
+  cancelButton.disabled = true;
+  trackButton.textContent = "Checking...";
+
+  try {
+    const {data,error} = await db.rpc("get_customer_order_status", {
+      p_order_id: orderId,
+      p_customer_phone: phone
+    });
+    if (error) {
+      console.error(error);
+      throw new Error("Unable to check order status. Please try again.");
+    }
+    if (!data || data.success !== true) {
+      showMessage(data?.message || "Order not found. Check your Order ID and phone number.", "error");
+      return;
+    }
+
+    const returnedId = data.order_id || data.id || orderId;
+    currentStatus = data.status;
+    document.getElementById("showOrderId").textContent = returnedId;
+    document.getElementById("showDate").textContent = formatDate(data.created_at);
+    document.getElementById("showStatus").textContent = currentStatus;
+    document.getElementById("showUpdated").textContent = formatDate(data.updated_at);
+    document.getElementById("statusPill").textContent = currentStatus;
+
+    showTrackingStatus(currentStatus);
+    updateCancelControls(currentStatus);
+    resultBox.style.display = "block";
+    showMessage("Order details loaded successfully.", "success");
+    lastOrderId = orderId;
+    lastPhone = phone;
+  } catch (error) {
+    console.error("Tracking error:", error);
+    showMessage(error.message || "Something went wrong. Please try again.", "error");
+  } finally {
+    trackButton.disabled = false;
+    refreshButton.disabled = false;
+    trackButton.textContent = "Track My Order";
+    if (currentStatus === "Pending" || currentStatus === "Confirmed") cancelButton.disabled = false;
+  }
+}
+
+async function cancelOrder() {
+  if (!lastOrderId || !lastPhone) {
+    showMessage("Please track your order first.", "error");
+    return;
+  }
+  if (currentStatus !== "Pending" && currentStatus !== "Confirmed") {
+    showMessage("This order can no longer be cancelled.", "error");
+    updateCancelControls(currentStatus);
+    return;
+  }
+  const confirmed = window.confirm(
+    "Are you sure you want to cancel this order? This action cannot be undone."
+  );
+  if (!confirmed) return;
+
+  hideMessage();
+  cancelButton.disabled = true;
+  refreshButton.disabled = true;
+  cancelButton.textContent = "Cancelling...";
+
+  try {
+    const {data,error} = await db.rpc("cancel_customer_order", {
+      p_order_id: lastOrderId,
+      p_customer_phone: lastPhone
+    });
+
+    if (error) {
+      console.error("Cancellation error:", error);
+      const raw = (error.message || "").toLowerCase();
+      if (raw.includes("no longer be cancelled")) {
+        throw new Error("This order can no longer be cancelled because its status has changed.");
+      }
+      if (raw.includes("incorrect") || raw.includes("invalid order")) {
+        throw new Error("Order ID or phone number is incorrect. Please track your order again.");
+      }
+      throw new Error(error.message || "Unable to cancel this order. Please try again.");
+    }
+    if (!data || data.success !== true) {
+      throw new Error(data?.message || "Unable to cancel this order. Please try again.");
+    }
+
+    showMessage("Your order has been cancelled successfully.", "success");
+    await checkOrder(lastOrderId, lastPhone);
+    showMessage("Your order has been cancelled successfully.", "success");
+  } catch (error) {
+    console.error("Cancel order error:", error);
+    showMessage(error.message || "Something went wrong while cancelling.", "error");
+  } finally {
+    cancelButton.textContent = "Cancel Order";
+    refreshButton.disabled = false;
+    updateCancelControls(currentStatus);
+  }
+}
+
+form.addEventListener("submit", event => {
+  event.preventDefault();
+  const orderId = document.getElementById("orderId").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  currentStatus = "";
+  checkOrder(orderId, phone);
+});
+refreshButton.addEventListener("click", () => {
+  if (lastOrderId && lastPhone) checkOrder(lastOrderId, lastPhone);
+});
+cancelButton.addEventListener("click", cancelOrder);
+</script>
+</body>
+</html>
