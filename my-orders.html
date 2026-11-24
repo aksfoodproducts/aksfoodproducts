@@ -54,15 +54,42 @@ footer{background:#10291d;color:#fff;text-align:center;padding:28px 15px;font-si
 footer strong{color:var(--gold)}
 @media(max-width:600px){header{justify-content:center;padding:12px 3%}.brand img{width:55px;height:52px}.brand-name{font-size:16px}nav{justify-content:center;gap:12px}nav a{font-size:12px}main{padding:28px 3%}.panel{padding:17px}.input-row{flex-direction:column}.input-row button{width:100%}}
 @media print{
+  @page{size:A4 portrait;margin:12mm}
+  html,body{background:#fff!important;margin:0!important;padding:0!important}
   body *{visibility:hidden!important}
   #receipt-print,#receipt-print *{visibility:visible!important}
-  #receipt-print{display:block!important;position:absolute;left:0;top:0;width:100%;padding:25px;color:#111;background:#fff;font-family:Arial,sans-serif}
-  #receipt-print h1{font-size:22px;color:#17452e;margin-bottom:4px}
-  #receipt-print h2{font-size:17px;margin:18px 0 8px}
-  #receipt-print p{font-size:12px;margin:4px 0}
-  #receipt-print table{width:100%;border-collapse:collapse;margin:12px 0}
-  #receipt-print th,#receipt-print td{border:1px solid #bbb;padding:7px;text-align:left;font-size:12px}
-  #receipt-print .receipt-total{text-align:right;font-weight:bold;margin-top:12px}
+  #receipt-print{display:block!important;position:absolute;left:0;top:0;width:100%;margin:0;padding:0;background:#fff;color:#26352b}
+  #receipt-print .receipt-sheet{width:100%;max-width:none;margin:0 auto;padding:4mm 3mm;font-family:Arial,sans-serif;color:#26352b;background:#fff}
+  #receipt-print .receipt-brand{text-align:center;padding:0 0 18px;border-bottom:3px solid #d8a64d}
+  #receipt-print .receipt-logo{width:112px;height:112px;object-fit:contain;display:block;margin:0 auto 8px}
+  #receipt-print .receipt-shop{font-family:Georgia,serif;font-size:27px;font-weight:700;color:#17452e}
+  #receipt-print .receipt-tagline{font-size:12px;letter-spacing:1px;color:#6b776e;margin-top:3px}
+  #receipt-print .receipt-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:22px 0 20px}
+  #receipt-print .receipt-heading h2{font-size:23px;color:#17452e;margin:0}
+  #receipt-print .receipt-status{border:1px solid #d8a64d;border-radius:22px;padding:6px 15px;font-size:12px;font-weight:700;color:#17452e;white-space:nowrap}
+  #receipt-print .receipt-meta{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:25px}
+  #receipt-print .meta-label{font-size:10px;font-weight:700;letter-spacing:.8px;color:#555;text-transform:uppercase;margin-bottom:4px}
+  #receipt-print .meta-value{font-size:13px;overflow-wrap:anywhere}
+  #receipt-print .receipt-customer{margin:0 0 25px;padding:0 16px}
+  #receipt-print .receipt-customer h3{font-size:16px;color:#17452e;margin:0 0 9px}
+  #receipt-print .receipt-customer p{font-size:13px;line-height:1.65;margin:2px 0}
+  #receipt-print table{width:100%;border-collapse:collapse;margin:15px 0 18px;table-layout:fixed}
+  #receipt-print th{font-size:12px;color:#777;text-align:left;padding:9px 8px;border-bottom:1px solid #dfe4dd}
+  #receipt-print td{font-size:12px;padding:11px 8px;border-bottom:1px solid #e5e9e3;vertical-align:top}
+  #receipt-print th:first-child,#receipt-print td:first-child{width:7%;text-align:center}
+  #receipt-print th:nth-child(2),#receipt-print td:nth-child(2){width:43%}
+  #receipt-print th:nth-child(3),#receipt-print td:nth-child(3){width:12%;text-align:center}
+  #receipt-print th:nth-child(4),#receipt-print td:nth-child(4){width:18%;text-align:right}
+  #receipt-print th:nth-child(5),#receipt-print td:nth-child(5){width:20%;text-align:right}
+  #receipt-print .item-name{font-weight:700}
+  #receipt-print .item-note{font-size:10px;color:#6b776e;margin-top:2px}
+  #receipt-print .receipt-totals{width:52%;margin:18px 0 0 auto}
+  #receipt-print .total-row{display:flex;justify-content:space-between;gap:15px;padding:6px 0;font-size:13px}
+  #receipt-print .total-grand{border-top:2px solid #d8a64d;margin-top:6px;padding-top:11px;font-size:20px;font-weight:700;color:#17452e}
+  #receipt-print .receipt-thanks{border-top:1px dashed #cbd5ca;margin-top:38px;padding-top:20px;text-align:center}
+  #receipt-print .receipt-thanks h3{font-family:Georgia,serif;font-size:19px;color:#17452e;margin:0 0 5px}
+  #receipt-print .receipt-thanks p{font-size:12px;color:#657267;margin:3px 0}
+  #receipt-print .receipt-note{font-size:10px;color:#8a938b;text-align:center;margin-top:14px}
 }
 </style>
 </head>
@@ -74,8 +101,8 @@ footer strong{color:var(--gold)}
   </a>
   <nav>
     <a href="index.html">Home</a>
-    <a href="products.html#products">Our Products</a>
-    <a href="products.html#cart">My Cart</a>
+    <a href="shopage.html">Our Products</a>
+    <a href="shopage.html#cart">My Cart</a>
     <a href="track-order.html">Track Order</a>
   </nav>
 </header>
@@ -246,30 +273,71 @@ document.getElementById("change-number").addEventListener("click", () => {
 function printReceipt(index) {
   const order = currentOrders[index];
   if (!order) return;
+
   const items = getOrderItems(order);
-  const rows = items.map(item => `
-    <tr><td>${escapeHTML(item.name || "Product")}</td>
-    <td>${Number(item.quantity || 0)}</td>
-    <td>${formatMoney(item.price)}</td>
-    <td>${formatMoney(item.line_total ?? (Number(item.price || 0) * Number(item.quantity || 0)))}</td></tr>
-  `).join("");
+  const rows = items.map((item, itemIndex) => {
+    const quantity = Number(item.quantity || 0);
+    const price = Number(item.price || 0);
+    const amount = Number(item.line_total ?? (price * quantity));
+    const note = item.weight || item.size || item.variant || item.unit || "";
+    return `
+      <tr>
+        <td>${itemIndex + 1}</td>
+        <td><div class="item-name">${escapeHTML(item.name || "Product")}</div>
+          ${note ? `<div class="item-note">${escapeHTML(note)}</div>` : ""}
+        </td>
+        <td>${quantity}</td>
+        <td>${formatMoney(price)}</td>
+        <td>${formatMoney(amount)}</td>
+      </tr>`;
+  }).join("");
+
+  const subtotal = Number(order.subtotal ?? items.reduce((sum, item) =>
+    sum + Number(item.line_total ?? (Number(item.price || 0) * Number(item.quantity || 0))), 0));
+  const delivery = Number(order.delivery_fee || 0);
+  const total = Number(order.total_amount ?? (subtotal + delivery));
+  const status = String(order.status || "Pending");
   const receipt = document.getElementById("receipt-print");
+
   receipt.innerHTML = `
-    <h1>AKS FOOD PRODUCTS</h1>
-    <p>Homemade with Love • Traditional Taste • Made with Care</p>
-    <h2>ORDER RECEIPT</h2>
-    <p><strong>Order ID:</strong> ${escapeHTML(order.id)}</p>
-    <p><strong>Date:</strong> ${escapeHTML(formatDate(order.created_at))}</p>
-    <p><strong>Customer:</strong> ${escapeHTML(order.customer_name || "")}</p>
-    <p><strong>Phone:</strong> ${escapeHTML(order.customer_phone || "")}</p>
-    <p><strong>Delivery District:</strong> ${escapeHTML(order.district || "")}</p>
-    <p><strong>Address:</strong> ${escapeHTML(order.customer_address || "")}</p>
-    <p><strong>Status:</strong> ${escapeHTML(order.status || "Pending")}</p>
-    <table><thead><tr><th>Product</th><th>Qty</th><th>Price</th><th>Amount</th></tr></thead><tbody>${rows}</tbody></table>
-    <p class="receipt-total">Subtotal: ${formatMoney(order.subtotal)}</p>
-    <p class="receipt-total">Delivery: ${formatMoney(order.delivery_fee)}</p>
-    <p class="receipt-total">Total: ${formatMoney(order.total_amount)}</p>
-    <p style="margin-top:25px">Thank you for ordering from AKS Food Products!</p>`;
+    <div class="receipt-sheet">
+      <div class="receipt-brand">
+        <img class="receipt-logo" src="assets/AKS Homemade Food Products Logo 1.png" alt="AKS Food Products Logo">
+        <div class="receipt-shop">AKS FOOD PRODUCTS</div>
+        <div class="receipt-tagline">HOMEMADE • TRADITIONAL • MADE WITH LOVE</div>
+      </div>
+      <div class="receipt-heading">
+        <h2>ORDER RECEIPT</h2>
+        <span class="receipt-status">${escapeHTML(status)}</span>
+      </div>
+      <div class="receipt-meta">
+        <div><div class="meta-label">Receipt / Order ID</div><div class="meta-value">${escapeHTML(order.id || "")}</div></div>
+        <div><div class="meta-label">Order Date</div><div class="meta-value">${escapeHTML(formatDate(order.created_at))}</div></div>
+      </div>
+      <div class="receipt-customer">
+        <h3>Customer Details</h3>
+        <p><strong>${escapeHTML(order.customer_name || "Customer")}</strong></p>
+        <p>Phone: ${escapeHTML(order.customer_phone || "—")}</p>
+        ${order.customer_email ? `<p>Email: ${escapeHTML(order.customer_email)}</p>` : ""}
+        <p>Delivery Address: ${escapeHTML(order.customer_address || "—")}</p>
+        ${order.district ? `<p>District: ${escapeHTML(order.district)}</p>` : ""}
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>Product</th><th>Qty</th><th>Price</th><th>Amount</th></tr></thead>
+        <tbody>${rows || '<tr><td colspan="5">Order items unavailable</td></tr>'}</tbody>
+      </table>
+      <div class="receipt-totals">
+        <div class="total-row"><span>Subtotal</span><strong>${formatMoney(subtotal)}</strong></div>
+        <div class="total-row"><span>Delivery Charge</span><strong>${formatMoney(delivery)}</strong></div>
+        <div class="total-row total-grand"><span>Total</span><strong>${formatMoney(total)}</strong></div>
+      </div>
+      <div class="receipt-thanks">
+        <h3>Thank you for choosing AKS!</h3>
+        <p>From our home to your home with love.</p>
+        <p>AKS Food Products</p>
+      </div>
+      <div class="receipt-note">This is a computer-generated order receipt.</div>
+    </div>`;
   window.print();
 }
 </script>
