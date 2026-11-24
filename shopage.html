@@ -11,6 +11,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
 <style>
 :root{
   --green:#17452e;
@@ -445,6 +446,22 @@ nav a:hover{color:var(--gold)}
 #copy-order-feedback{font-size:12px;color:var(--green);font-weight:700;margin-top:8px}
 
 
+
+/* CUSTOMER ADDRESS + MANUAL MAP PICKER */
+.address-location-tools{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.address-location-tools button{flex:1;min-width:180px}
+.address-sync-hint{display:block;margin-top:7px;color:var(--muted);font-size:12px}
+.map-picker-panel{display:none;margin-top:14px;padding:14px;border:1px solid #cfe3d2;border-radius:12px;background:#fff}
+.map-picker-panel.open{display:block}
+.map-picker-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.map-picker-heading strong{color:var(--green)}
+#delivery-location-map{width:100%;height:360px;border-radius:9px;z-index:1;background:#eef1e9}
+.map-picker-help{font-size:12px;color:var(--muted);margin:8px 0}
+.map-picker-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:10px}
+.map-picker-actions button{flex:1;min-width:150px}
+.location-coordinate-text{font-size:11px;color:var(--muted);overflow-wrap:anywhere;margin-top:4px}
+@media(max-width:600px){#delivery-location-map{height:300px}.map-picker-panel{padding:10px}}
+
 /* FOOTER */
 footer{
   background:var(--footer);color:white;text-align:center;
@@ -653,6 +670,7 @@ footer strong{color:var(--gold)}
     <a href="#products">Our Products</a>
     <a href="#cart" class="cart-nav">My Cart (<span id="cart-count">0</span>)</a>
     <a href="#checkout">Place Order</a>
+    <a href="my-orders.html">My Orders</a>
     <a href="track-order.html">Track Order</a>
   </nav>
 </header>
@@ -809,8 +827,26 @@ footer strong{color:var(--gold)}
           required
         ></textarea>
         <small id="address-status" style="color:var(--muted);font-size:12px">
-          GPS address is provided in English. You can edit it in Tamil or English.
+          GPS address is provided in English. You can edit it in Tamil or English. After editing, the GPS pin will be updated from the address.
         </small>
+        <div class="address-location-tools">
+          <button type="button" class="btn btn-green" id="open-map-picker">📍 Select Location on Map</button>
+          <button type="button" class="btn btn-gold" id="sync-address-location">↻ Update GPS from Address</button>
+        </div>
+        <small class="address-sync-hint">You can correct the address or move the map pin to your exact delivery entrance. Confirm the final pin before ordering.</small>
+        <div class="map-picker-panel" id="map-picker-panel">
+          <div class="map-picker-heading">
+            <strong>Choose your exact delivery location</strong>
+            <button type="button" class="btn btn-gold" id="map-use-current">◎ Use Current GPS</button>
+          </div>
+          <div id="delivery-location-map" aria-label="Map for choosing delivery location"></div>
+          <p class="map-picker-help">Tap anywhere on the map or drag the marker to your house / delivery entrance. Then press “Confirm Pin”.</p>
+          <div class="location-coordinate-text" id="map-coordinate-status">No map location selected yet.</div>
+          <div class="map-picker-actions">
+            <button type="button" class="btn btn-green" id="confirm-map-pin">✓ Confirm Pin Location</button>
+            <button type="button" class="btn btn-gold" id="close-map-picker">Close Map</button>
+          </div>
+        </div>
       </div>
 
       <div class="form-group full">
@@ -899,6 +935,7 @@ footer strong{color:var(--gold)}
   </button>
 </div>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase.js"></script>
 
@@ -921,6 +958,12 @@ let orderingAllowed = false;
 let deliveryCharge = 0;
 let deliveryDistance = null;
 let customerGPSLocation = null;
+let addressNeedsSync = false;
+let addressSyncInProgress = false;
+let mapPicker = null;
+let mapMarker = null;
+let pendingMapCoordinates = null;
+let lastSyncedAddress = "";
 let activeProductCategory = "all";
 let productSearchText = "";
 
@@ -2222,64 +2265,252 @@ async function verifyCustomerDistrict(latitude, longitude) {
    17. GPS ADDRESS LOOKUP
 ========================================================= */
 
+async function reverseGeocodeAddress(latitude, longitude) {
+  const url =
+    "https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=" +
+    encodeURIComponent(latitude) +
+    "&lon=" +
+    encodeURIComponent(longitude) +
+    "&zoom=18&addressdetails=1&accept-language=en";
+
+  const response = await fetch(url, { headers: { "Accept": "application/json" } });
+  if (!response.ok) throw new Error("Address lookup failed.");
+  return response.json();
+}
+
 async function fillCustomerAddressFromLocation(latitude, longitude) {
   const field = document.getElementById("customer-address");
   const status = document.getElementById("address-status");
-
-  status.textContent = "Finding your address in English...";
+  status.textContent = "Finding the address for the selected map pin...";
 
   try {
-    const url =
-      "https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=" +
-      encodeURIComponent(latitude) +
-      "&lon=" +
-      encodeURIComponent(longitude) +
-      "&zoom=18&addressdetails=1&accept-language=en";
-
-    const response = await fetch(url, {
-      headers: { "Accept": "application/json" }
-    });
-
-    if (!response.ok) {
-      throw new Error("Address lookup failed.");
-    }
-
-    const data = await response.json();
+    const data = await reverseGeocodeAddress(latitude, longitude);
     const a = data.address || {};
-
     const parts = [
-      a.house_number,
-      a.road || a.street,
+      a.house_number, a.road || a.street,
       a.neighbourhood || a.suburb || a.village,
       a.town || a.city || a.municipality,
-      a.state_district || a.county,
-      a.state,
-      a.postcode,
-      a.country
+      a.state_district || a.county, a.state, a.postcode, a.country
     ].filter(Boolean);
 
-    if (parts.length) {
-      field.value = parts.join(", ");
-
-      status.textContent =
-        "✓ GPS address detected in English. You can edit or replace it in Tamil or English.";
-    } else if (data.display_name) {
-      field.value = data.display_name;
-
-      status.textContent =
-        "✓ GPS address detected. You can edit it in Tamil or English.";
+    const resolved = parts.length ? parts.join(", ") : (data.display_name || "");
+    if (resolved) {
+      field.value = resolved;
+      lastSyncedAddress = resolved;
+      addressNeedsSync = false;
+      status.textContent = "✓ Address updated from the selected GPS pin. You can still edit it.";
     } else {
-      status.textContent =
-        "Please enter your delivery address manually in Tamil or English.";
+      status.textContent = "No readable address found. Please enter the address manually.";
     }
-
   } catch (error) {
     console.warn("Address lookup error:", error);
-
-    status.textContent =
-      "GPS address could not be loaded. Please type your address in Tamil or English.";
+    status.textContent = "Could not fetch the address. Please type it manually; your selected GPS pin is retained.";
   }
 }
+
+/* Resolve a customer-edited address to coordinates. The typed address is preserved. */
+async function syncCoordinatesFromEditedAddress() {
+  const field = document.getElementById("customer-address");
+  const status = document.getElementById("address-status");
+  const address = field.value.trim();
+
+  if (!address) {
+    status.textContent = "Please enter your delivery address first.";
+    return false;
+  }
+  if (addressSyncInProgress) return false;
+  if (address === lastSyncedAddress && customerGPSLocation) {
+    addressNeedsSync = false;
+    return true;
+  }
+
+  addressSyncInProgress = true;
+  status.textContent = "Finding GPS coordinates for your edited address...";
+  setOrderingState(false, "", "Please wait while the edited address is matched to a GPS location.");
+
+  try {
+    const url = "https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&addressdetails=1&countrycodes=in&q=" +
+      encodeURIComponent(address);
+    const response = await fetch(url, { headers: { "Accept": "application/json" } });
+    if (!response.ok) throw new Error("Address coordinate lookup failed.");
+    const results = await response.json();
+    if (!Array.isArray(results) || !results.length) {
+      throw new Error("No matching location found for this address.");
+    }
+
+    const lat = Number(results[0].lat);
+    const lon = Number(results[0].lon);
+    if (!Number.isFinite(lat) || !Number.isFinite(lon)) throw new Error("Invalid coordinates.");
+
+    await applyCustomerCoordinates(lat, lon, {
+      accuracy: null,
+      source: "edited-address",
+      updateAddress: false
+    });
+    lastSyncedAddress = address;
+    addressNeedsSync = false;
+    status.textContent = "✓ GPS pin updated from your edited address. Please check the map pin is correct.";
+    return true;
+  } catch (error) {
+    console.warn("Edited address GPS lookup:", error);
+    addressNeedsSync = true;
+    status.textContent = "Could not match this address automatically. Please select the exact location on the map.";
+    setOrderingState(false, detectedDistrict, "Address GPS could not be updated. Select and confirm your location on the map.");
+    return false;
+  } finally {
+    addressSyncInProgress = false;
+  }
+}
+
+/* Shared path for GPS, edited-address geocoding and manually selected map pins. */
+async function applyCustomerCoordinates(latitude, longitude, options = {}) {
+  const lat = Number(latitude);
+  const lon = Number(longitude);
+  if (!Number.isFinite(lat) || !Number.isFinite(lon) || Math.abs(lat) > 90 || Math.abs(lon) > 180) {
+    throw new Error("The selected map coordinates are invalid.");
+  }
+
+  customerGPSLocation = {
+    latitude: lat,
+    longitude: lon,
+    accuracy: options.accuracy ?? null,
+    source: options.source || "map-pin",
+    mapsLink: `https://www.google.com/maps?q=${lat},${lon}`
+  };
+
+  locationVerified = false;
+  orderingAllowed = false;
+  detectedDistrict = "";
+  setOrderingState(false, "", "Checking the selected delivery location against enabled districts...");
+
+  await verifyCustomerDistrict(lat, lon);
+
+  deliveryDistance = calculateDistance(
+    SHOP_LOCATION.latitude, SHOP_LOCATION.longitude, lat, lon
+  );
+  if (deliveryDistance <= FREE_DELIVERY_KM) {
+    deliveryCharge = 0;
+    document.getElementById("delivery-note").textContent =
+      "You are approximately " + deliveryDistance.toFixed(1) +
+      " km from our shop. Free delivery applies within " + FREE_DELIVERY_KM + " km.";
+  } else {
+    const extra = Math.ceil(deliveryDistance - FREE_DELIVERY_KM);
+    deliveryCharge = extra * EXTRA_KM_CHARGE;
+    document.getElementById("delivery-note").textContent =
+      "You are approximately " + deliveryDistance.toFixed(1) +
+      " km from our shop. Estimated delivery charge: ₹" + deliveryCharge +
+      " (₹" + EXTRA_KM_CHARGE + " per additional km beyond " + FREE_DELIVERY_KM + " km).";
+  }
+
+  if (options.updateAddress) {
+    await fillCustomerAddressFromLocation(lat, lon);
+  }
+
+  document.getElementById("location-status").textContent =
+    "Selected location: " + lat.toFixed(6) + ", " + lon.toFixed(6);
+  document.getElementById("top-location-status").textContent =
+    locationVerified ? "✓ Location verified: " + detectedDistrict : "Location selected; district verification needs attention.";
+
+  if (mapPicker && mapMarker) {
+    mapMarker.setLatLng([lat, lon]);
+    pendingMapCoordinates = { latitude: lat, longitude: lon };
+    document.getElementById("map-coordinate-status").textContent =
+      "Pin: " + lat.toFixed(6) + ", " + lon.toFixed(6);
+  }
+  renderCart();
+}
+
+/* Leaflet map is initialized only when the customer opens the picker. */
+function openDeliveryMap() {
+  if (typeof L === "undefined") {
+    alert("The map could not be loaded. Please check your internet connection and try again.");
+    return;
+  }
+  const panel = document.getElementById("map-picker-panel");
+  panel.classList.add("open");
+
+  const initial = customerGPSLocation || { latitude: SHOP_LOCATION.latitude, longitude: SHOP_LOCATION.longitude };
+  pendingMapCoordinates = {
+    latitude: Number(initial.latitude),
+    longitude: Number(initial.longitude)
+  };
+
+  if (!mapPicker) {
+    mapPicker = L.map("delivery-location-map").setView(
+      [pendingMapCoordinates.latitude, pendingMapCoordinates.longitude], 16
+    );
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(mapPicker);
+
+    mapMarker = L.marker(
+      [pendingMapCoordinates.latitude, pendingMapCoordinates.longitude],
+      { draggable: true }
+    ).addTo(mapPicker);
+
+    mapPicker.on("click", event => setPendingMapPin(event.latlng.lat, event.latlng.lng));
+    mapMarker.on("dragend", event => {
+      const point = event.target.getLatLng();
+      setPendingMapPin(point.lat, point.lng);
+    });
+  } else {
+    mapMarker.setLatLng([pendingMapCoordinates.latitude, pendingMapCoordinates.longitude]);
+    mapPicker.setView([pendingMapCoordinates.latitude, pendingMapCoordinates.longitude], 17);
+  }
+
+  document.getElementById("map-coordinate-status").textContent =
+    "Move the pin to your delivery entrance, then confirm it.";
+  setTimeout(() => mapPicker.invalidateSize(), 100);
+}
+
+function setPendingMapPin(latitude, longitude) {
+  pendingMapCoordinates = { latitude: Number(latitude), longitude: Number(longitude) };
+  if (mapMarker) mapMarker.setLatLng([latitude, longitude]);
+  document.getElementById("map-coordinate-status").textContent =
+    "Selected pin: " + latitude.toFixed(6) + ", " + longitude.toFixed(6) +
+    " — press Confirm Pin Location.";
+}
+
+async function confirmMapPinLocation() {
+  if (!pendingMapCoordinates) {
+    alert("Please select a location on the map first.");
+    return;
+  }
+  addressNeedsSync = false;
+  await applyCustomerCoordinates(
+    pendingMapCoordinates.latitude,
+    pendingMapCoordinates.longitude,
+    { accuracy: null, source: "manual-map-pin", updateAddress: true }
+  );
+  lastSyncedAddress = document.getElementById("customer-address").value.trim();
+  document.getElementById("map-picker-panel").classList.remove("open");
+}
+
+/* Wire address editing and map controls. */
+document.getElementById("customer-address").addEventListener("input", () => {
+  addressNeedsSync = true;
+  document.getElementById("address-status").textContent =
+    "Address edited. GPS coordinates will be updated when you leave this field or press Update GPS from Address.";
+});
+document.getElementById("customer-address").addEventListener("blur", () => {
+  if (addressNeedsSync) syncCoordinatesFromEditedAddress();
+});
+document.getElementById("sync-address-location").addEventListener("click", syncCoordinatesFromEditedAddress);
+document.getElementById("open-map-picker").addEventListener("click", openDeliveryMap);
+document.getElementById("close-map-picker").addEventListener("click", () =>
+  document.getElementById("map-picker-panel").classList.remove("open")
+);
+document.getElementById("confirm-map-pin").addEventListener("click", confirmMapPinLocation);
+document.getElementById("map-use-current").addEventListener("click", () => {
+  if (!navigator.geolocation) return alert("GPS is not supported by this browser.");
+  navigator.geolocation.getCurrentPosition(position => {
+    const lat = position.coords.latitude, lon = position.coords.longitude;
+    setPendingMapPin(lat, lon);
+    if (mapPicker) mapPicker.setView([lat, lon], 18);
+  }, () => alert("Could not get your current GPS location. Please move the pin manually."),
+  { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 });
+});
 
 /* =========================================================
    18. DETECT LOCATION + DELIVERY CHARGE
@@ -2290,6 +2521,8 @@ function calculateDeliveryCharge() {
 
   if (!navigator.geolocation) {
     customerGPSLocation = null;
+    addressNeedsSync = false;
+    lastSyncedAddress = "";
     locationVerified = false;
 
     setOrderingState(
@@ -2328,57 +2561,19 @@ function calculateDeliveryCharge() {
     async position => {
       const lat = position.coords.latitude;
       const lon = position.coords.longitude;
-
-      // Keep the coordinates only in this page session.
-      customerGPSLocation = {
-        latitude: lat,
-        longitude: lon,
-        accuracy: Number.isFinite(position.coords.accuracy)
-          ? Math.round(position.coords.accuracy)
-          : null,
-        mapsLink: `https://www.google.com/maps?q=${lat},${lon}`
-      };
-
-      await verifyCustomerDistrict(lat, lon);
-
-      deliveryDistance = calculateDistance(
-        SHOP_LOCATION.latitude,
-        SHOP_LOCATION.longitude,
-        lat,
-        lon
-      );
-
-      if (deliveryDistance <= FREE_DELIVERY_KM) {
-        deliveryCharge = 0;
-
-        note.textContent =
-          "You are approximately " +
-          deliveryDistance.toFixed(1) +
-          " km from our shop. Free delivery applies within " +
-          FREE_DELIVERY_KM +
-          " km.";
-
-      } else {
-        const extra = Math.ceil(
-          deliveryDistance - FREE_DELIVERY_KM
-        );
-
-        deliveryCharge = extra * EXTRA_KM_CHARGE;
-
-        note.textContent =
-          "You are approximately " +
-          deliveryDistance.toFixed(1) +
-          " km from our shop. Estimated delivery charge: ₹" +
-          deliveryCharge +
-          " (₹" +
-          EXTRA_KM_CHARGE +
-          " per additional km beyond " +
-          FREE_DELIVERY_KM +
-          " km).";
+      try {
+        addressNeedsSync = false;
+        await applyCustomerCoordinates(lat, lon, {
+          accuracy: Number.isFinite(position.coords.accuracy)
+            ? Math.round(position.coords.accuracy) : null,
+          source: "device-gps",
+          updateAddress: true
+        });
+        lastSyncedAddress = document.getElementById("customer-address").value.trim();
+      } catch (error) {
+        console.error("Could not apply GPS location:", error);
+        setOrderingState(false, "", "Could not verify this GPS location. Please select it on the map.");
       }
-
-      await fillCustomerAddressFromLocation(lat, lon);
-      renderCart();
     },
 
     error => {
@@ -2482,6 +2677,10 @@ function getOrderDetails() {
 
   if (!customerGPSLocation) {
     alert("Please detect your GPS location before placing your order.");
+    return null;
+  }
+  if (addressNeedsSync || addressSyncInProgress) {
+    alert("Your delivery address has changed. Please wait for its GPS location to update, or use the map pin.");
     return null;
   }
 
