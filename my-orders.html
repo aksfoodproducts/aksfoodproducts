@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Orders | AKS Food Products</title>
+<meta name="description" content="View your AKS Food Products orders by registered phone number.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{--green:#17452e;--green-light:#286b45;--gold:#d8a64d;--cream:#fffaf1;--text:#243329;--muted:#6b776e;--border:#e8e8df;--danger:#b83232}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"DM Sans",sans-serif;background:var(--cream);color:var(--text);line-height:1.6}
+button,input{font:inherit}button{cursor:pointer}a{text-decoration:none;color:inherit}
+header{background:var(--green);color:#fff;padding:12px 5%;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px}.brand img{width:65px;height:60px;object-fit:contain;background:#fff;border-radius:10px;padding:4px}
+.brand-name{font-size:19px;font-weight:700;letter-spacing:1px}.brand-tagline{font-size:12px;color:#e8d7ad}
+nav{display:flex;align-items:center;gap:20px;flex-wrap:wrap}nav a{font-size:14px;font-weight:600}nav a:hover{color:var(--gold)}
+.hero{padding:55px 20px;text-align:center;background:linear-gradient(135deg,#17452e,#286b45);color:#fff}
+.hero-label{color:var(--gold);font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase}
+.hero h1{font-family:"Playfair Display",serif;font-size:clamp(30px,5vw,46px);margin:10px 0}
+.hero p{color:#e7eee8;font-size:14px}
+main{padding:42px 5%;max-width:1050px;margin:auto}
+.panel{background:#fff;border:1px solid var(--border);border-radius:16px;padding:25px;box-shadow:0 5px 20px #183c2510}
+.lookup{max-width:600px;margin:0 auto 28px}.lookup h2,.orders-heading{font-family:"Playfair Display",serif;color:var(--green);font-size:25px}
+.lookup p{font-size:13px;color:var(--muted);margin:5px 0 16px}
+label{display:block;color:var(--green);font-weight:700;font-size:13px;margin-bottom:6px}
+.input-row{display:flex;gap:10px}.input-row input{min-width:0;flex:1;padding:12px;border:1px solid var(--border);border-radius:8px;outline:none}
+.input-row input:focus{border-color:var(--green-light)}
+.btn{border:0;border-radius:8px;padding:12px 17px;font-weight:700;font-size:13px}
+.btn-green{background:var(--green);color:#fff}.btn-gold{background:var(--gold);color:var(--green)}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+.hint{display:block;color:var(--muted);font-size:11px;margin-top:8px}
+#lookup-status{font-size:13px;margin-top:13px;font-weight:600;color:var(--green)}
+#orders-section{display:none}.orders-top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.orders-subtitle{font-size:12px;color:var(--muted);margin-top:3px}
+.order-card{border:1px solid var(--border);border-radius:12px;padding:17px;margin:13px 0;background:#fff}
+.order-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}
+.order-id{font-weight:700;color:var(--green);overflow-wrap:anywhere;font-size:14px}
+.order-date{font-size:11px;color:var(--muted);margin-top:3px}
+.status{display:inline-block;border-radius:20px;padding:5px 10px;font-size:11px;font-weight:700;background:#f0f2ed;color:#4c5b50}
+.status.delivered,.status.completed{background:#e8f5e9;color:#226b32}
+.status.cancelled{background:#fff0f0;color:#a52c2c}
+.status.processing,.status.shipped,.status.pending{background:#fff6df;color:#8a6418}
+.order-items{font-size:13px;margin:13px 0;color:#435147}
+.order-items div{display:flex;justify-content:space-between;gap:12px;padding:4px 0;border-bottom:1px dashed #eceee8}
+.order-total{display:flex;justify-content:space-between;gap:12px;border-top:1px solid var(--border);padding-top:10px;color:var(--green);font-weight:700}
+.order-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}
+.order-actions button{padding:8px 12px;font-size:12px}
+.empty{background:#f7f8f3;border-radius:10px;padding:25px;text-align:center;color:var(--muted);font-size:14px}
+#receipt-print{display:none}
+footer{background:#10291d;color:#fff;text-align:center;padding:28px 15px;font-size:13px;margin-top:35px}
+footer strong{color:var(--gold)}
+@media(max-width:600px){header{justify-content:center;padding:12px 3%}.brand img{width:55px;height:52px}.brand-name{font-size:16px}nav{justify-content:center;gap:12px}nav a{font-size:12px}main{padding:28px 3%}.panel{padding:17px}.input-row{flex-direction:column}.input-row button{width:100%}}
+@media print{
+  body *{visibility:hidden!important}
+  #receipt-print,#receipt-print *{visibility:visible!important}
+  #receipt-print{display:block!important;position:absolute;left:0;top:0;width:100%;padding:25px;color:#111;background:#fff;font-family:Arial,sans-serif}
+  #receipt-print h1{font-size:22px;color:#17452e;margin-bottom:4px}
+  #receipt-print h2{font-size:17px;margin:18px 0 8px}
+  #receipt-print p{font-size:12px;margin:4px 0}
+  #receipt-print table{width:100%;border-collapse:collapse;margin:12px 0}
+  #receipt-print th,#receipt-print td{border:1px solid #bbb;padding:7px;text-align:left;font-size:12px}
+  #receipt-print .receipt-total{text-align:right;font-weight:bold;margin-top:12px}
+}
+</style>
+</head>
+<body>
+<header>
+  <a href="index.html" class="brand">
+    <img src="assets/AKS Homemade Food Products Logo 1.png" alt="AKS Food Products Logo">
+    <div><div class="brand-name">AKS FOOD PRODUCTS</div><div class="brand-tagline">Homemade with Love</div></div>
+  </a>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="products.html#products">Our Products</a>
+    <a href="products.html#cart">My Cart</a>
+    <a href="track-order.html">Track Order</a>
+  </nav>
+</header>
+<section class="hero">
+  <div class="hero-label">AKS Food Products</div>
+  <h1>My Orders</h1>
+  <p>Find your order history using the phone number entered during checkout.</p>
+</section>
+<main>
+  <section class="panel lookup">
+    <h2>View Your Orders</h2>
+    <p>Enter the registered mobile number used when placing your orders.</p>
+    <form id="lookup-form">
+      <label for="customer-phone">Registered Phone Number</label>
+      <div class="input-row">
+        <input id="customer-phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="16" placeholder="10-digit mobile number" required>
+        <button class="btn btn-green" id="lookup-button" type="submit">View My Orders</button>
+      </div>
+      <small class="hint">You can enter your 10-digit number or a number beginning with +91. No OTP is required.</small>
+    </form>
+    <div id="lookup-status" role="status" aria-live="polite"></div>
+  </section>
+
+  <section id="orders-section" class="panel">
+    <div class="orders-top">
+      <div><h2 class="orders-heading">Your Order History</h2><p class="orders-subtitle" id="orders-subtitle"></p></div>
+      <button class="btn btn-gold" id="change-number" type="button">Change Number</button>
+    </div>
+    <div id="orders-list"></div>
+  </section>
+</main>
+<div id="receipt-print"></div>
+<footer>
+  <p><strong>AKS FOOD PRODUCTS</strong></p>
+  <p>Homemade with Love • Traditional Taste • Made with Care</p>
+  <p>© 2026 AKS Food Products. All Rights Reserved.</p>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script>
+"use strict";
+
+const lookupForm = document.getElementById("lookup-form");
+const phoneInput = document.getElementById("customer-phone");
+const lookupButton = document.getElementById("lookup-button");
+const lookupStatus = document.getElementById("lookup-status");
+const ordersSection = document.getElementById("orders-section");
+const ordersList = document.getElementById("orders-list");
+
+let currentOrders = [];
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[char]));
+}
+
+function normalizePhone(value) {
+  return String(value || "").replace(/\D/g, "");
+}
+
+function formatMoney(value) {
+  return "₹" + Number(value || 0).toFixed(2);
+}
+
+function formatDate(value) {
+  if (!value) return "Date unavailable";
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? "Date unavailable" :
+    date.toLocaleString("en-IN", {dateStyle:"medium",timeStyle:"short"});
+}
+
+function statusClass(value) {
+  return String(value || "").toLowerCase().replace(/[^a-z0-9]+/g, "-");
+}
+
+function getOrderItems(order) {
+  let items = order.order_items;
+  if (typeof items === "string") {
+    try { items = JSON.parse(items); } catch { items = []; }
+  }
+  return Array.isArray(items) ? items : [];
+}
+
+function renderOrders(orders, phone) {
+  currentOrders = Array.isArray(orders) ? orders : [];
+  document.getElementById("orders-subtitle").textContent =
+    currentOrders.length + " order(s) found for " + phone;
+  ordersSection.style.display = "block";
+
+  if (!currentOrders.length) {
+    ordersList.innerHTML = '<div class="empty">No orders were found for this phone number.</div>';
+    return;
+  }
+
+  ordersList.innerHTML = currentOrders.map((order, index) => {
+    const items = getOrderItems(order);
+    const itemMarkup = items.length ? items.map(item => `
+      <div><span>${escapeHTML(item.name || "Product")} × ${Number(item.quantity || 0)}</span>
+      <strong>${formatMoney(item.line_total ?? (Number(item.price || 0) * Number(item.quantity || 0)))}</strong></div>
+    `).join("") : '<div>Order items unavailable</div>';
+    const status = String(order.status || "Pending");
+    return `
+      <article class="order-card">
+        <div class="order-top">
+          <div><div class="order-id">Order ID: ${escapeHTML(order.id)}</div>
+          <div class="order-date">${escapeHTML(formatDate(order.created_at))}</div></div>
+          <span class="status ${escapeHTML(statusClass(status))}">${escapeHTML(status)}</span>
+        </div>
+        <div class="order-items">${itemMarkup}</div>
+        <div class="order-total"><span>Total Amount</span><span>${formatMoney(order.total_amount)}</span></div>
+        <div class="order-actions">
+          <button type="button" class="btn btn-green" onclick="printReceipt(${index})">Print Receipt</button>
+          <a class="btn btn-gold" href="track-order.html">Track Order</a>
+        </div>
+      </article>`;
+  }).join("");
+}
+
+lookupForm.addEventListener("submit", async event => {
+  event.preventDefault();
+  const digits = normalizePhone(phoneInput.value);
+  const lastTen = digits.slice(-10);
+
+  if (digits.length < 10 || digits.length > 15 || lastTen.length !== 10) {
+    lookupStatus.textContent = "Please enter a valid 10-digit mobile number.";
+    ordersSection.style.display = "none";
+    return;
+  }
+
+  if (typeof db === "undefined" || !db.rpc) {
+    lookupStatus.textContent = "Supabase connection is unavailable. Please try again later.";
+    return;
+  }
+
+  lookupButton.disabled = true;
+  lookupButton.textContent = "Searching...";
+  lookupStatus.textContent = "Finding your orders...";
+  ordersSection.style.display = "none";
+
+  try {
+    const {data, error} = await db.rpc("get_customer_orders_by_phone", {
+      p_phone: phoneInput.value.trim()
+    });
+    if (error) throw error;
+
+    const orders = Array.isArray(data) ? data : (data && Array.isArray(data.orders) ? data.orders : []);
+    renderOrders(orders, phoneInput.value.trim());
+    lookupStatus.textContent = orders.length
+      ? "✓ Orders loaded successfully."
+      : "No orders found for this phone number.";
+  } catch (error) {
+    console.error("My Orders lookup failed:", error);
+    lookupStatus.textContent = "Unable to load orders. " + (error.message || "Please try again.");
+  } finally {
+    lookupButton.disabled = false;
+    lookupButton.textContent = "View My Orders";
+  }
+});
+
+document.getElementById("change-number").addEventListener("click", () => {
+  ordersSection.style.display = "none";
+  phoneInput.focus();
+  lookupStatus.textContent = "";
+  window.scrollTo({top:0,behavior:"smooth"});
+});
+
+function printReceipt(index) {
+  const order = currentOrders[index];
+  if (!order) return;
+  const items = getOrderItems(order);
+  const rows = items.map(item => `
+    <tr><td>${escapeHTML(item.name || "Product")}</td>
+    <td>${Number(item.quantity || 0)}</td>
+    <td>${formatMoney(item.price)}</td>
+    <td>${formatMoney(item.line_total ?? (Number(item.price || 0) * Number(item.quantity || 0)))}</td></tr>
+  `).join("");
+  const receipt = document.getElementById("receipt-print");
+  receipt.innerHTML = `
+    <h1>AKS FOOD PRODUCTS</h1>
+    <p>Homemade with Love • Traditional Taste • Made with Care</p>
+    <h2>ORDER RECEIPT</h2>
+    <p><strong>Order ID:</strong> ${escapeHTML(order.id)}</p>
+    <p><strong>Date:</strong> ${escapeHTML(formatDate(order.created_at))}</p>
+    <p><strong>Customer:</strong> ${escapeHTML(order.customer_name || "")}</p>
+    <p><strong>Phone:</strong> ${escapeHTML(order.customer_phone || "")}</p>
+    <p><strong>Delivery District:</strong> ${escapeHTML(order.district || "")}</p>
+    <p><strong>Address:</strong> ${escapeHTML(order.customer_address || "")}</p>
+    <p><strong>Status:</strong> ${escapeHTML(order.status || "Pending")}</p>
+    <table><thead><tr><th>Product</th><th>Qty</th><th>Price</th><th>Amount</th></tr></thead><tbody>${rows}</tbody></table>
+    <p class="receipt-total">Subtotal: ${formatMoney(order.subtotal)}</p>
+    <p class="receipt-total">Delivery: ${formatMoney(order.delivery_fee)}</p>
+    <p class="receipt-total">Total: ${formatMoney(order.total_amount)}</p>
+    <p style="margin-top:25px">Thank you for ordering from AKS Food Products!</p>`;
+  window.print();
+}
+</script>
+</body>
+</html>
