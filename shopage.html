@@ -537,12 +537,12 @@ nav a:hover{color:var(--gold)}
 .map-picker-panel.open{display:block}
 .map-picker-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px}
 .map-picker-heading strong{color:var(--green)}
-#delivery-location-map{width:100%;height:360px;border-radius:9px;z-index:1;background:#eef1e9}
+#delivery-location-map{width:100%;height:460px;border-radius:9px;z-index:1;background:#eef1e9}
 .map-picker-help{font-size:12px;color:var(--muted);margin:8px 0}
 .map-picker-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:10px}
 .map-picker-actions button{flex:1;min-width:150px}
 .location-coordinate-text{font-size:11px;color:var(--muted);overflow-wrap:anywhere;margin-top:4px}
-@media(max-width:600px){#delivery-location-map{height:300px}.map-picker-panel{padding:10px}}
+@media(max-width:600px){#delivery-location-map{height:380px}.map-picker-panel{padding:10px}}
 
 /* FOOTER */
 footer{
@@ -824,6 +824,14 @@ footer strong{color:var(--gold)}
   .floating-cart-panel{padding:15px;border-radius:16px}
 }
 
+
+/* BULK ORDER SAVINGS */
+.bulk-discount-row span{color:#267442;font-weight:600}
+.bulk-discount-value{color:#267442!important}
+.bulk-discount-note{background:linear-gradient(120deg,#f0f8ed,#fff9e8);border:1px solid #dcebd6;color:#386b43;font-weight:600}
+.cart-bulk-saving{display:block;color:#287742;font-size:12px;font-weight:700;margin-top:4px}
+.floating-bulk-saving{color:#287742!important;font-weight:700}
+
 </style>
 </head>
 
@@ -924,6 +932,10 @@ footer strong{color:var(--gold)}
         <span>Subtotal</span>
         <strong id="cart-subtotal">₹0.00</strong>
       </div>
+      <div class="summary-row bulk-discount-row">
+        <span>Bulk Discount</span>
+        <strong id="bulk-discount-total" class="bulk-discount-value">−₹0.00</strong>
+      </div>
       <div class="summary-row">
         <span>Delivery Charge</span>
         <strong id="delivery-charge">₹0.00</strong>
@@ -934,6 +946,9 @@ footer strong{color:var(--gold)}
       </div>
     </div>
 
+    <div class="delivery-note bulk-discount-note" id="bulk-discount-note">
+      🎉 Bulk offer: Buy 5 or more packs of the same product and save ₹5 per pack.
+    </div>
     <div class="delivery-note" id="delivery-note">
       Delivery charge will be calculated after location detection.
     </div>
@@ -979,6 +994,37 @@ footer strong{color:var(--gold)}
         </small>
       </div>
 
+      <div class="form-group full">
+        <label for="customer-taluk">Taluk / தாலுகா *</label>
+        <input type="text" id="customer-taluk" list="taluk-suggestions" placeholder="Select or type Taluk / தாலுகா" autocomplete="address-level3" required>
+        <datalist id="taluk-suggestions">
+          <option value="Coimbatore North"></option><option value="Coimbatore South"></option>
+          <option value="Mettupalayam"></option><option value="Sulur"></option><option value="Pollachi"></option>
+          <option value="Kinathukadavu"></option><option value="Valparai"></option><option value="Anaimalai"></option>
+          <option value="Tiruppur"></option><option value="Avinashi"></option><option value="Palladam"></option>
+          <option value="Udumalpet"></option><option value="Dharapuram"></option><option value="Kangeyam"></option>
+          <option value="Erode"></option><option value="Perundurai"></option><option value="Bhavani"></option>
+          <option value="Gobichettipalayam"></option><option value="Sathyamangalam"></option>
+          <option value="Other / Type manually"></option>
+        </datalist>
+      </div>
+
+      <div class="form-group full">
+        <label for="customer-post">Post / Post Office / அஞ்சல் *</label>
+        <input type="text" id="customer-post" list="post-office-suggestions" placeholder="Select or type Post Office / அஞ்சல்" autocomplete="postal-address" required>
+        <datalist id="post-office-suggestions">
+          <option value="Coimbatore H.O"></option><option value="Coimbatore R.S"></option><option value="Gandhipuram"></option>
+          <option value="Ramanathapuram"></option><option value="Peelamedu"></option><option value="Singanallur"></option>
+          <option value="Saibaba Colony"></option><option value="Town Hall"></option><option value="RS Puram"></option>
+          <option value="Vadavalli"></option><option value="Thudiyalur"></option><option value="Saravanampatti"></option>
+          <option value="Kovilpalayam"></option><option value="Sulur"></option><option value="Pollachi"></option>
+          <option value="Mettupalayam"></option><option value="Kinathukadavu"></option><option value="Anaimalai"></option>
+          <option value="Tiruppur"></option><option value="Avinashi"></option><option value="Palladam"></option>
+          <option value="Udumalpet"></option><option value="Erode"></option><option value="Perundurai"></option>
+          <option value="Other / Type manually"></option>
+        </datalist>
+      </div>
+
       <div class="dashboard-district-notice" id="dashboard-district-notice" aria-live="polite">
         <strong>📍 Delivery available only in the districts selected in the Admin Dashboard</strong>
         <p id="dashboard-district-message">Loading the enabled delivery districts...</p>
@@ -986,7 +1032,12 @@ footer strong{color:var(--gold)}
       </div>
 
       <div class="form-group full">
-        <label for="customer-address">Delivery Address * / விநியோக முகவரி *</label>
+        <label for="customer-door-shop">Door Number / Building Name / Shop Name * / கதவு எண் / கட்டிடம் / கடை பெயர் *</label>
+        <input type="text" id="customer-door-shop" placeholder="e.g., 12A, Lakshmi Stores, 2nd Floor" autocomplete="address-line1" required>
+      </div>
+
+      <div class="form-group full">
+        <label for="customer-address">Street, Area & Full Delivery Address * / தெரு, பகுதி மற்றும் முழு முகவரி *</label>
         <textarea
           id="customer-address"
           lang="ta"
@@ -1011,7 +1062,7 @@ footer strong{color:var(--gold)}
             <button type="button" class="btn btn-gold" id="map-use-current">◎ Use Current GPS</button>
           </div>
           <div id="delivery-location-map" aria-label="Map for choosing delivery location"></div>
-          <p class="map-picker-help">Tap anywhere on the map or drag the marker to your house / delivery entrance. Then press “Confirm Pin”.</p>
+          <p class="map-picker-help">Satellite view is shown by default. Tap anywhere or drag the marker to your house, shop, or delivery entrance, then press “Confirm Pin”.</p>
           <div class="location-coordinate-text" id="map-coordinate-status">No map location selected yet.</div>
           <div class="map-picker-actions">
             <button type="button" class="btn btn-green" id="confirm-map-pin">✓ Confirm Pin Location</button>
@@ -1090,6 +1141,10 @@ footer strong{color:var(--gold)}
       <span>Offer Total</span>
       <span id="floating-cart-total">₹0.00</span>
     </div>
+    <div class="floating-cart-total" style="margin-top:0;padding-top:0;border-top:0;font-size:12px;color:#287742">
+      <span>Bulk Discount</span>
+      <span id="floating-cart-bulk-discount">−₹0.00</span>
+    </div>
     <div id="floating-cart-items">
       <p class="floating-cart-empty">Your cart is empty.</p>
     </div>
@@ -1145,6 +1200,8 @@ const SHOP_LOCATION = {
 
 const FREE_DELIVERY_KM = 10;
 const EXTRA_KM_CHARGE = 5;
+const LOCAL_FIXED_PRICE_KM = 5;
+const LOCAL_FIXED_PACK_PRICE = 50;
 const WHATSAPP_NUMBER = "919787256249";
 const BUSINESS_EMAIL = "aksfoodproducts1607@gmail.com";
 
@@ -1598,17 +1655,42 @@ async function loadShopProducts() {
   const container = document.getElementById("products-container");
 
   try {
-    if (typeof db === "undefined") {
-      throw new Error("Supabase db client not found. Check supabase.js.");
+    if (typeof db === "undefined" || !db || typeof db.from !== "function") {
+      throw new Error("Supabase client was not initialized. Check that the Supabase CDN script and supabase.js both load.");
     }
 
-    const { data, error } = await db
+    let data = null;
+    let primaryError = null;
+
+    // Preferred query: active products, newest first.
+    const primaryResult = await db
       .from("products")
       .select("*")
       .eq("is_active", true)
       .order("created_at", { ascending: false });
 
-    if (error) throw error;
+    if (!primaryResult.error) {
+      data = primaryResult.data || [];
+    } else {
+      primaryError = primaryResult.error;
+      console.warn("Primary products query failed; trying a schema-tolerant fallback:", primaryError);
+
+      // Fallback for schemas where is_active or created_at is not present.
+      const fallbackResult = await db.from("products").select("*");
+      if (fallbackResult.error) {
+        const detail = fallbackResult.error.message || String(fallbackResult.error);
+        throw new Error(`Primary query failed (${primaryError.message || primaryError}). Fallback query failed (${detail}).`);
+      }
+
+      data = fallbackResult.data || [];
+      // Respect known activity fields when the fallback query succeeds.
+      if (data.some(row => Object.prototype.hasOwnProperty.call(row, "is_active"))) {
+        data = data.filter(row => row.is_active === true);
+      } else if (data.some(row => Object.prototype.hasOwnProperty.call(row, "active"))) {
+        data = data.filter(row => row.active === true);
+      }
+      console.warn("Products loaded using fallback query. Review products table columns and active status fields.");
+    }
 
     products = (data || []).map(row => {
   const originalPrice = Number(
@@ -1659,9 +1741,13 @@ async function loadShopProducts() {
 
   } catch (error) {
     console.error("Product loading error:", error);
-
-    container.innerHTML =
-      '<p class="error-message">Unable to load products. Check your Supabase connection and products table.</p>';
+    const detail = error?.message || String(error);
+    container.innerHTML = `
+      <div class="error-message">
+        <strong>Unable to load products.</strong>
+        <p style="margin-top:8px;font-size:12px;overflow-wrap:anywhere">${escapeHTML(detail)}</p>
+        <p style="margin-top:8px;font-size:12px">Open the browser Console (F12) for more details, or verify Supabase table permissions.</p>
+      </div>`;
   }
 }
 
@@ -1747,6 +1833,30 @@ function getVisibleProductEntries() {
       return Number(bSpecial) - Number(aSpecial);
     });
 }
+function isLocalFixedPriceActive() {
+  return Number.isFinite(deliveryDistance) && deliveryDistance <= LOCAL_FIXED_PRICE_KM;
+}
+
+function getBaseProductPrice(size) {
+  return Number(size.offer_price > 0 && size.offer_price < size.original_price
+    ? size.offer_price : size.price);
+}
+
+function getEffectiveProductPrice(size) {
+  return isLocalFixedPriceActive() ? LOCAL_FIXED_PACK_PRICE : getBaseProductPrice(size);
+}
+
+function updateCartPricesForDistance() {
+  cart.forEach(item => {
+    const product = products.find(p => String(p.id) === String(item.productId));
+    if (!product || !product.sizes?.[0]) return;
+    const size = product.sizes[0];
+    item.price = getEffectiveProductPrice(size);
+    item.originalPrice = Number(size.original_price || size.price || 0);
+    item.localPriceApplied = isLocalFixedPriceActive();
+  });
+}
+
 /* =========================================================
    8. PRODUCT DISPLAY
 ========================================================= */
@@ -1830,11 +1940,20 @@ function renderShopProducts() {
       ? `<span class="product-stock-badge">OUT OF STOCK</span>`
       : "";
 
-    const offerBadge = hasOffer
+    // Initialize local pricing state before any render logic reads it.
+    const localPriceActive = isLocalFixedPriceActive();
+
+    const offerBadge = localPriceActive
+      ? `<span class="offer-badge">📍 ₹50 LOCAL PRICE</span>`
+      : hasOffer
       ? `<span class="offer-badge">🔥 OFFER PRICE</span>`
       : "";
 
-    const priceMarkup = hasOffer
+    const priceMarkup = localPriceActive
+      ? `<span class="offer-price">₹${LOCAL_FIXED_PACK_PRICE.toFixed(2)}</span>
+         <span class="price-saving local-price-label">Local price within ${LOCAL_FIXED_PRICE_KM} km</span>
+         <small>/ ${escapeHTML(size.label)}</small>`
+      : hasOffer
       ? `<span class="product-original-price">₹${originalPrice.toFixed(2)}</span>
          <span class="offer-price">₹${price.toFixed(2)}</span>
          <span class="price-saving">Save ₹${saving.toFixed(2)}</span>
@@ -1920,12 +2039,9 @@ function addProductToCart(index, quantity) {
     productId: product.id,
     name: product.name,
     pack: size.label,
-    price: Number(
-      size.offer_price > 0 && size.offer_price < size.original_price
-        ? size.offer_price
-        : size.price
-    ),
+    price: getEffectiveProductPrice(size),
     originalPrice: Number(size.original_price || size.price || 0),
+    localPriceApplied: isLocalFixedPriceActive(),
     quantity: next
   });
 
@@ -1983,29 +2099,50 @@ function updateProductBadges() {
    11. CART DISPLAY
 ========================================================= */
 
+function getBulkDiscountForItem(item) {
+  return item.quantity >= 5 ? 5 * item.quantity : 0;
+}
+
+function getBulkDiscountTotal() {
+  let savings = 0;
+  cart.forEach(item => { savings += getBulkDiscountForItem(item); });
+  return savings;
+}
+
+function getCartSubtotalBeforeBulkDiscount() {
+  let subtotal = 0;
+  cart.forEach(item => { subtotal += item.price * item.quantity; });
+  return subtotal;
+}
+
 function renderCart() {
   const target = document.getElementById("cart-items");
 
   let subtotal = 0;
   let count = 0;
+  let bulkDiscount = 0;
 
   if (!cart.size) {
-    target.innerHTML =
-      '<p class="cart-empty">Your cart is empty.</p>';
+    target.innerHTML = '<p class="cart-empty">Your cart is empty.</p>';
   } else {
     let html = "";
 
     cart.forEach((item, key) => {
-      const amount = item.price * item.quantity;
+      const grossAmount = item.price * item.quantity;
+      const itemDiscount = getBulkDiscountForItem(item);
+      const amount = grossAmount - itemDiscount;
 
-      subtotal += amount;
+      subtotal += grossAmount;
+      bulkDiscount += itemDiscount;
       count += item.quantity;
 
       html += `
         <div class="cart-item">
           <div class="cart-item-info">
             <strong>${escapeHTML(item.name)}</strong>
-            <small>${escapeHTML(item.pack)} × ${item.quantity} — ₹${amount.toFixed(2)}</small>
+            <small>${escapeHTML(item.pack)} × ${item.quantity} — ₹${grossAmount.toFixed(2)}</small>
+            ${itemDiscount ? `<small class="cart-bulk-saving">Bulk savings: −₹${itemDiscount.toFixed(2)} (₹5 off each pack)</small>` : item.quantity === 4 ? `<small class="cart-bulk-saving">Add 1 more pack to unlock ₹5 off each pack!</small>` : ""}
+            ${itemDiscount ? `<small>After bulk discount: ₹${amount.toFixed(2)}</small>` : ""}
           </div>
           <div class="cart-item-actions">
             <button onclick="changeCartQuantity('${encodeURIComponent(key)}',-1)">−</button>
@@ -2020,19 +2157,17 @@ function renderCart() {
     target.innerHTML = html;
   }
 
-  const total = subtotal + deliveryCharge;
+  const total = subtotal - bulkDiscount + deliveryCharge;
 
   document.getElementById("cart-subtotal").textContent =
     "₹" + subtotal.toFixed(2);
-
+  const bulkEl = document.getElementById("bulk-discount-total");
+  if (bulkEl) bulkEl.textContent = "−₹" + bulkDiscount.toFixed(2);
   document.getElementById("delivery-charge").textContent =
     "₹" + deliveryCharge.toFixed(2);
-
   document.getElementById("cart-total").textContent =
     "₹" + total.toFixed(2);
-
   document.getElementById("cart-count").textContent = count;
-
   document.getElementById("floating-cart-count").textContent = count;
 
   renderFloatingCart(total);
@@ -2111,20 +2246,24 @@ function clearCart() {
 
 function renderFloatingCart(total) {
   const list = document.getElementById("floating-cart-items");
+  let bulkDiscount = 0;
 
   if (!cart.size) {
-    list.innerHTML =
-      '<p class="floating-cart-empty">Your cart is empty.</p>';
+    list.innerHTML = '<p class="floating-cart-empty">Your cart is empty.</p>';
   } else {
     let html = "";
 
     cart.forEach((item, key) => {
+      const itemDiscount = getBulkDiscountForItem(item);
+      const grossAmount = item.price * item.quantity;
+      bulkDiscount += itemDiscount;
       html += `
         <div class="floating-cart-line">
           <div class="floating-cart-line-info">
             <strong>${escapeHTML(item.name)}</strong>
             <small>${escapeHTML(item.pack)} · ₹${item.price.toFixed(2)} each${item.originalPrice > item.price ? ` <span class="original-price floating-original-price">₹${item.originalPrice.toFixed(2)}</span>` : ""}</small>
-            <small>Amount: ₹${(item.price * item.quantity).toFixed(2)}</small>
+            <small>Amount: ₹${(grossAmount - itemDiscount).toFixed(2)}${itemDiscount ? ` <span class="floating-bulk-saving">(save ₹${itemDiscount.toFixed(2)})</span>` : ""}</small>
+            ${item.quantity === 4 ? `<small class="floating-bulk-saving">Add 1 more for bulk savings!</small>` : item.quantity >= 5 ? `<small class="floating-bulk-saving">₹5 off each pack applied</small>` : ""}
           </div>
           <div class="floating-cart-line-actions">
             <button onclick="changeCartQuantity('${encodeURIComponent(key)}',-1)">−</button>
@@ -2138,6 +2277,8 @@ function renderFloatingCart(total) {
     list.innerHTML = html;
   }
 
+  const discountLine = document.getElementById("floating-cart-bulk-discount");
+  if (discountLine) discountLine.textContent = "−₹" + bulkDiscount.toFixed(2);
   document.getElementById("floating-cart-total").textContent =
     "₹" + Number(total || 0).toFixed(2);
 }
@@ -2559,6 +2700,14 @@ async function fillCustomerAddressFromLocation(latitude, longitude) {
     ].filter(Boolean);
 
     const resolved = parts.length ? parts.join(", ") : (data.display_name || "");
+    const talukField = document.getElementById("customer-taluk");
+    const postField = document.getElementById("customer-post");
+    if (talukField && !talukField.value.trim()) {
+      talukField.value = a.subdistrict || a.taluk || a.county || "";
+    }
+    if (postField && !postField.value.trim()) {
+      postField.value = a.post_office || a.post_office_name || a.postcode || "";
+    }
     if (resolved) {
       field.value = resolved;
       lastSyncedAddress = resolved;
@@ -2578,9 +2727,11 @@ async function syncCoordinatesFromEditedAddress() {
   const field = document.getElementById("customer-address");
   const status = document.getElementById("address-status");
   const address = field.value.trim();
+  const doorShop = document.getElementById("customer-door-shop").value.trim();
+  const geocodeAddress = [doorShop, address].filter(Boolean).join(", ");
 
-  if (!address) {
-    status.textContent = "Please enter your delivery address first.";
+  if (!address || !doorShop) {
+    status.textContent = "Please enter your door / shop name and full delivery address first.";
     return false;
   }
   if (addressSyncInProgress) return false;
@@ -2595,7 +2746,7 @@ async function syncCoordinatesFromEditedAddress() {
 
   try {
     const url = "https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&addressdetails=1&countrycodes=in&q=" +
-      encodeURIComponent(address);
+      encodeURIComponent(geocodeAddress);
     const response = await fetch(url, { headers: { "Accept": "application/json" } });
     if (!response.ok) throw new Error("Address coordinate lookup failed.");
     const results = await response.json();
@@ -2653,17 +2804,23 @@ async function applyCustomerCoordinates(latitude, longitude, options = {}) {
   deliveryDistance = calculateDistance(
     SHOP_LOCATION.latitude, SHOP_LOCATION.longitude, lat, lon
   );
+  updateCartPricesForDistance();
+  renderShopProducts();
+
   if (deliveryDistance <= FREE_DELIVERY_KM) {
     deliveryCharge = 0;
     document.getElementById("delivery-note").textContent =
       "You are approximately " + deliveryDistance.toFixed(1) +
-      " km from our shop. Free delivery applies within " + FREE_DELIVERY_KM + " km.";
+      " km from our shop. " + (deliveryDistance <= LOCAL_FIXED_PRICE_KM
+        ? "Local product price: ₹50 per pack within " + LOCAL_FIXED_PRICE_KM + " km. "
+        : "Free delivery applies within " + FREE_DELIVERY_KM + " km. ") +
+      "Delivery charge: ₹0.";
   } else {
     const extra = Math.ceil(deliveryDistance - FREE_DELIVERY_KM);
     deliveryCharge = extra * EXTRA_KM_CHARGE;
     document.getElementById("delivery-note").textContent =
       "You are approximately " + deliveryDistance.toFixed(1) +
-      " km from our shop. Estimated delivery charge: ₹" + deliveryCharge +
+      " km from our shop. Product prices are unchanged. Estimated delivery charge: ₹" + deliveryCharge +
       " (₹" + EXTRA_KM_CHARGE + " per additional km beyond " + FREE_DELIVERY_KM + " km).";
   }
 
@@ -2702,11 +2859,22 @@ function openDeliveryMap() {
 
   if (!mapPicker) {
     mapPicker = L.map("delivery-location-map").setView(
-      [pendingMapCoordinates.latitude, pendingMapCoordinates.longitude], 16
+      [pendingMapCoordinates.latitude, pendingMapCoordinates.longitude], 18
     );
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      maxZoom: 19,
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    // Default map layer: satellite imagery (Esri World Imagery).
+    L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
+      maxZoom: 20,
+      attribution: 'Tiles &copy; Esri — Source: Esri, Maxar, Earthstar Geographics, and the GIS User Community'
+    }).addTo(mapPicker);
+    // Overlay street/transportation labels on the satellite imagery.
+    L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}", {
+      maxZoom: 20, opacity: 0.95,
+      attribution: 'Transportation labels &copy; Esri'
+    }).addTo(mapPicker);
+    // Add place, locality, boundary and other geographic names too (hybrid satellite + labels).
+    L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}", {
+      maxZoom: 20, opacity: 1,
+      attribution: 'Place labels &copy; Esri'
     }).addTo(mapPicker);
 
     mapMarker = L.marker(
@@ -2721,7 +2889,7 @@ function openDeliveryMap() {
     });
   } else {
     mapMarker.setLatLng([pendingMapCoordinates.latitude, pendingMapCoordinates.longitude]);
-    mapPicker.setView([pendingMapCoordinates.latitude, pendingMapCoordinates.longitude], 17);
+    mapPicker.setView([pendingMapCoordinates.latitude, pendingMapCoordinates.longitude], 18);
   }
 
   document.getElementById("map-coordinate-status").textContent =
@@ -2772,7 +2940,7 @@ document.getElementById("map-use-current").addEventListener("click", () => {
   navigator.geolocation.getCurrentPosition(position => {
     const lat = position.coords.latitude, lon = position.coords.longitude;
     setPendingMapPin(lat, lon);
-    if (mapPicker) mapPicker.setView([lat, lon], 18);
+    if (mapPicker) mapPicker.setView([lat, lon], 19);
   }, () => alert("Could not get your current GPS location. Please move the pin manually."),
   { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 });
 });
@@ -2954,7 +3122,15 @@ function getOrderDetails() {
     phone: document.getElementById("customer-phone").value.trim(),
     email: document.getElementById("customer-email").value.trim(),
     district: document.getElementById("customer-district").value.trim(),
-    address: document.getElementById("customer-address").value.trim(),
+    taluk: document.getElementById("customer-taluk").value.trim(),
+    post: document.getElementById("customer-post").value.trim(),
+    address: [
+      document.getElementById("customer-door-shop").value.trim(),
+      document.getElementById("customer-address").value.trim(),
+      "Post: " + document.getElementById("customer-post").value.trim(),
+      "Taluk: " + document.getElementById("customer-taluk").value.trim(),
+      "District: " + document.getElementById("customer-district").value.trim()
+    ].filter(Boolean).join(", "),
     notes: document.getElementById("customer-notes").value.trim()
   };
 
@@ -2962,7 +3138,10 @@ function getOrderDetails() {
     !customer.name ||
     !customer.phone ||
     !customer.district ||
-    !customer.address
+    !document.getElementById("customer-door-shop").value.trim() ||
+    !document.getElementById("customer-taluk").value.trim() ||
+    !document.getElementById("customer-post").value.trim() ||
+    !document.getElementById("customer-address").value.trim()
   ) {
     alert(
       "Please complete all required fields. / தேவையான விவரங்களை நிரப்பவும்."
@@ -2984,7 +3163,12 @@ function getOrderDetails() {
 
   const items = Array.from(cart.values()).map(item => ({
     product_id: Number(item.productId),
-    quantity: Number(item.quantity)
+    quantity: Number(item.quantity),
+    bulk_discount_per_pack: item.quantity >= 5 ? 5 : 0,
+    bulk_discount_total: item.quantity >= 5 ? 5 * item.quantity : 0,
+    unit_price_override: item.localPriceApplied ? LOCAL_FIXED_PACK_PRICE : null,
+    local_price_applied: Boolean(item.localPriceApplied),
+    delivery_distance_km: Number.isFinite(deliveryDistance) ? Number(deliveryDistance.toFixed(3)) : null
   }));
 
   if (items.some(item =>
@@ -3147,7 +3331,12 @@ async function placeOrder(channel) {
         p_items: order.items,
         p_delivery_fee: order.deliveryFee,
         p_customer_email: order.customer.email || null,
-        p_customer_notes: order.customer.notes || null
+        p_customer_notes: [
+          order.customer.notes || "",
+          Array.from(cart.values()).some(item => item.quantity >= 5)
+            ? "Bulk discount preview: quantities of 5 or more packs per product qualify for ₹5 off per pack. Please apply bulk discount in order pricing."
+            : ""
+        ].filter(Boolean).join("\n") || null
       }
     );
 
