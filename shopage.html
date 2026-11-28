@@ -537,12 +537,12 @@ nav a:hover{color:var(--gold)}
 .map-picker-panel.open{display:block}
 .map-picker-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px}
 .map-picker-heading strong{color:var(--green)}
-#delivery-location-map{width:100%;height:460px;border-radius:9px;z-index:1;background:#eef1e9}
+#delivery-location-map{width:100%;height:540px;border-radius:9px;z-index:1;background:#eef1e9}
 .map-picker-help{font-size:12px;color:var(--muted);margin:8px 0}
 .map-picker-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:10px}
 .map-picker-actions button{flex:1;min-width:150px}
 .location-coordinate-text{font-size:11px;color:var(--muted);overflow-wrap:anywhere;margin-top:4px}
-@media(max-width:600px){#delivery-location-map{height:380px}.map-picker-panel{padding:10px}}
+@media(max-width:600px){#delivery-location-map{height:460px}.map-picker-panel{padding:10px}}
 
 /* FOOTER */
 footer{
@@ -2842,46 +2842,37 @@ async function applyCustomerCoordinates(latitude, longitude, options = {}) {
   renderCart();
 }
 
-/* Leaflet map is initialized only when the customer opens the picker. */
+/* Interactive delivery map — initialize after panel is visible, then resize. */
 function openDeliveryMap() {
   if (typeof L === "undefined") {
-    alert("The map could not be loaded. Please check your internet connection and try again.");
+    alert("Map library failed to load. Please check your internet connection and refresh.");
     return;
   }
   const panel = document.getElementById("map-picker-panel");
   panel.classList.add("open");
 
   const initial = customerGPSLocation || { latitude: SHOP_LOCATION.latitude, longitude: SHOP_LOCATION.longitude };
-  pendingMapCoordinates = {
-    latitude: Number(initial.latitude),
-    longitude: Number(initial.longitude)
-  };
+  pendingMapCoordinates = { latitude: Number(initial.latitude), longitude: Number(initial.longitude) };
 
   if (!mapPicker) {
-    mapPicker = L.map("delivery-location-map").setView(
-      [pendingMapCoordinates.latitude, pendingMapCoordinates.longitude], 18
-    );
-    // Default map layer: satellite imagery (Esri World Imagery).
-    L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
-      maxZoom: 20,
-      attribution: 'Tiles &copy; Esri — Source: Esri, Maxar, Earthstar Geographics, and the GIS User Community'
-    }).addTo(mapPicker);
-    // Overlay street/transportation labels on the satellite imagery.
-    L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}", {
-      maxZoom: 20, opacity: 0.95,
-      attribution: 'Transportation labels &copy; Esri'
-    }).addTo(mapPicker);
-    // Add place, locality, boundary and other geographic names too (hybrid satellite + labels).
-    L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}", {
-      maxZoom: 20, opacity: 1,
-      attribution: 'Place labels &copy; Esri'
-    }).addTo(mapPicker);
+    mapPicker = L.map("delivery-location-map", { zoomControl: true, preferCanvas: true })
+      .setView([pendingMapCoordinates.latitude, pendingMapCoordinates.longitude], 14);
 
-    mapMarker = L.marker(
-      [pendingMapCoordinates.latitude, pendingMapCoordinates.longitude],
-      { draggable: true }
-    ).addTo(mapPicker);
+    const satellite = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
+      maxZoom: 19, attribution: "Tiles © Esri"
+    });
+    const street = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19, attribution: "© OpenStreetMap contributors"
+    });
+    // Satellite + geographic labels/roads overlay, closer to the original Google Maps Hybrid screenshot.
+    const labels = L.tileLayer("https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Reference_Overlay/MapServer/tile/{z}/{y}/{x}", {
+      maxZoom: 19, opacity: 1, attribution: "Labels and roads © Esri"
+    });
+    satellite.addTo(mapPicker);
+    labels.addTo(mapPicker);
+    L.control.layers({ "Satellite (labels)": satellite, "Road map": street }, { "Village / road labels": labels }, { collapsed: false }).addTo(mapPicker);
 
+    mapMarker = L.marker([pendingMapCoordinates.latitude, pendingMapCoordinates.longitude], { draggable: true }).addTo(mapPicker);
     mapPicker.on("click", event => setPendingMapPin(event.latlng.lat, event.latlng.lng));
     mapMarker.on("dragend", event => {
       const point = event.target.getLatLng();
@@ -2889,12 +2880,16 @@ function openDeliveryMap() {
     });
   } else {
     mapMarker.setLatLng([pendingMapCoordinates.latitude, pendingMapCoordinates.longitude]);
-    mapPicker.setView([pendingMapCoordinates.latitude, pendingMapCoordinates.longitude], 18);
+    mapPicker.setView([pendingMapCoordinates.latitude, pendingMapCoordinates.longitude], 14);
   }
 
-  document.getElementById("map-coordinate-status").textContent =
-    "Move the pin to your delivery entrance, then confirm it.";
-  setTimeout(() => mapPicker.invalidateSize(), 100);
+  document.getElementById("map-coordinate-status").textContent = "Move the pin to your delivery entrance, then confirm it.";
+  // Map dimensions are often zero while the expandable panel is hidden; recalculate after display.
+  requestAnimationFrame(() => {
+    mapPicker.invalidateSize(true);
+    mapPicker.setView([pendingMapCoordinates.latitude, pendingMapCoordinates.longitude], 14);
+    setTimeout(() => mapPicker && mapPicker.invalidateSize(true), 300);
+  });
 }
 
 function setPendingMapPin(latitude, longitude) {
