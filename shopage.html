@@ -213,6 +213,88 @@ nav a:hover{color:var(--gold)}
   border-radius:20px;padding:5px 10px;
   font-size:12px;font-weight:700;display:none
 }
+
+/* STOCK + OFFER BADGES */
+.product-stock-badge{
+  position:absolute;
+  top:12px;
+  left:12px;
+  z-index:2;
+  padding:7px 12px;
+  border-radius:20px;
+  background:#b83232;
+  color:#fff;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.3px;
+  box-shadow:0 4px 12px #b8323240;
+}
+.product-image.out-of-stock img{
+  filter:grayscale(55%) brightness(.72);
+}
+
+/* Offer label sits at the top of the product image; prices stay in product-info */
+.product-image .offer-badge{
+  position:absolute;top:12px;right:12px;z-index:3;margin:0;
+  box-shadow:0 3px 12px rgba(0,0,0,.14);
+}
+.offer-badge{
+  display:inline-flex;
+  align-items:center;
+  width:fit-content;
+  margin-bottom:6px;
+  padding:5px 10px;
+  border-radius:18px;
+  background:#eaf7ed;
+  color:#1d6b3b;
+  border:1px solid #c6e2cc;
+  font-size:11px;
+  font-weight:800;
+}
+.original-price{
+  color:#8a8f8a;
+  font-size:14px;
+  font-weight:600;
+  text-decoration:line-through;
+  text-decoration-thickness:2px;
+  text-decoration-color:#b83232;
+}
+.offer-price{
+  color:var(--green) !important;
+  font-size:22px;
+  font-weight:800;
+}
+/* Original price: diagonal strike */
+.product-original-price{
+  position:relative;
+  display:inline-block;
+  color:#8a8f8a;
+  font-size:14px;
+  font-weight:600;
+  white-space:nowrap;
+}
+.product-original-price::after{
+  content:"";
+  position:absolute;
+  left:-2%;
+  right:-2%;
+  top:50%;
+  height:1.5px;
+  background:#b83232;
+  transform:rotate(-22deg);
+  transform-origin:center;
+  pointer-events:none;
+}
+.price-saving{
+  color:#1d6b3b;
+  font-size:11px;
+  font-weight:700;
+}
+.product-price.offer-active{
+  align-items:baseline;
+  gap:7px;
+}
+.product-price-top{margin:0 0 9px;min-height:30px;flex-wrap:wrap;}
 .product-info{
   display:flex;
   flex-direction:column;
@@ -482,8 +564,8 @@ footer strong{color:var(--gold)}
   user-select:none;white-space:nowrap
 }
 .floating-cart-panel{
-  position:absolute;right:0;bottom:calc(100% + 12px);
-  width:min(360px,calc(100vw - 32px));
+  position:fixed;left:0;top:0;right:auto;bottom:auto;
+  width:min(360px,calc(100vw - 24px));
   max-height:min(65vh,520px);overflow-y:auto;
   background:#fff;color:var(--text);border:1px solid var(--border);
   border-radius:14px;box-shadow:0 10px 35px #0003;
@@ -502,6 +584,8 @@ footer strong{color:var(--gold)}
 }
 .floating-cart-line-info strong{color:var(--green)}
 .floating-cart-line-info small{color:var(--muted)}
+.floating-original-price{font-size:11px;margin-left:4px;text-decoration-thickness:1px;text-decoration-color:#b8b8b8;color:#8a8f8a!important;opacity:.85}
+.floating-cart-total-top{margin:0 0 8px;padding:0 0 10px;border-top:0;border-bottom:1px solid var(--border)}
 .floating-cart-line-actions{
   display:flex;align-items:center;gap:5px;flex-shrink:0
 }
@@ -651,6 +735,95 @@ footer strong{color:var(--gold)}
   color: #a87513;
 }
 
+/* Special-category offer prices retain their gold override; normal offers stay green */
+.special-product .offer-price{color:#a87513 !important;}
+
+
+/* =========================================================
+   PROFESSIONAL CART REFRESH — AKS ORGANIC PREMIUM STYLE
+   Visual-only overrides; cart logic and product pricing unchanged.
+========================================================= */
+.cart-section{background:linear-gradient(180deg,#f5f6ef 0%,#fffaf1 100%)}
+.cart-section .section-heading h2{color:var(--green);letter-spacing:-.4px}
+.cart-section .content-box{
+  max-width:1000px;padding:clamp(18px,3vw,34px);border:1px solid #e8ecdf;
+  border-radius:22px;box-shadow:0 12px 34px #183d2510
+}
+#cart-items{display:flex;flex-direction:column;gap:0}
+.cart-empty{padding:38px 15px;color:#7b887d;font-size:14px}
+.cart-item{
+  padding:20px 4px;gap:20px;border-bottom:1px solid #edf0e8;
+  transition:background .2s ease
+}
+.cart-item:last-child{border-bottom:0}
+.cart-item-info{flex:1;min-width:0}
+.cart-item-info strong{font-size:15px;line-height:1.4;color:#19452e;font-weight:700}
+.cart-item-info small{display:block;margin-top:5px;font-size:12px;color:#788378}
+.cart-item-actions{gap:7px;flex-shrink:0}
+.cart-item-actions button{
+  min-width:34px;min-height:34px;border:1px solid #e1e9de;border-radius:9px;
+  padding:5px 10px;background:#f3f7f0;color:#214c32;font-weight:700;
+  transition:transform .15s,background .15s,border-color .15s
+}
+.cart-item-actions button:hover{background:#e5efe2;border-color:#c9dcc7;transform:translateY(-1px)}
+.cart-item-actions strong{min-width:22px;text-align:center;color:#2d3c30;font-size:14px}
+.cart-item-actions .remove-item{min-width:auto;border:0!important;background:#fff4f2!important;
+  color:#b24b43!important;padding:7px 11px!important;font-size:12px;font-weight:600}
+.cart-item-actions .remove-item:hover{background:#ffe8e4!important}
+.cart-summary{
+  max-width:420px;margin:22px 0 0 auto;padding:20px 22px;
+  background:#fafbf7;border:1px solid #e9eee5;border-radius:16px
+}
+.summary-row{padding:8px 0;font-size:14px;color:#59675d}
+.summary-row strong{color:#26382c;font-weight:700}
+.summary-total{margin-top:8px;padding-top:15px;border-top:1px dashed #d7dfd3;
+  font-size:18px;color:var(--green)}
+.summary-total strong{color:var(--green);font-size:21px}
+.delivery-note{border:1px solid #e7eddf;background:#f5f8f1;color:#607064;
+  padding:13px 15px;border-radius:12px;font-size:12px;line-height:1.55}
+.cart-buttons{gap:12px;margin-top:20px}
+.cart-buttons .clear-btn{border-radius:10px;padding:11px 17px;background:#fff;
+  font-weight:700;font-size:12px;transition:background .2s}
+.cart-buttons .clear-btn:hover{background:#fff5f4}
+.cart-buttons .btn-green{border-radius:10px;padding:12px 20px;min-height:43px;
+  box-shadow:0 5px 12px #17452e20;transition:transform .2s,box-shadow .2s}
+.cart-buttons .btn-green:hover{transform:translateY(-1px);box-shadow:0 8px 17px #17452e25}
+/* Mini-cart panel */
+.floating-cart{border:1px solid #e6c77f;background:linear-gradient(135deg,#e2b65f,#d4a044);
+  box-shadow:0 9px 26px #16352230;padding:13px 19px;letter-spacing:.1px;
+  transition:box-shadow .2s,transform .2s}
+.floating-cart:hover{box-shadow:0 12px 30px #16352240;transform:translateY(-1px)}
+.floating-cart-panel{border:1px solid #e5ebdf;border-radius:18px;padding:18px;
+  box-shadow:0 20px 55px #10291d30;background:#fffdf9;backdrop-filter:blur(8px)}
+.floating-cart-panel h3{font-size:17px;font-weight:700;margin-bottom:12px;color:var(--green)}
+.floating-cart-total-top{padding:12px 0 13px;margin-bottom:6px;border-bottom:1px solid #e8eee4;
+  color:#617064;font-size:13px;font-weight:600}
+.floating-cart-total-top span:last-child{font-size:17px;color:var(--green);font-weight:800}
+.floating-cart-line{padding:13px 0;border-bottom:1px solid #edf0e8;align-items:center}
+.floating-cart-line-info strong{font-size:13px;line-height:1.4}
+.floating-cart-line-info small{font-size:11px;color:#778279;margin-top:3px}
+.floating-cart-line-actions button{width:28px;height:28px;padding:2px;border-radius:8px;
+  border:1px solid #e1e9de;background:#f3f7f0;font-weight:700}
+.floating-cart-line-actions strong{min-width:18px;text-align:center;font-size:12px}
+.floating-cart-total{margin-top:14px;padding-top:13px;border-top:1px dashed #d8e1d4;font-size:14px}
+.floating-cart-total span:last-child{font-size:17px}
+.floating-cart-panel-buttons{gap:9px;margin-top:15px}
+.floating-cart-panel-buttons a,.floating-cart-panel-buttons button{padding:11px 12px;border-radius:10px;font-size:12px}
+.floating-cart-view{border:1px solid #dce7d9!important;background:#f1f6ed!important}
+.floating-cart-checkout{box-shadow:0 4px 12px #17452e22}
+@media(max-width:600px){
+  .cart-section .content-box{padding:17px;border-radius:17px}
+  .cart-item{gap:12px;padding:17px 0}
+  .cart-item-actions{width:100%;display:flex;align-items:center;flex-wrap:wrap;gap:7px}
+  .cart-item-actions button{min-width:32px;min-height:33px}
+  .cart-item-actions .remove-item{margin-left:auto}
+  .cart-summary{max-width:none;margin-top:17px;padding:16px}
+  .summary-total strong{font-size:19px}
+  .cart-buttons{display:grid;grid-template-columns:1fr;gap:9px}
+  .cart-buttons .clear-btn,.cart-buttons .btn-green{width:100%;text-align:center;justify-content:center}
+  .floating-cart-panel{padding:15px;border-radius:16px}
+}
+
 </style>
 </head>
 
@@ -667,9 +840,7 @@ footer strong{color:var(--gold)}
 
   <nav>
     <a href="index.html">Home</a>
-    <a href="#products">Our Products</a>
     <a href="#cart" class="cart-nav">My Cart (<span id="cart-count">0</span>)</a>
-    <a href="#checkout">Place Order</a>
     <a href="my-orders.html">My Orders</a>
     <a href="track-order.html">Track Order</a>
   </nav>
@@ -915,12 +1086,12 @@ footer strong{color:var(--gold)}
 <div class="floating-cart-widget" id="floating-cart-widget">
   <div class="floating-cart-panel" id="floating-cart-panel" aria-hidden="true">
     <h3>🛒 Your Cart</h3>
+    <div class="floating-cart-total floating-cart-total-top">
+      <span>Offer Total</span>
+      <span id="floating-cart-total">₹0.00</span>
+    </div>
     <div id="floating-cart-items">
       <p class="floating-cart-empty">Your cart is empty.</p>
-    </div>
-    <div class="floating-cart-total">
-      <span>Total</span>
-      <span id="floating-cart-total">₹0.00</span>
     </div>
     <div class="floating-cart-panel-buttons">
       <button type="button" class="floating-cart-view" onclick="goToCart()">Full Cart</button>
@@ -1439,18 +1610,37 @@ async function loadShopProducts() {
 
     if (error) throw error;
 
-    products = (data || []).map(row => ({
-      id: row.id,
-      name: row.name || "Unnamed Product",
-      description: row.description || "",
-      category: row.category || "",
-      image_url: row.image_url || "",
-      stock_quantity: Number(row.stock_quantity || 0),
-      sizes: [{
-        label: row.pack_size || "Standard pack",
-        price: Number(row.price || 0)
-      }]
-    }));
+    products = (data || []).map(row => {
+  const originalPrice = Number(
+    row.price ?? row.original_price ?? 0
+  );
+
+  const offerPrice = Number(
+    row.offer_price ?? row.sale_price ?? row.discount_price ?? 0
+  );
+
+  const hasOffer =
+    offerPrice > 0 &&
+    originalPrice > 0 &&
+    offerPrice < originalPrice;
+
+  return {
+    id: row.id,
+    name: row.name || "Unnamed Product",
+    description: row.description || "",
+    category: row.category || "",
+    image_url: row.image_url || "",
+    stock_quantity: Number(row.stock_quantity || 0),
+
+    sizes: [{
+      label: row.pack_size || "Standard pack",
+
+      price: hasOffer ? offerPrice : originalPrice,
+      original_price: originalPrice,
+      offer_price: hasOffer ? offerPrice : 0
+    }]
+  };
+});
 
     selectedQuantities = {};
 
@@ -1583,9 +1773,27 @@ function renderShopProducts() {
 
   container.innerHTML = entries.map(({ product, index }) => {
     const size = product.sizes[0];
-    const price = Number(size.price || 0);
+
+    const rawOriginalPrice = Number(
+      size.original_price || size.price || 0
+    );
+
+    const rawOfferPrice = Number(
+      size.offer_price || 0
+    );
+
+    const hasOffer =
+      rawOfferPrice > 0 &&
+      rawOriginalPrice > 0 &&
+      rawOfferPrice < rawOriginalPrice;
+
+    const price = hasOffer ? rawOfferPrice : rawOriginalPrice;
+    const originalPrice = hasOffer ? rawOriginalPrice : 0;
+    const saving = hasOffer ? rawOriginalPrice - rawOfferPrice : 0;
+
     const stock = Number(product.stock_quantity || 0);
     const quantity = selectedQuantities[index] || 0;
+    const isOutOfStock = stock <= 0;
 
     const image = product.image_url
       ? `<img src="${escapeHTML(product.image_url)}"
@@ -1597,13 +1805,13 @@ function renderShopProducts() {
     const controls = orderingAllowed
       ? `<div class="product-actions">
            <div class="quantity-selector">
-             <button type="button" onclick="changeSelectedQty(${index},-1)" ${stock <= 0 ? "disabled" : ""}>−</button>
+             <button type="button" onclick="changeSelectedQty(${index},-1)" ${isOutOfStock ? "disabled" : ""}>−</button>
              <span id="qty-${index}">${quantity}</span>
-             <button type="button" onclick="changeSelectedQty(${index},1)" ${stock <= 0 ? "disabled" : ""}>+</button>
+             <button type="button" onclick="changeSelectedQty(${index},1)" ${isOutOfStock ? "disabled" : ""}>+</button>
            </div>
            <button class="btn btn-gold" type="button"
-             onclick="orderSelectedNow(${index})" ${stock <= 0 ? "disabled" : ""}>
-             Order Now
+             onclick="orderSelectedNow(${index})" ${isOutOfStock ? "disabled" : ""}>
+             ${isOutOfStock ? "Out of Stock" : "Order Now"}
            </button>
          </div>`
       : `<div class="district-restriction pending">
@@ -1612,28 +1820,43 @@ function renderShopProducts() {
 
     const categoryName = String(product.category || "").trim();
 
-const isSpecialCategory = /\bspecial\b/i.test(categoryName);
+    const isSpecialCategory = /\bspecial\b/i.test(categoryName);
 
-const specialBadge = isSpecialCategory
-  ? `<span class="special-category-badge">★ ${escapeHTML(categoryName)}</span>`
-  : "";
+    const specialBadge = isSpecialCategory
+      ? `<span class="special-category-badge">★ ${escapeHTML(categoryName)}</span>`
+      : "";
 
-return `
+    const stockBadge = isOutOfStock
+      ? `<span class="product-stock-badge">OUT OF STOCK</span>`
+      : "";
+
+    const offerBadge = hasOffer
+      ? `<span class="offer-badge">🔥 OFFER PRICE</span>`
+      : "";
+
+    const priceMarkup = hasOffer
+      ? `<span class="product-original-price">₹${originalPrice.toFixed(2)}</span>
+         <span class="offer-price">₹${price.toFixed(2)}</span>
+         <span class="price-saving">Save ₹${saving.toFixed(2)}</span>
+         <small>/ ${escapeHTML(size.label)}</small>`
+      : `₹${price.toFixed(2)}
+         <small>/ ${escapeHTML(size.label)}</small>`;
+
+    return `
       <article class="product ${isSpecialCategory ? "special-product" : ""}">
-        <div class="product-image">
+        <div class="product-image ${isOutOfStock ? "out-of-stock" : ""}">
           ${image}
+          ${stockBadge}
           <span class="product-quantity-badge" id="badge-${index}"></span>
+          ${offerBadge}
         </div>
         <div class="product-info">
-         ${specialBadge}
-<h3>${escapeHTML(product.name)}</h3>
+          ${specialBadge}
+          <h3>${escapeHTML(product.name)}</h3>
           <p>${escapeHTML(product.description)}</p>
-          <div class="product-price">
-            ₹${price.toFixed(2)}
-            <small>/ ${escapeHTML(size.label)}</small>
-          </div>
-          <div class="stock-text ${stock <= 0 ? "out" : ""}">
-            ${stock > 0 ? `Available: ${stock} pack(s)` : "Currently out of stock"}
+          <div class="product-price ${hasOffer ? "offer-active" : ""}">${priceMarkup}</div>
+          <div class="stock-text ${isOutOfStock ? "out" : ""}">
+            ${isOutOfStock ? "Currently out of stock" : `Available: ${stock} pack(s)`}
           </div>
           ${controls}
         </div>
@@ -1697,7 +1920,12 @@ function addProductToCart(index, quantity) {
     productId: product.id,
     name: product.name,
     pack: size.label,
-    price: Number(size.price),
+    price: Number(
+      size.offer_price > 0 && size.offer_price < size.original_price
+        ? size.offer_price
+        : size.price
+    ),
+    originalPrice: Number(size.original_price || size.price || 0),
     quantity: next
   });
 
@@ -1895,7 +2123,7 @@ function renderFloatingCart(total) {
         <div class="floating-cart-line">
           <div class="floating-cart-line-info">
             <strong>${escapeHTML(item.name)}</strong>
-            <small>${escapeHTML(item.pack)} · ₹${item.price.toFixed(2)} each</small>
+            <small>${escapeHTML(item.pack)} · ₹${item.price.toFixed(2)} each${item.originalPrice > item.price ? ` <span class="original-price floating-original-price">₹${item.originalPrice.toFixed(2)}</span>` : ""}</small>
             <small>Amount: ₹${(item.price * item.quantity).toFixed(2)}</small>
           </div>
           <div class="floating-cart-line-actions">
@@ -1914,6 +2142,30 @@ function renderFloatingCart(total) {
     "₹" + Number(total || 0).toFixed(2);
 }
 
+function positionFloatingCartPanel() {
+  const widget = document.getElementById("floating-cart-widget");
+  const button = document.getElementById("floating-cart-button");
+  const panel = document.getElementById("floating-cart-panel");
+  if (!widget || !button || !panel || !panel.classList.contains("open")) return;
+
+  const b = button.getBoundingClientRect();
+  const margin = 12;
+  const panelWidth = Math.min(360, window.innerWidth - margin * 2);
+  panel.style.width = panelWidth + "px";
+  panel.style.maxHeight = Math.min(window.innerHeight * 0.65, 520) + "px";
+
+  // Measure after the panel is visible, then clamp it within the viewport.
+  const panelHeight = panel.getBoundingClientRect().height;
+  let left = b.right - panelWidth;
+  left = Math.max(margin, Math.min(window.innerWidth - panelWidth - margin, left));
+  let top = b.top - panelHeight - margin;
+  if (top < margin) top = b.bottom + margin;
+  top = Math.max(margin, Math.min(window.innerHeight - panelHeight - margin, top));
+
+  panel.style.left = left + "px";
+  panel.style.top = top + "px";
+}
+
 function toggleFloatingCart(force) {
   const panel = document.getElementById("floating-cart-panel");
   const button = document.getElementById("floating-cart-button");
@@ -1925,6 +2177,7 @@ function toggleFloatingCart(force) {
   panel.classList.toggle("open", open);
   panel.setAttribute("aria-hidden", String(!open));
   button.setAttribute("aria-expanded", String(open));
+  if (open) requestAnimationFrame(positionFloatingCartPanel);
 }
 
 function closeFloatingCart() {
@@ -1985,6 +2238,8 @@ function initializeDraggableCart() {
 
     widget.style.right = "auto";
     widget.style.bottom = "auto";
+    // Keep expanded cart panel anchored to the button as it is dragged.
+    positionFloatingCartPanel();
   });
 
   const finish = () => {
@@ -2000,6 +2255,16 @@ function initializeDraggableCart() {
 
   button.addEventListener("pointerup", finish);
   button.addEventListener("pointercancel", finish);
+
+  window.addEventListener("resize", () => {
+    // Keep the draggable button and expanded panel within the viewport.
+    const r = widget.getBoundingClientRect();
+    widget.style.left = Math.max(8, Math.min(innerWidth - widget.offsetWidth - 8, r.left)) + "px";
+    widget.style.top = Math.max(8, Math.min(innerHeight - widget.offsetHeight - 8, r.top)) + "px";
+    widget.style.right = "auto";
+    widget.style.bottom = "auto";
+    positionFloatingCartPanel();
+  });
 
   button.addEventListener("click", e => {
     if (button.dataset.dragged) {
